@@ -8,6 +8,8 @@ public class PokemonIndex : MonoBehaviour
 
     private readonly Dictionary<int, IndexMethod> indexMethods = new();
 
+    [SerializeField] private List<Sprite> pokemonSprites = new();
+
     private void Awake()
     {
         PopulateIndex();
@@ -30,6 +32,8 @@ public class PokemonIndex : MonoBehaviour
     {
         return new PokemonData
         {
+            pokemonName = "Incineroar",
+            sprite = pokemonSprites[0],
             pokeTypes = new() { PokemonData.PokeType.Fire, PokemonData.PokeType.Dark },
             ability = "Intimidate",
             moveIndexes = new() { 0, 0, 0, 0 },

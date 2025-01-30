@@ -1,9 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PokemonData
 {
+    public string pokemonName;
+
+    public Sprite sprite;
+
     public enum PokeType { Normal, Fire, Water, Grass, Electric, Ice, Fighting, Poison, Ground, Flying, Psychic, Bug, Rock, Ghost, Dragon, Dark, Steel, Fairy };
     public List<PokeType> pokeTypes = new();
 
@@ -26,11 +31,19 @@ public class MoveData
     public bool canTargetEnemy;
     public bool canTargetAlly;
 }
-public class Pokemon : MonoBehaviour
+public class PokemonSlot : MonoBehaviour
 {
+    // PREFAB REFERENCE:
+    [SerializeField] private Image pokemonImage;
+    [SerializeField] private Transform healthBar;
+    [SerializeField] private GameObject statusActive;
+    [SerializeField] private Image statusIcon;
+
     // SCENE REFERENCE:
     [SerializeField] private PokemonIndex pokemonIndex;
     [SerializeField] private MoveIndex moveIndex;
+
+    public bool isBenchSlot;
 
     // DYNAMIC:
     public PokemonData pokemonData;
@@ -43,6 +56,6 @@ public class Pokemon : MonoBehaviour
         for (int i = 0; i < 4; i++)
             moves.Add(moveIndex.LoadMoveFromIndex(pokemonData.moveIndexes[i]));
 
-        // Set up pokemon using data
+        pokemonImage.sprite = pokemonData.sprite;
     }
 }
