@@ -10,6 +10,9 @@ public class PokemonIndex : MonoBehaviour
 
     [SerializeField] private List<Sprite> pokemonSprites = new();
 
+    [SerializeField] private AbilityIndex abilityIndex;
+    [SerializeField] private MoveIndex moveIndex;
+
     private void Awake()
     {
         PopulateIndex();
@@ -23,7 +26,9 @@ public class PokemonIndex : MonoBehaviour
             return null;
         }
 
-        return indexMethods[indexNumber]();
+        PokemonData data = indexMethods[indexNumber]();
+        data.currentHP = data.baseHP;
+        return data;
     }
 
 
@@ -34,12 +39,17 @@ public class PokemonIndex : MonoBehaviour
         {
             pokemonName = "Incineroar",
             sprite = pokemonSprites[0],
-            pokeTypes = new() { PokemonData.PokeType.Fire, PokemonData.PokeType.Dark },
-            ability = "Intimidate",
-            moveIndexes = new() { 0, 0, 0, 0 },
+            pokeTypes = new() { 1, 15 },
+            ability = abilityIndex.LoadAbilityFromIndex(0),
+            moves = new List<MoveData>() {
+                moveIndex.LoadMoveFromIndex(0),
+                moveIndex.LoadMoveFromIndex(0),
+                moveIndex.LoadMoveFromIndex(0),
+                moveIndex.LoadMoveFromIndex(0)
+                },
             baseHP = 5,
-            baseAttack = 5,
-            baseSpeed = 5
+            attack = 5,
+            speed = 5
         };
     }
 

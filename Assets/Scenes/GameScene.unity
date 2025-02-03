@@ -5181,6 +5181,7 @@ GameObject:
   - component: {fileID: 1092461925}
   - component: {fileID: 1092461928}
   - component: {fileID: 1092461927}
+  - component: {fileID: 1092461929}
   - component: {fileID: 1092461926}
   m_Layer: 0
   m_Name: MiscScripts
@@ -5225,6 +5226,28 @@ MonoBehaviour:
   - {fileID: 1461273278}
   - {fileID: 1979912382}
   - {fileID: 489497926}
+  resetChoices: {fileID: 0}
+  submitChoices: {fileID: 0}
+  quitGame: {fileID: 0}
+  infoScreen: {fileID: 0}
+  infoSprite: {fileID: 0}
+  infoName: {fileID: 0}
+  infoHealthBar: {fileID: 0}
+  infoTypes: []
+  infoHP: {fileID: 0}
+  infoAttack: {fileID: 0}
+  infoSpeed: {fileID: 0}
+  infoAbilityName: {fileID: 0}
+  infoAbilityDescription: {fileID: 0}
+  infoNoStatusImage: {fileID: 0}
+  infoStatusIcon: {fileID: 0}
+  infoStatusName: {fileID: 0}
+  infoStatusDescription: {fileID: 0}
+  infoMoveTypes: []
+  infoMoveNames: []
+  infoMoveDescriptions: []
+  infoMovePriority: []
+  typeSprites: []
 --- !u!114 &1092461926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5263,6 +5286,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pokemonSprites:
   - {fileID: 21300000, guid: 82101701397280440834780458ad088c, type: 3}
+--- !u!114 &1092461929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1092461922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c5c5846a99bfc54b86eba69738bc842, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1123343716
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveIndex : MonoBehaviour
+public class StatusIndex : MonoBehaviour
 {
-    private delegate MoveData IndexMethod();
+    private delegate AbilityData IndexMethod();
 
     private readonly Dictionary<int, IndexMethod> indexMethods = new();
 
@@ -13,7 +13,7 @@ public class MoveIndex : MonoBehaviour
         PopulateIndex();
     }
 
-    public MoveData LoadMoveFromIndex(int indexNumber)
+    public AbilityData LoadAbilityFromIndex(int indexNumber)
     {
         if (!indexMethods.ContainsKey(indexNumber))
         {
@@ -26,15 +26,12 @@ public class MoveIndex : MonoBehaviour
 
 
 
-    private MoveData Protect() // 0
+    private AbilityData Intimidate() // 0
     {
-        return new MoveData
+        return new AbilityData
         {
-            pokeType = 0,
-            priority = 7,
-            isDamaging = false,
-            canTargetEnemy = false,
-            canTargetAlly = false
+            name = "Intimidate",
+            description = "Enemies lose 1 Attack when I enter battle"
         };
     }
 
@@ -42,6 +39,6 @@ public class MoveIndex : MonoBehaviour
 
     private void PopulateIndex()
     {
-        indexMethods.Add(0, Protect);
+        indexMethods.Add(0, Intimidate);
     }
 }
