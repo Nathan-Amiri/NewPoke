@@ -24,6 +24,8 @@ public class PokemonSlot : MonoBehaviour
         data = pokemonIndex.LoadPokemonFromIndex(indexNumber);
 
         pokemonImage.sprite = data.sprite;
-        healthBar.localScale = new Vector2(data.currentHP / data.baseHP, healthBar.localScale.y);
+
+        if (!isBenchSlot)
+            healthBar.localScale = new Vector2(data.currentHP / data.baseHP, healthBar.localScale.y);
     }
 }

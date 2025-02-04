@@ -18,10 +18,14 @@ public class PokemonData
 
     public AbilityData ability;
     public List<MoveData> moves = new();
+    public StatusData status;
 }
 public class MoveData
 {
     public int pokeType;
+
+    public string name;
+    public string description;
 
     public int priority;
 
@@ -32,6 +36,13 @@ public class MoveData
 }
 public class AbilityData
 {
+    public string name;
+    public string description;
+}
+public class StatusData
+{
+    public Sprite icon;
+
     public string name;
     public string description;
 }

@@ -1784,6 +1784,38 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1092461925}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SelectPokemonSlot
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GameManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2342,6 +2374,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: isBenchSlot
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: pokemonIndex
       value: 
       objectReference: {fileID: 1092461928}
@@ -2440,6 +2476,38 @@ PrefabInstance:
     - target: {fileID: 4054452671173800056, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1092461925}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SelectPokemonSlot
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GameManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -2489,6 +2557,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: isBenchSlot
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: pokemonIndex
       value: 
       objectReference: {fileID: 1092461928}
@@ -2587,6 +2659,38 @@ PrefabInstance:
     - target: {fileID: 4054452671173800056, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1092461925}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SelectPokemonSlot
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GameManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -4273,6 +4377,38 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1092461925}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SelectPokemonSlot
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GameManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5046,8 +5182,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 283695804}
-  - {fileID: 1503888707}
   - {fileID: 1696344087}
+  - {fileID: 1503888707}
   m_Father: {fileID: 1757950508}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -5183,6 +5319,7 @@ GameObject:
   - component: {fileID: 1092461927}
   - component: {fileID: 1092461929}
   - component: {fileID: 1092461926}
+  - component: {fileID: 1092461930}
   m_Layer: 0
   m_Name: MiscScripts
   m_TagString: Untagged
@@ -5226,28 +5363,51 @@ MonoBehaviour:
   - {fileID: 1461273278}
   - {fileID: 1979912382}
   - {fileID: 489497926}
-  resetChoices: {fileID: 0}
-  submitChoices: {fileID: 0}
-  quitGame: {fileID: 0}
-  infoScreen: {fileID: 0}
-  infoSprite: {fileID: 0}
-  infoName: {fileID: 0}
-  infoHealthBar: {fileID: 0}
-  infoTypes: []
-  infoHP: {fileID: 0}
-  infoAttack: {fileID: 0}
-  infoSpeed: {fileID: 0}
-  infoAbilityName: {fileID: 0}
-  infoAbilityDescription: {fileID: 0}
-  infoNoStatusImage: {fileID: 0}
-  infoStatusIcon: {fileID: 0}
-  infoStatusName: {fileID: 0}
-  infoStatusDescription: {fileID: 0}
-  infoMoveTypes: []
-  infoMoveNames: []
-  infoMoveDescriptions: []
-  infoMovePriority: []
-  typeSprites: []
+  statusIndex: {fileID: 1092461930}
+  resetChoices: {fileID: 2011102766}
+  submitChoices: {fileID: 1424553501}
+  quitGame: {fileID: 7416251}
+  infoScreen: {fileID: 812933874}
+  infoSprite: {fileID: 1598133246}
+  infoName: {fileID: 751274264}
+  infoHealthBar: {fileID: 913285280}
+  infoTypes:
+  - {fileID: 157772026}
+  - {fileID: 1409674188}
+  - {fileID: 576360193}
+  infoHP: {fileID: 1868116307}
+  infoAttack: {fileID: 1040533948}
+  infoSpeed: {fileID: 1551946374}
+  infoAbilityName: {fileID: 661919052}
+  infoAbilityDescription: {fileID: 1540337381}
+  infoNoStatusImage: {fileID: 1503888706}
+  infoStatusIcon: {fileID: 1696344088}
+  infoStatusName: {fileID: 1487710987}
+  infoStatusDescription: {fileID: 690773739}
+  infoMoveTypes:
+  - {fileID: 1229173249}
+  - {fileID: 670339027}
+  - {fileID: 1502159468}
+  - {fileID: 1524343215}
+  infoMoveNames:
+  - {fileID: 1447082606}
+  - {fileID: 1044202498}
+  - {fileID: 1604546227}
+  - {fileID: 246887005}
+  infoMoveDescriptions:
+  - {fileID: 906659111}
+  - {fileID: 440640310}
+  - {fileID: 83201403}
+  - {fileID: 621903424}
+  infoMovePriority:
+  - {fileID: 105776071}
+  - {fileID: 398291722}
+  - {fileID: 101359710}
+  - {fileID: 2140974409}
+  pokemonTypeSprites:
+  - {fileID: 21300000, guid: 38e71015792532b4aa3ef6aa0feffabd, type: 3}
+  moveTypeSprites:
+  - {fileID: 21300000, guid: 2080fc43a17c9824488265a2afdc84e1, type: 3}
 --- !u!114 &1092461926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5286,6 +5446,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pokemonSprites:
   - {fileID: 21300000, guid: 82101701397280440834780458ad088c, type: 3}
+  abilityIndex: {fileID: 1092461929}
+  moveIndex: {fileID: 1092461927}
 --- !u!114 &1092461929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5298,6 +5460,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c5c5846a99bfc54b86eba69738bc842, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1092461930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1092461922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9ae445b8544a924fb1512a9e192446f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  statusIcons: []
 --- !u!1 &1123343716
 GameObject:
   m_ObjectHideFlags: 0
@@ -6766,6 +6941,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: isBenchSlot
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: pokemonIndex
       value: 
       objectReference: {fileID: 1092461928}
@@ -6864,6 +7043,38 @@ PrefabInstance:
     - target: {fileID: 4054452671173800056, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1092461925}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SelectPokemonSlot
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GameManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -7498,6 +7709,38 @@ PrefabInstance:
     - target: {fileID: 4054452671173800056, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1092461925}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SelectPokemonSlot
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GameManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8352,7 +8595,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1696344087
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9163,6 +9406,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: isBenchSlot
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: pokemonIndex
       value: 
       objectReference: {fileID: 1092461928}
@@ -9261,6 +9508,38 @@ PrefabInstance:
     - target: {fileID: 4054452671173800056, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1092461925}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SelectPokemonSlot
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GameManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -10048,30 +10327,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slot0Pokemon
       objectReference: {fileID: 0}
-    - target: {fileID: 2288245747285439855, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 95
-      objectReference: {fileID: 0}
-    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
-      propertyPath: moveIndex
-      value: 
-      objectReference: {fileID: 1092461927}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: pokemonIndex
       value: 
       objectReference: {fileID: 1092461928}
-    - target: {fileID: 3689600461146886012, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3689600461146886012, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3689600461146886012, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4054452671173800056, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -10151,6 +10410,34 @@ PrefabInstance:
     - target: {fileID: 4054452671173800056, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1092461925}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SelectPokemonSlot
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GameManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6359415742462912721, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

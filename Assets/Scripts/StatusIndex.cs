@@ -4,16 +4,18 @@ using UnityEngine;
 
 public class StatusIndex : MonoBehaviour
 {
-    private delegate AbilityData IndexMethod();
+    private delegate StatusData IndexMethod();
 
     private readonly Dictionary<int, IndexMethod> indexMethods = new();
+
+    [SerializeField] private List<Sprite> statusIcons = new();
 
     private void Awake()
     {
         PopulateIndex();
     }
 
-    public AbilityData LoadAbilityFromIndex(int indexNumber)
+    public StatusData LoadStatusFromIndex(int indexNumber)
     {
         if (!indexMethods.ContainsKey(indexNumber))
         {
@@ -26,12 +28,13 @@ public class StatusIndex : MonoBehaviour
 
 
 
-    private AbilityData Intimidate() // 0
+    private StatusData Poison() // 0
     {
-        return new AbilityData
+        return new StatusData
         {
-            name = "Intimidate",
-            description = "Enemies lose 1 Attack when I enter battle"
+            icon = statusIcons[0],
+            name = "Poison",
+            description = "I lose 1 hp at the end of each round"
         };
     }
 
@@ -39,6 +42,6 @@ public class StatusIndex : MonoBehaviour
 
     private void PopulateIndex()
     {
-        indexMethods.Add(0, Intimidate);
+        indexMethods.Add(0, Poison);
     }
 }

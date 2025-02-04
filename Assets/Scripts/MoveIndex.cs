@@ -31,6 +31,8 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 0,
+            name = "Protect",
+            description = "I become protected from everything this round",
             priority = 7,
             isDamaging = false,
             canTargetEnemy = false,
