@@ -35,8 +35,7 @@ public class MoveIndex : MonoBehaviour
             description = "I become protected from everything this round",
             priority = 7,
             isDamaging = false,
-            canTargetEnemy = false,
-            canTargetAlly = false
+            isTargeted = false
         };
     }
 

@@ -19,6 +19,8 @@ public class PokemonData
     public AbilityData ability;
     public List<MoveData> moves = new();
     public StatusData status;
+
+    public bool hasChosen;
 }
 public class MoveData
 {
@@ -31,8 +33,7 @@ public class MoveData
 
     public bool isDamaging;
 
-    public bool canTargetEnemy;
-    public bool canTargetAlly;
+    public bool isTargeted;
 }
 public class AbilityData
 {

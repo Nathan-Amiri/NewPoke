@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    // next, add targeting, then submit choices to tiebreaker and the delegation section is literally done!!!!!
+
     // SCENE REFERENCE:
     [SerializeField] private List<PokemonSlot> pokemonSlots = new();
     [SerializeField] private StatusIndex statusIndex;
@@ -34,8 +36,16 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<TMP_Text> infoMoveDescriptions = new();
     [SerializeField] private List<TMP_Text> infoMovePriority = new();
 
+    [SerializeField] private List<Button> infoMoveButtons = new();
+    [SerializeField] private Button switchButton;
+
     [SerializeField] private List<Sprite> pokemonTypeSprites = new();
     [SerializeField] private List<Sprite> moveTypeSprites = new();
+
+    [SerializeField] private TMP_Text message;
+
+    private int selectedSlot;
+    private List<ChoiceInfo> choices = new();
 
     private void Start()
     {
@@ -45,6 +55,8 @@ public class GameManager : MonoBehaviour
 
     public void SelectPokemonSlot(int slot)
     {
+        selectedSlot = slot;
+
         PokemonData data = pokemonSlots[slot].data;
 
         infoSprite.sprite = data.sprite;
@@ -98,5 +110,94 @@ public class GameManager : MonoBehaviour
             infoMoveDescriptions[i].text = data.moves[i].description;
             infoMovePriority[i].text = data.moves[i].priority.ToString();
         }
+
+        ResetInteractable();
     }
+
+    private void ResetInteractable()
+    {
+        List<bool> choicesInteractable = pokemonSlots[selectedSlot].ChoicesInteractable();
+        for (int i = 0; i < 4; i++)
+            infoMoveButtons[i].interactable = choicesInteractable[i];
+        switchButton.interactable = choicesInteractable[4];
+    }
+
+    public void SelectChoice(int choice)
+    {
+        ChoiceInfo newChoice = new()
+        {
+            casterData = pokemonSlots[selectedSlot].data,
+            choice = choice
+        };
+
+        if (choice == 4) // Switch
+        {
+            //switch targets
+            return;
+        }
+
+        MoveData moveData = newChoice.casterData.moves[choice];
+        if (moveData.isTargeted)
+        {
+            message.text = "Select a target";
+            infoScreen.SetActive(false);
+
+            //battlefield targets
+        }
+
+        choices.Add(newChoice);
+
+        resetChoices.interactable = true;
+
+        if (!moveData.isTargeted)
+            ChoiceComplete();
+    }
+
+    private void ChoiceComplete()
+    {
+        choices[^1].casterData.hasChosen = true;
+
+        ResetInteractable();
+
+        if (choices.Count == 4)
+            submitChoices.interactable = true;
+    }
+
+    public void SelectTarget(int targetSlot)
+    {
+        choices[^1].targetSlot = pokemonSlots[targetSlot];
+
+        //remove targets
+
+        infoScreen.SetActive(true);
+
+        ChoiceComplete();
+    }
+
+    public void ResetChoices()
+    {
+        // remove targets
+
+        infoScreen.SetActive(true);
+
+        submitChoices.interactable = false;
+        resetChoices.interactable = false;
+
+        foreach (ChoiceInfo choice in choices)
+            choice.casterData.hasChosen = false;
+        choices.Clear();
+
+        ResetInteractable();
+    }
+
+    public void SubmitChoices()
+    {
+        Debug.Log("Submitted");
+    }
+}
+public class ChoiceInfo
+{
+    public PokemonData casterData;
+    public int choice;
+    public PokemonSlot targetSlot;
 }

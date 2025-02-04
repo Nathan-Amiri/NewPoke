@@ -3381,7 +3381,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 670339027}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1092461925}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: SelectChoice
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &670339027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3586,6 +3598,7 @@ RectTransform:
   - {fileID: 435147844}
   - {fileID: 310225632}
   - {fileID: 61114977}
+  - {fileID: 1770183582}
   m_Father: {fileID: 812933875}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -3969,7 +3982,6 @@ RectTransform:
   - {fileID: 1786034073}
   - {fileID: 1757950508}
   - {fileID: 713328423}
-  - {fileID: 1770183582}
   m_Father: {fileID: 1744752713}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -5404,10 +5416,17 @@ MonoBehaviour:
   - {fileID: 398291722}
   - {fileID: 101359710}
   - {fileID: 2140974409}
+  infoMoveButtons:
+  - {fileID: 1229173248}
+  - {fileID: 670339026}
+  - {fileID: 1502159467}
+  - {fileID: 1524343214}
+  switchButton: {fileID: 1770183583}
   pokemonTypeSprites:
   - {fileID: 21300000, guid: 38e71015792532b4aa3ef6aa0feffabd, type: 3}
   moveTypeSprites:
   - {fileID: 21300000, guid: 2080fc43a17c9824488265a2afdc84e1, type: 3}
+  message: {fileID: 0}
 --- !u!114 &1092461926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5989,7 +6008,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1229173249}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1092461925}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: SelectChoice
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1229173249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6572,11 +6603,23 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1424553502}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1092461925}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: SubmitChoices
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1424553502
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7314,7 +7357,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1502159468}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1092461925}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: SelectChoice
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1502159468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7509,7 +7564,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1524343215}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1092461925}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: SelectChoice
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1524343215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9006,11 +9073,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 209982093}
-  m_Father: {fileID: 812933875}
+  m_Father: {fileID: 713328423}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 526.7, y: -505}
+  m_AnchoredPosition: {x: -53.299927, y: -204.99997}
   m_SizeDelta: {x: 130, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1770183583
@@ -9056,7 +9123,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1770183584}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1092461925}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: SelectChoice
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 4
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1770183584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9792,11 +9871,23 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 2011102767}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1092461925}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: ResetChoices
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2011102767
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -28,4 +28,23 @@ public class PokemonSlot : MonoBehaviour
         if (!isBenchSlot)
             healthBar.localScale = new Vector2(data.currentHP / data.baseHP, healthBar.localScale.y);
     }
+
+    public List<bool> ChoicesInteractable()
+    {
+        List<bool> choicesInteractable = new();
+
+        for (int i = 0; i < 5; i++) // 5 = Switch interactable
+        {
+            bool choiceInteractable = true;
+
+            if (data.hasChosen)
+                choiceInteractable = false;
+
+            //other fail conditions here
+
+            choicesInteractable.Add(choiceInteractable);
+        }
+
+        return choicesInteractable;
+    }
 }
