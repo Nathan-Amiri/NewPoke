@@ -6,10 +6,12 @@ using UnityEngine.UI;
 public class PokemonSlot : MonoBehaviour
 {
     // PREFAB REFERENCE:
-    [SerializeField] private Image pokemonImage;
     [SerializeField] private Transform healthBar;
     [SerializeField] private GameObject statusActive;
     [SerializeField] private Image statusIcon;
+
+    public Image pokemonImage;
+    public Button button;
 
     // SCENE REFERENCE:
     [SerializeField] private PokemonIndex pokemonIndex;
@@ -18,6 +20,8 @@ public class PokemonSlot : MonoBehaviour
 
     // DYNAMIC:
     public PokemonData data;
+
+    public bool slotIsEmpty;
 
     public void LoadPokemon(int indexNumber)
     {

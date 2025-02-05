@@ -44,8 +44,15 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private TMP_Text message;
 
+    [SerializeField] private List<GameObject> targetButtons = new();
+
+    // CONSTANT:
+    private readonly List<ChoiceInfo> choices = new();
+
+    // DYNAMIC:
     private int selectedSlot;
-    private List<ChoiceInfo> choices = new();
+
+    [SerializeField] private Color pokemonDim;
 
     private void Start()
     {
@@ -132,25 +139,81 @@ public class GameManager : MonoBehaviour
 
         if (choice == 4) // Switch
         {
-            //switch targets
-            return;
-        }
-
-        MoveData moveData = newChoice.casterData.moves[choice];
-        if (moveData.isTargeted)
-        {
             message.text = "Select a target";
             infoScreen.SetActive(false);
 
-            //battlefield targets
+            foreach (PokemonSlot pokemonSlot in pokemonSlots)
+            {
+                pokemonSlot.button.interactable = false;
+                pokemonSlot.pokemonImage.color = pokemonDim;
+            }
+            pokemonSlots[selectedSlot].pokemonImage.color = Color.white;
+
+            List<int> targetSlots = GetSwitchTargetSlots();
+            foreach (int targetSlot in targetSlots)
+                targetButtons[targetSlot].SetActive(true);
+        }
+        else // Move
+        {
+            MoveData moveData = newChoice.casterData.moves[choice];
+            if (moveData.isTargeted)
+            {
+                message.text = "Select a target";
+                infoScreen.SetActive(false);
+
+                foreach (PokemonSlot pokemonSlot in pokemonSlots)
+                {
+                    pokemonSlot.button.interactable = false;
+                    pokemonSlot.pokemonImage.color = pokemonDim;
+                }
+                pokemonSlots[selectedSlot].pokemonImage.color = Color.white;
+
+                List<int> targetSlots = GetMoveTargetSlots();
+                foreach (int targetSlot in targetSlots)
+                    targetButtons[targetSlot].SetActive(true);
+
+                if (!moveData.isTargeted)
+                    ChoiceComplete();
+            }
         }
 
         choices.Add(newChoice);
 
         resetChoices.interactable = true;
+    }
+    private List<int> GetMoveTargetSlots()
+    {
+        List<int> targetSlots;
 
-        if (!moveData.isTargeted)
-            ChoiceComplete();
+        if (selectedSlot == 0)
+            targetSlots = new() { 1, 2, 3 };
+        else if (selectedSlot == 1)
+            targetSlots = new() { 0, 2, 3 };
+        else if (selectedSlot == 2)
+            targetSlots = new() { 0, 1, 3 };
+        else // selectedSlot == 3
+            targetSlots = new() { 0, 1, 2 };
+
+        foreach (int targetSlot in targetSlots)
+            if (pokemonSlots[targetSlot].slotIsEmpty)
+                targetSlots.Remove(targetSlot);
+
+        return targetSlots;
+    }
+    private List<int> GetSwitchTargetSlots()
+    {
+        List<int> targetSlots;
+
+        if (selectedSlot == 0 || selectedSlot == 1)
+            targetSlots = new() { 4, 5 };
+        else // selectedSlot == 2 or 3
+            targetSlots = new() { 6, 7 };
+
+        foreach (int targetSlot in targetSlots)
+            if (pokemonSlots[targetSlot].slotIsEmpty)
+                targetSlots.Remove(targetSlot);
+
+        return targetSlots;
     }
 
     private void ChoiceComplete()
@@ -167,9 +230,16 @@ public class GameManager : MonoBehaviour
     {
         choices[^1].targetSlot = pokemonSlots[targetSlot];
 
-        //remove targets
-
         infoScreen.SetActive(true);
+
+        foreach (PokemonSlot pokemonSlot in pokemonSlots)
+        {
+            pokemonSlot.button.interactable = true;
+            pokemonSlot.pokemonImage.color = Color.white;
+        }
+
+        foreach (GameObject targetButton in targetButtons)
+            targetButton.SetActive(false);
 
         ChoiceComplete();
     }
@@ -188,6 +258,17 @@ public class GameManager : MonoBehaviour
         choices.Clear();
 
         ResetInteractable();
+
+        foreach (PokemonSlot pokemonSlot in pokemonSlots)
+        {
+            pokemonSlot.button.interactable = true;
+            pokemonSlot.pokemonImage.color = Color.white;
+        }
+
+        foreach (GameObject targetButton in targetButtons)
+            targetButton.SetActive(false);
+
+        message.text = string.Empty;
     }
 
     public void SubmitChoices()
