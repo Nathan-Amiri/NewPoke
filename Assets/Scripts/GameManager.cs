@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<Sprite> moveTypeSprites = new();
 
     [SerializeField] private TMP_Text message;
+    [SerializeField] private GameObject messageButton;
 
     [SerializeField] private List<Button> targetButtons = new();
 
@@ -176,15 +177,15 @@ public class GameManager : MonoBehaviour
                 List<int> targetSlots = GetMoveTargetSlots();
                 foreach (int targetSlot in targetSlots)
                     targetButtons[targetSlot].gameObject.SetActive(true);
-
-                if (!moveData.isTargeted)
-                    ChoiceComplete();
             }
         }
 
         choices.Add(newChoice);
 
         resetChoicesButton.interactable = true;
+
+        if (!newChoice.casterData.moves[choice].isTargeted)
+            ChoiceComplete();
     }
     private List<int> GetMoveTargetSlots()
     {
@@ -287,6 +288,10 @@ public class GameManager : MonoBehaviour
 
     public void SubmitChoices()
     {
+        infoScreen.SetActive(false);
+        resetChoicesButton.interactable = false;
+        submitChoicesButton.interactable = false;
+
         pastChoices = choices;
         pastPokemon = new();
         foreach (PokemonSlot pokemonSlot in pokemonSlots)
@@ -300,6 +305,10 @@ public class GameManager : MonoBehaviour
 
     public void SelectReplay()
     {
+        infoScreen.SetActive(false);
+        resetChoicesButton.interactable = false;
+        submitChoicesButton.interactable = false;
+
         choices = pastChoices;
         for (int i = 0; i < pokemonSlots.Count; i++)
             pokemonSlots[i].data = pastPokemon[i];
@@ -309,18 +318,16 @@ public class GameManager : MonoBehaviour
 
     private void ExecuteChoice()
     {
-        infoScreen.SetActive(false);
-
         ChoiceInfo nextChoice = GetNextChoice();
 
         if (nextChoice.choice == 4)
             message.text = nextChoice.casterData.pokemonName + " is switching into " + nextChoice.targetSlot.data.pokemonName;
-        else if (!nextChoice.casterData.moves[nextChoice.choice].isTargeted)
-            message.text = nextChoice.casterData.pokemonName + " is using " + nextChoice.casterData.moves[nextChoice.choice].name;
         else
-            message.text = nextChoice.casterData.pokemonName + " is using " + nextChoice.casterData.moves[nextChoice.choice].name + " on " + nextChoice.targetSlot.data.pokemonName;
+            message.text = nextChoice.casterData.pokemonName + " is using " + nextChoice.casterData.moves[nextChoice.choice].name;
 
         //add "super effective/not very effective/doesn't affect/the scale of the effectiveness exceeds mortal comprehension" to message
+
+        messageButton.SetActive(true);
 
         foreach (PokemonSlot pokemonSlot in pokemonSlots)
         {
@@ -333,8 +340,11 @@ public class GameManager : MonoBehaviour
         }
 
         ResetTargetButtons();
-        targetButtons[nextChoice.targetSlotNumber].gameObject.SetActive(true);
-        targetButtons[nextChoice.targetSlotNumber].interactable = false;
+        if (nextChoice.casterData.moves[nextChoice.choice].isTargeted)
+        {
+            targetButtons[nextChoice.targetSlotNumber].gameObject.SetActive(true);
+            targetButtons[nextChoice.targetSlotNumber].interactable = false;
+        }
     }
     private ChoiceInfo GetNextChoice()
     {
@@ -389,6 +399,11 @@ public class GameManager : MonoBehaviour
         }
 
         return nextChoice;
+    }
+
+    public void SelectMessageButton()
+    {
+
     }
 }
 public class ChoiceInfo
