@@ -49,7 +49,7 @@ public class PokemonIndex : MonoBehaviour
                 },
             baseHP = 5,
             attack = 5,
-            speed = 5
+            speed = 5.5f
         };
     }
 

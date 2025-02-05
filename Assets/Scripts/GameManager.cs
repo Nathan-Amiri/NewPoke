@@ -12,9 +12,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<PokemonSlot> pokemonSlots = new();
     [SerializeField] private StatusIndex statusIndex;
 
-    [SerializeField] private Button resetChoices;
-    [SerializeField] private Button submitChoices;
-    [SerializeField] private Button quitGame;
+    [SerializeField] private Button resetChoicesButton;
+    [SerializeField] private Button submitChoicesButton;
+    [SerializeField] private Button replayButton;
 
     [SerializeField] private GameObject infoScreen;
 
@@ -44,13 +44,16 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private TMP_Text message;
 
-    [SerializeField] private List<GameObject> targetButtons = new();
-
-    // CONSTANT:
-    private readonly List<ChoiceInfo> choices = new();
+    [SerializeField] private List<Button> targetButtons = new();
 
     // DYNAMIC:
     private int selectedSlot;
+
+    private List<ChoiceInfo> choices = new();
+    private List<ChoiceInfo> pastChoices = new(); // Replay
+    private List<PokemonData> pastPokemon = new(); // Replay
+
+    private bool random; // Cached for Replay
 
     [SerializeField] private Color pokemonDim;
 
@@ -89,7 +92,7 @@ public class GameManager : MonoBehaviour
 
         infoHP.text = data.currentHP.ToString();
         infoAttack.text = data.attack.ToString();
-        infoSpeed.text = data.speed.ToString();
+        infoSpeed.text = data.speed.ToString("0.0");
 
         infoAbilityName.text = data.ability.name;
         infoAbilityDescription.text = data.ability.description;
@@ -131,6 +134,8 @@ public class GameManager : MonoBehaviour
 
     public void SelectChoice(int choice)
     {
+        ResetTargetButtons();
+
         ChoiceInfo newChoice = new()
         {
             casterData = pokemonSlots[selectedSlot].data,
@@ -151,7 +156,7 @@ public class GameManager : MonoBehaviour
 
             List<int> targetSlots = GetSwitchTargetSlots();
             foreach (int targetSlot in targetSlots)
-                targetButtons[targetSlot].SetActive(true);
+                targetButtons[targetSlot].gameObject.SetActive(true);
         }
         else // Move
         {
@@ -170,7 +175,7 @@ public class GameManager : MonoBehaviour
 
                 List<int> targetSlots = GetMoveTargetSlots();
                 foreach (int targetSlot in targetSlots)
-                    targetButtons[targetSlot].SetActive(true);
+                    targetButtons[targetSlot].gameObject.SetActive(true);
 
                 if (!moveData.isTargeted)
                     ChoiceComplete();
@@ -179,7 +184,7 @@ public class GameManager : MonoBehaviour
 
         choices.Add(newChoice);
 
-        resetChoices.interactable = true;
+        resetChoicesButton.interactable = true;
     }
     private List<int> GetMoveTargetSlots()
     {
@@ -223,12 +228,13 @@ public class GameManager : MonoBehaviour
         ResetInteractable();
 
         if (choices.Count == 4)
-            submitChoices.interactable = true;
+            submitChoicesButton.interactable = true;
     }
 
     public void SelectTarget(int targetSlot)
     {
         choices[^1].targetSlot = pokemonSlots[targetSlot];
+        choices[^1].targetSlotNumber = targetSlot;
 
         infoScreen.SetActive(true);
 
@@ -238,10 +244,18 @@ public class GameManager : MonoBehaviour
             pokemonSlot.pokemonImage.color = Color.white;
         }
 
-        foreach (GameObject targetButton in targetButtons)
-            targetButton.SetActive(false);
+        ResetTargetButtons();
 
         ChoiceComplete();
+    }
+
+    private void ResetTargetButtons()
+    {
+        foreach (Button targetButton in targetButtons)
+        {
+            targetButton.interactable = true;
+            targetButton.gameObject.SetActive(false);
+        }
     }
 
     public void ResetChoices()
@@ -250,8 +264,8 @@ public class GameManager : MonoBehaviour
 
         infoScreen.SetActive(true);
 
-        submitChoices.interactable = false;
-        resetChoices.interactable = false;
+        submitChoicesButton.interactable = false;
+        resetChoicesButton.interactable = false;
 
         foreach (ChoiceInfo choice in choices)
             choice.casterData.hasChosen = false;
@@ -265,15 +279,116 @@ public class GameManager : MonoBehaviour
             pokemonSlot.pokemonImage.color = Color.white;
         }
 
-        foreach (GameObject targetButton in targetButtons)
-            targetButton.SetActive(false);
+        ResetTargetButtons();
+
 
         message.text = string.Empty;
     }
 
     public void SubmitChoices()
     {
-        Debug.Log("Submitted");
+        pastChoices = choices;
+        pastPokemon = new();
+        foreach (PokemonSlot pokemonSlot in pokemonSlots)
+            pastPokemon.Add(pokemonSlot.data);
+        replayButton.interactable = true;
+
+        random = Random.Range(0, 2) == 0;
+
+        ExecuteChoice();
+    }
+
+    public void SelectReplay()
+    {
+        choices = pastChoices;
+        for (int i = 0; i < pokemonSlots.Count; i++)
+            pokemonSlots[i].data = pastPokemon[i];
+
+        ExecuteChoice();
+    }
+
+    private void ExecuteChoice()
+    {
+        infoScreen.SetActive(false);
+
+        ChoiceInfo nextChoice = GetNextChoice();
+
+        if (nextChoice.choice == 4)
+            message.text = nextChoice.casterData.pokemonName + " is switching into " + nextChoice.targetSlot.data.pokemonName;
+        else if (!nextChoice.casterData.moves[nextChoice.choice].isTargeted)
+            message.text = nextChoice.casterData.pokemonName + " is using " + nextChoice.casterData.moves[nextChoice.choice].name;
+        else
+            message.text = nextChoice.casterData.pokemonName + " is using " + nextChoice.casterData.moves[nextChoice.choice].name + " on " + nextChoice.targetSlot.data.pokemonName;
+
+        //add "super effective/not very effective/doesn't affect/the scale of the effectiveness exceeds mortal comprehension" to message
+
+        foreach (PokemonSlot pokemonSlot in pokemonSlots)
+        {
+            pokemonSlot.button.interactable = false;
+
+            if (pokemonSlot.data == nextChoice.casterData)
+                pokemonSlot.pokemonImage.color = Color.white;
+            else
+                pokemonSlot.pokemonImage.color = pokemonDim;
+        }
+
+        ResetTargetButtons();
+        targetButtons[nextChoice.targetSlotNumber].gameObject.SetActive(true);
+        targetButtons[nextChoice.targetSlotNumber].interactable = false;
+    }
+    private ChoiceInfo GetNextChoice()
+    {
+        if (choices.Count == 1)
+            return choices[0];
+
+        ChoiceInfo nextChoice = null;
+
+        foreach (ChoiceInfo choiceInfo in choices) // Check for switches
+        {
+            if (choiceInfo.choice != 4)
+                continue;
+
+            if (nextChoice == null)
+            {
+                nextChoice = choiceInfo;
+                continue;
+            }
+
+            if (choiceInfo.casterData.speed > nextChoice.casterData.speed || 
+                choiceInfo.casterData.speed == nextChoice.casterData.speed && random)
+                nextChoice = choiceInfo;
+        }
+
+        if (nextChoice != null)
+            return nextChoice;
+
+
+
+        nextChoice = null;
+
+        foreach (ChoiceInfo choiceInfo in choices) // Compare priority/speed
+        {
+            if (nextChoice == null)
+            {
+                nextChoice = choiceInfo;
+                continue;
+            }
+
+            int priority = choiceInfo.casterData.moves[choiceInfo.choice].priority;
+            int nextPriority = nextChoice.casterData.moves[nextChoice.choice].priority;
+
+            if (priority > nextPriority)
+            {
+                nextChoice = choiceInfo;
+                continue;
+            }
+
+            if (choiceInfo.casterData.speed > nextChoice.casterData.speed ||
+                choiceInfo.casterData.speed == nextChoice.casterData.speed && random)
+                nextChoice = choiceInfo;
+        }
+
+        return nextChoice;
     }
 }
 public class ChoiceInfo
@@ -281,4 +396,5 @@ public class ChoiceInfo
     public PokemonData casterData;
     public int choice;
     public PokemonSlot targetSlot;
+    public int targetSlotNumber;
 }

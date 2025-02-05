@@ -14,7 +14,7 @@ public class PokemonData
     public int baseHP;
     public int currentHP;
     public int attack;
-    public int speed;
+    public float speed;
 
     public AbilityData ability;
     public List<MoveData> moves = new();
