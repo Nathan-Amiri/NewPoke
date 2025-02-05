@@ -2388,6 +2388,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1092461927}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: slotNumber
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: pokemonIndex
       value: 
       objectReference: {fileID: 1092461928}
@@ -3201,6 +3205,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1092461927}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: slotNumber
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: statusIcon
       value: 
       objectReference: {fileID: 0}
@@ -3474,6 +3482,10 @@ PrefabInstance:
       propertyPath: moveIndex
       value: 
       objectReference: {fileID: 1092461927}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: slotNumber
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: statusIcon
       value: 
@@ -5500,6 +5512,10 @@ PrefabInstance:
       propertyPath: moveIndex
       value: 
       objectReference: {fileID: 1092461927}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: slotNumber
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: pokemonIndex
       value: 
@@ -8163,6 +8179,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1092461927}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: slotNumber
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: statusIcon
       value: 
       objectReference: {fileID: 0}
@@ -8860,6 +8880,10 @@ PrefabInstance:
       propertyPath: moveIndex
       value: 
       objectReference: {fileID: 1092461927}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: slotNumber
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: statusIcon
       value: 
@@ -10837,6 +10861,10 @@ PrefabInstance:
       propertyPath: moveIndex
       value: 
       objectReference: {fileID: 1092461927}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: slotNumber
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: statusIcon
       value: 

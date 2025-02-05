@@ -17,6 +17,7 @@ public class PokemonSlot : MonoBehaviour
     [SerializeField] private PokemonIndex pokemonIndex;
 
     public bool isBenchSlot;
+    public int slotNumber;
 
     // DYNAMIC:
     public PokemonData data;

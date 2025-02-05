@@ -184,7 +184,7 @@ public class GameManager : MonoBehaviour
 
         resetChoicesButton.interactable = true;
 
-        if (!newChoice.casterData.moves[choice].isTargeted)
+        if (!(newChoice.choice == 4) && !newChoice.casterData.moves[choice].isTargeted)
             ChoiceComplete();
     }
     private List<int> GetMoveTargetSlots()
@@ -235,7 +235,6 @@ public class GameManager : MonoBehaviour
     public void SelectTarget(int targetSlot)
     {
         choices[^1].targetSlot = pokemonSlots[targetSlot];
-        choices[^1].targetSlotNumber = targetSlot;
 
         infoScreen.SetActive(true);
 
@@ -340,10 +339,10 @@ public class GameManager : MonoBehaviour
         }
 
         ResetTargetButtons();
-        if (nextChoice.casterData.moves[nextChoice.choice].isTargeted)
+        if (nextChoice.choice == 4 || nextChoice.casterData.moves[nextChoice.choice].isTargeted)
         {
-            targetButtons[nextChoice.targetSlotNumber].gameObject.SetActive(true);
-            targetButtons[nextChoice.targetSlotNumber].interactable = false;
+            targetButtons[nextChoice.targetSlot.slotNumber].gameObject.SetActive(true);
+            targetButtons[nextChoice.targetSlot.slotNumber].interactable = false;
         }
     }
     private ChoiceInfo GetNextChoice()
@@ -411,5 +410,4 @@ public class ChoiceInfo
     public PokemonData casterData;
     public int choice;
     public PokemonSlot targetSlot;
-    public int targetSlotNumber;
 }
