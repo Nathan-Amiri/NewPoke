@@ -34,6 +34,8 @@ public class MoveData
     public bool isDamaging;
 
     public bool isTargeted;
+
+    public int indexNumber; // MoveEffect
 }
 public class AbilityData
 {

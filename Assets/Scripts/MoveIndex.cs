@@ -21,7 +21,9 @@ public class MoveIndex : MonoBehaviour
             return null;
         }
 
-        return indexMethods[indexNumber]();
+        MoveData data = indexMethods[indexNumber]();
+        data.indexNumber = indexNumber;
+        return data;
     }
 
 

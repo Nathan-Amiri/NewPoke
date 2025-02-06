@@ -6597,6 +6597,7 @@ MonoBehaviour:
   - {fileID: 1979912382}
   - {fileID: 489497926}
   statusIndex: {fileID: 1092461930}
+  moveEffectIndex: {fileID: 1092461926}
   resetChoicesButton: {fileID: 2011102766}
   submitChoicesButton: {fileID: 1424553501}
   replayButton: {fileID: 659132910}
@@ -6671,6 +6672,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff5d2ddfac7203647b775a4025c5a36b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  statusIcons: []
 --- !u!114 &1092461927
 MonoBehaviour:
   m_ObjectHideFlags: 0

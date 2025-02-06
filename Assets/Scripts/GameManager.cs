@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     // SCENE REFERENCE:
     [SerializeField] private List<PokemonSlot> pokemonSlots = new();
     [SerializeField] private StatusIndex statusIndex;
+    [SerializeField] private MoveEffectIndex moveEffectIndex;
 
     [SerializeField] private Button resetChoicesButton;
     [SerializeField] private Button submitChoicesButton;
@@ -57,6 +58,8 @@ public class GameManager : MonoBehaviour
     private bool random; // Cached for Replay
 
     [SerializeField] private Color pokemonDim;
+
+    private ChoiceInfo nextChoice;
 
     private void Start()
     {
@@ -317,7 +320,7 @@ public class GameManager : MonoBehaviour
 
     private void ExecuteChoice()
     {
-        ChoiceInfo nextChoice = GetNextChoice();
+        GetNextChoice();
 
         if (nextChoice.choice == 4)
             message.text = nextChoice.casterData.pokemonName + " is switching into " + nextChoice.targetSlot.data.pokemonName;
@@ -345,12 +348,15 @@ public class GameManager : MonoBehaviour
             targetButtons[nextChoice.targetSlot.slotNumber].interactable = false;
         }
     }
-    private ChoiceInfo GetNextChoice()
+    private void GetNextChoice()
     {
         if (choices.Count == 1)
-            return choices[0];
+        {
+            nextChoice = choices[0];
+            return;
+        }
 
-        ChoiceInfo nextChoice = null;
+        nextChoice = null;
 
         foreach (ChoiceInfo choiceInfo in choices) // Check for switches
         {
@@ -369,11 +375,9 @@ public class GameManager : MonoBehaviour
         }
 
         if (nextChoice != null)
-            return nextChoice;
+            return;
 
 
-
-        nextChoice = null;
 
         foreach (ChoiceInfo choiceInfo in choices) // Compare priority/speed
         {
@@ -396,11 +400,17 @@ public class GameManager : MonoBehaviour
                 choiceInfo.casterData.speed == nextChoice.casterData.speed && random)
                 nextChoice = choiceInfo;
         }
-
-        return nextChoice;
     }
 
     public void SelectMessageButton()
+    {
+        if (nextChoice.choice == 4)
+            SwitchEffect();
+        else
+            moveEffectIndex.MoveEffect(nextChoice);
+    }
+
+    private void SwitchEffect()
     {
 
     }

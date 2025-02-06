@@ -17,7 +17,7 @@ public class AbilityIndex : MonoBehaviour
     {
         if (!indexMethods.ContainsKey(indexNumber))
         {
-            Debug.LogError("The following move index method was not found: " + indexNumber);
+            Debug.LogError("The following ability index method was not found: " + indexNumber);
             return null;
         }
 
