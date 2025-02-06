@@ -6,7 +6,11 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    // next, add targeting, then submit choices to tiebreaker and the delegation section is literally done!!!!!
+    // Todo:
+    // Types
+    // Delayed Effects
+    // End Game
+    // Repopulation
 
     // SCENE REFERENCE:
     [SerializeField] private List<PokemonSlot> pokemonSlots = new();
@@ -48,12 +52,13 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private List<Button> targetButtons = new();
 
-    // DYNAMIC:
-    private int selectedSlot;
-
+    // CONSTANT:
     private List<ChoiceInfo> choices = new();
     private List<ChoiceInfo> pastChoices = new(); // Replay
     private List<PokemonData> pastPokemon = new(); // Replay
+
+    // DYNAMIC:
+    private int selectedSlot;
 
     private bool random; // Cached for Replay
 
@@ -61,10 +66,12 @@ public class GameManager : MonoBehaviour
 
     private ChoiceInfo nextChoice;
 
+    private bool roundEnding; // Message Button
+
     private void Start()
     {
         foreach (PokemonSlot pokemonSlot in pokemonSlots)
-            pokemonSlot.LoadPokemon(0);
+            pokemonSlot.FirstLoadPokemon(0);
     }
 
     public void SelectPokemonSlot(int slot)
@@ -142,7 +149,8 @@ public class GameManager : MonoBehaviour
 
         ChoiceInfo newChoice = new()
         {
-            casterData = pokemonSlots[selectedSlot].data,
+            casterSlot = pokemonSlots[selectedSlot],
+            casterName = pokemonSlots[selectedSlot].data.pokemonName,
             choice = choice
         };
 
@@ -164,7 +172,7 @@ public class GameManager : MonoBehaviour
         }
         else // Move
         {
-            MoveData moveData = newChoice.casterData.moves[choice];
+            MoveData moveData = newChoice.casterSlot.data.moves[choice];
             if (moveData.isTargeted)
             {
                 message.text = "Select a target";
@@ -187,7 +195,7 @@ public class GameManager : MonoBehaviour
 
         resetChoicesButton.interactable = true;
 
-        if (!(newChoice.choice == 4) && !newChoice.casterData.moves[choice].isTargeted)
+        if (!(newChoice.choice == 4) && !newChoice.casterSlot.data.moves[choice].isTargeted)
             ChoiceComplete();
     }
     private List<int> GetMoveTargetSlots()
@@ -227,7 +235,7 @@ public class GameManager : MonoBehaviour
 
     private void ChoiceComplete()
     {
-        choices[^1].casterData.hasChosen = true;
+        choices[^1].casterSlot.data.hasChosen = true;
 
         ResetInteractable();
 
@@ -237,7 +245,9 @@ public class GameManager : MonoBehaviour
 
     public void SelectTarget(int targetSlot)
     {
-        choices[^1].targetSlot = pokemonSlots[targetSlot];
+        ChoiceInfo temp = choices[^1];
+        temp.targetSlot = pokemonSlots[targetSlot];
+        choices[^1] = temp;
 
         infoScreen.SetActive(true);
 
@@ -271,7 +281,7 @@ public class GameManager : MonoBehaviour
         resetChoicesButton.interactable = false;
 
         foreach (ChoiceInfo choice in choices)
-            choice.casterData.hasChosen = false;
+            choice.casterSlot.data.hasChosen = false;
         choices.Clear();
 
         ResetInteractable();
@@ -294,10 +304,25 @@ public class GameManager : MonoBehaviour
         resetChoicesButton.interactable = false;
         submitChoicesButton.interactable = false;
 
-        pastChoices = choices;
-        pastPokemon = new();
+        pastChoices.Clear();
+        foreach (ChoiceInfo currentChoice in choices)
+        {
+            ChoiceInfo pastChoice = new()
+            {
+                casterSlot = currentChoice.casterSlot,
+                casterName = currentChoice.casterName,
+                choice = currentChoice.choice,
+                targetSlot = currentChoice.targetSlot
+            };
+            pastChoices.Add(pastChoice);
+        }
+
+        choices.RemoveAt(0);
+
+        pastPokemon.Clear();
         foreach (PokemonSlot pokemonSlot in pokemonSlots)
             pastPokemon.Add(pokemonSlot.data);
+
         replayButton.interactable = true;
 
         random = Random.Range(0, 2) == 0;
@@ -311,7 +336,19 @@ public class GameManager : MonoBehaviour
         resetChoicesButton.interactable = false;
         submitChoicesButton.interactable = false;
 
-        choices = pastChoices;
+        choices.Clear();
+        foreach (ChoiceInfo pastChoice in pastChoices)
+        {
+            ChoiceInfo currentChoice = new()
+            {
+                casterSlot = pastChoice.casterSlot,
+                casterName = pastChoice.casterName,
+                choice = pastChoice.choice,
+                targetSlot = pastChoice.targetSlot
+            };
+            choices.Add(currentChoice);
+        }
+
         for (int i = 0; i < pokemonSlots.Count; i++)
             pokemonSlots[i].data = pastPokemon[i];
 
@@ -323,11 +360,12 @@ public class GameManager : MonoBehaviour
         GetNextChoice();
 
         if (nextChoice.choice == 4)
-            message.text = nextChoice.casterData.pokemonName + " is switching into " + nextChoice.targetSlot.data.pokemonName;
+            message.text = nextChoice.casterName + " is switching into " + nextChoice.targetSlot.data.pokemonName;
         else
-            message.text = nextChoice.casterData.pokemonName + " is using " + nextChoice.casterData.moves[nextChoice.choice].name;
+            message.text = nextChoice.casterName + " is using " + nextChoice.casterSlot.data.moves[nextChoice.choice].name;
 
-        //add "super effective/not very effective/doesn't affect/the scale of the effectiveness exceeds mortal comprehension" to message
+        //add "super effective/not very effective/doesn't affect/the scale of the effectiveness exceeds mortal comprehension" to message,
+        //if it hits multiple do multiple messages and make sure that there's room above the console button
 
         messageButton.SetActive(true);
 
@@ -335,14 +373,14 @@ public class GameManager : MonoBehaviour
         {
             pokemonSlot.button.interactable = false;
 
-            if (pokemonSlot.data == nextChoice.casterData)
+            if (pokemonSlot == nextChoice.casterSlot)
                 pokemonSlot.pokemonImage.color = Color.white;
             else
                 pokemonSlot.pokemonImage.color = pokemonDim;
         }
 
         ResetTargetButtons();
-        if (nextChoice.choice == 4 || nextChoice.casterData.moves[nextChoice.choice].isTargeted)
+        if (nextChoice.choice == 4 || nextChoice.casterSlot.data.moves[nextChoice.choice].isTargeted)
         {
             targetButtons[nextChoice.targetSlot.slotNumber].gameObject.SetActive(true);
             targetButtons[nextChoice.targetSlot.slotNumber].interactable = false;
@@ -356,39 +394,39 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        nextChoice = null;
+        nextChoice = default;
 
         foreach (ChoiceInfo choiceInfo in choices) // Check for switches
         {
             if (choiceInfo.choice != 4)
                 continue;
 
-            if (nextChoice == null)
+            if (nextChoice.casterSlot == null)
             {
                 nextChoice = choiceInfo;
                 continue;
             }
 
-            if (choiceInfo.casterData.speed > nextChoice.casterData.speed || 
-                choiceInfo.casterData.speed == nextChoice.casterData.speed && random)
+            if (choiceInfo.casterSlot.data.speed > nextChoice.casterSlot.data.speed || 
+                choiceInfo.casterSlot.data.speed == nextChoice.casterSlot.data.speed && random)
                 nextChoice = choiceInfo;
         }
 
-        if (nextChoice != null)
+        if (nextChoice.casterSlot != null)
             return;
 
 
 
         foreach (ChoiceInfo choiceInfo in choices) // Compare priority/speed
         {
-            if (nextChoice == null)
+            if (nextChoice.casterSlot == null)
             {
                 nextChoice = choiceInfo;
                 continue;
             }
 
-            int priority = choiceInfo.casterData.moves[choiceInfo.choice].priority;
-            int nextPriority = nextChoice.casterData.moves[nextChoice.choice].priority;
+            int priority = choiceInfo.casterSlot.data.moves[choiceInfo.choice].priority;
+            int nextPriority = nextChoice.casterSlot.data.moves[nextChoice.choice].priority;
 
             if (priority > nextPriority)
             {
@@ -396,28 +434,82 @@ public class GameManager : MonoBehaviour
                 continue;
             }
 
-            if (choiceInfo.casterData.speed > nextChoice.casterData.speed ||
-                choiceInfo.casterData.speed == nextChoice.casterData.speed && random)
+            if (choiceInfo.casterSlot.data.speed > nextChoice.casterSlot.data.speed ||
+                choiceInfo.casterSlot.data.speed == nextChoice.casterSlot.data.speed && random)
                 nextChoice = choiceInfo;
         }
     }
 
     public void SelectMessageButton()
     {
+        if (roundEnding)
+        {
+            RoundEnd();
+            return;
+        }
+
         if (nextChoice.choice == 4)
             SwitchEffect();
         else
             moveEffectIndex.MoveEffect(nextChoice);
+
+        choices.Remove(nextChoice);
+
+        // Remove any choices made by a caster that's no longer in the same slot they cast the choice from
+        List<ChoiceInfo> choicesToRemove = new();
+        foreach (ChoiceInfo choiceInfo in choices)
+            if (choiceInfo.casterName != choiceInfo.casterSlot.data.pokemonName)
+                choicesToRemove.Add(choiceInfo);
+        foreach (ChoiceInfo choiceInfo in choicesToRemove)
+            choices.Remove(choiceInfo);
+
+        if (choices.Count > 0)
+            ExecuteChoice();
+        else
+        {
+            message.text = "Round will end";
+
+            foreach (PokemonSlot pokemonSlot in pokemonSlots)
+            {
+                pokemonSlot.button.interactable = false;
+                pokemonSlot.pokemonImage.color = Color.white;
+            }
+
+            ResetTargetButtons();
+
+            roundEnding = true;
+        }
     }
 
     private void SwitchEffect()
     {
+        PokemonSlot battleSlot = pokemonSlots[nextChoice.casterSlot.slotNumber];
 
+        (nextChoice.targetSlot.data, battleSlot.data) = (battleSlot.data, nextChoice.targetSlot.data);
+
+        battleSlot.ReloadPokemon();
+    }
+
+    private void RoundEnd()
+    {
+        roundEnding = false;
+
+        message.text = string.Empty;
+        messageButton.SetActive(false);
+
+        // DelayedEffects
+
+        // Check for game end
+
+        // Repopulation
+
+        Debug.Log("roundend");
     }
 }
-public class ChoiceInfo
+public struct ChoiceInfo
 {
-    public PokemonData casterData;
+    public PokemonSlot casterSlot; // For SelectMessageButton
+    public string casterName;
     public int choice;
     public PokemonSlot targetSlot;
 }

@@ -24,10 +24,14 @@ public class PokemonSlot : MonoBehaviour
 
     public bool slotIsEmpty;
 
-    public void LoadPokemon(int indexNumber)
+    public void FirstLoadPokemon(int indexNumber)
     {
         data = pokemonIndex.LoadPokemonFromIndex(indexNumber);
 
+        ReloadPokemon();
+    }
+    public void ReloadPokemon()
+    {
         pokemonImage.sprite = data.sprite;
 
         if (!isBenchSlot)

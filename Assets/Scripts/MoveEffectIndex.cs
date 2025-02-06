@@ -17,7 +17,7 @@ public class MoveEffectIndex : MonoBehaviour
 
     public void MoveEffect(ChoiceInfo choiceInfo)
     {
-        int indexNumber = choiceInfo.casterData.moves[choiceInfo.choice].indexNumber;
+        int indexNumber = choiceInfo.casterSlot.data.moves[choiceInfo.choice].indexNumber;
 
         if (!indexMethods.ContainsKey(indexNumber))
         {

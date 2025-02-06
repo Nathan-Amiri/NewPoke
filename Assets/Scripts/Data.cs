@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PokemonData
+public struct PokemonData
 {
     public string pokemonName;
 
     public Sprite sprite;
 
-    public List<int> pokeTypes = new();
+    public List<int> pokeTypes;
     // 0=Normal, 1=Fire, 2=Water, 3=Grass, 4=Electric, 5=Ice, 6=Fighting, 7=Poison, 8=Ground, 9=Flying, 10=Psychic, 11=Bug, 12=Rock, 13=Ghost, 14=Dragon, 15=Dark, 16=Steel, 17=Fairy
 
     public int baseHP;
@@ -17,7 +17,7 @@ public class PokemonData
     public float speed;
 
     public AbilityData ability;
-    public List<MoveData> moves = new();
+    public List<MoveData> moves;
     public StatusData status;
 
     public bool hasChosen;

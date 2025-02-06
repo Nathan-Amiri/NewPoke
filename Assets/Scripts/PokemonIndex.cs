@@ -23,7 +23,7 @@ public class PokemonIndex : MonoBehaviour
         if (!indexMethods.ContainsKey(indexNumber))
         {
             Debug.LogError("The following pokemon index method was not found: " + indexNumber);
-            return null;
+            return default;
         }
 
         PokemonData data = indexMethods[indexNumber]();
