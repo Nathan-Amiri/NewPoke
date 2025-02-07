@@ -4,18 +4,19 @@ using UnityEngine;
 
 public class MoveEffectIndex : MonoBehaviour
 {
-    private delegate void IndexMethod(ChoiceInfo choiceInfo);
+    [SerializeField] private GameManager gameManager;
+    [SerializeField] private List<Sprite> statusIcons = new();
+
+    private delegate void IndexMethod(ChoiceInfo choiceInfo, int occurance);
 
     private readonly Dictionary<int, IndexMethod> indexMethods = new();
-
-    [SerializeField] private List<Sprite> statusIcons = new();
 
     private void Awake()
     {
         PopulateIndex();
     }
 
-    public void MoveEffect(ChoiceInfo choiceInfo)
+    public void MoveEffect(ChoiceInfo choiceInfo, int occurance)
     {
         int indexNumber = choiceInfo.casterSlot.data.moves[choiceInfo.choice].indexNumber;
 
@@ -25,14 +26,22 @@ public class MoveEffectIndex : MonoBehaviour
             return;
         }
 
-        indexMethods[indexNumber](choiceInfo);
+        indexMethods[indexNumber](choiceInfo, occurance);
     }
 
 
 
-    private void Protect(ChoiceInfo choiceInfo) // 0
+    private void Protect(ChoiceInfo choiceInfo, int occurance) // 0
     {
-        Debug.Log("protect");
+        if (occurance == 0)
+        {
+            Debug.Log("protect");
+            gameManager.AddDelayedEffect(choiceInfo, 1);
+        }
+        else
+        {
+            Debug.Log("protect again");
+        }
     }
 
 

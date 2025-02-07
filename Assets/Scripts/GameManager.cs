@@ -7,10 +7,15 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     // Todo:
-    // Types
-    // Delayed Effects
     // End Game
     // Repopulation
+    // Complete Loop
+    // Moves that:
+        // Deal damage
+        // Inflict Status
+        // Create field effect
+    // Types
+    // Draft & Quit Game
 
     // SCENE REFERENCE:
     [SerializeField] private List<PokemonSlot> pokemonSlots = new();
@@ -53,9 +58,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<Button> targetButtons = new();
 
     // CONSTANT:
-    private List<ChoiceInfo> choices = new();
-    private List<ChoiceInfo> pastChoices = new(); // Replay
-    private List<PokemonData> pastPokemon = new(); // Replay
+    private readonly List<ChoiceInfo> choices = new();
+    private readonly List<ChoiceInfo> pastChoices = new(); // Replay
+    private readonly List<PokemonData> pastPokemon = new(); // Replay
+
+    private readonly List<(ChoiceInfo, int)> delayedEffects = new();
 
     // DYNAMIC:
     private int selectedSlot;
@@ -352,11 +359,15 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < pokemonSlots.Count; i++)
             pokemonSlots[i].data = pastPokemon[i];
 
+        roundEnding = false;
+
         ExecuteChoice();
     }
 
     private void ExecuteChoice()
     {
+        // Check for game end
+
         GetNextChoice();
 
         if (nextChoice.choice == 4)
@@ -451,15 +462,21 @@ public class GameManager : MonoBehaviour
         if (nextChoice.choice == 4)
             SwitchEffect();
         else
-            moveEffectIndex.MoveEffect(nextChoice);
+            moveEffectIndex.MoveEffect(nextChoice, 0);
 
         choices.Remove(nextChoice);
 
-        // Remove any choices made by a caster that's no longer in the same slot they cast the choice from
         List<ChoiceInfo> choicesToRemove = new();
         foreach (ChoiceInfo choiceInfo in choices)
+        {
+            // Remove any choices made by a caster that's no longer in the same slot they cast the choice from
             if (choiceInfo.casterName != choiceInfo.casterSlot.data.pokemonName)
                 choicesToRemove.Add(choiceInfo);
+
+            // Remove any choices targeting an empty slot
+            if (choiceInfo.targetSlot.data.pokemonName == string.Empty)
+                choicesToRemove.Add(choiceInfo);
+        }
         foreach (ChoiceInfo choiceInfo in choicesToRemove)
             choices.Remove(choiceInfo);
 
@@ -497,13 +514,23 @@ public class GameManager : MonoBehaviour
         message.text = string.Empty;
         messageButton.SetActive(false);
 
-        // DelayedEffects
-
-        // Check for game end
+        List<(ChoiceInfo, int)> delayedEffectsToDelete = new();
+        foreach ((ChoiceInfo, int) delayedEffect in delayedEffects)
+        {
+            moveEffectIndex.MoveEffect(delayedEffect.Item1, delayedEffect.Item2);
+            delayedEffectsToDelete.Add(delayedEffect);
+        }
+        foreach ((ChoiceInfo, int) delayedEffectToDelete in delayedEffectsToDelete)
+            delayedEffects.Remove(delayedEffectToDelete);
 
         // Repopulation
 
-        Debug.Log("roundend");
+        // Loop back to delegation
+    }
+
+    public void AddDelayedEffect(ChoiceInfo info, int occurance)
+    {
+        delayedEffects.Add((info, occurance));
     }
 }
 public struct ChoiceInfo
