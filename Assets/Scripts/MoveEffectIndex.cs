@@ -35,13 +35,13 @@ public class MoveEffectIndex : MonoBehaviour
     {
         if (occurance == 0)
         {
-            Debug.Log("protect");
-            gameManager.AddDelayedEffect(choiceInfo, 1);
+            choiceInfo.targetSlot.HPChange(-10);
+            //gameManager.AddDelayedEffect(choiceInfo, 1);
         }
-        else
-        {
-            Debug.Log("protect again");
-        }
+        //else
+        //{
+        //    Debug.Log("protect again");
+        //}
     }
 
 

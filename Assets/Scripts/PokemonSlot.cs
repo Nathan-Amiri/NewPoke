@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class PokemonSlot : MonoBehaviour
 {
     // PREFAB REFERENCE:
-    [SerializeField] private Transform healthBar;
+    [SerializeField] private Transform healthBarPivot;
+    [SerializeField] private GameObject healthBarActive;
     [SerializeField] private GameObject statusActive;
     [SerializeField] private Image statusIcon;
 
@@ -32,10 +33,14 @@ public class PokemonSlot : MonoBehaviour
     }
     public void ReloadPokemon()
     {
+        pokemonImage.enabled = true;
         pokemonImage.sprite = data.sprite;
 
         if (!isBenchSlot)
-            healthBar.localScale = new Vector2(data.currentHP / data.baseHP, healthBar.localScale.y);
+        {
+            healthBarActive.SetActive(true);
+            healthBarPivot.localScale = new Vector2(data.currentHP / data.baseHP, healthBarPivot.localScale.y);
+        }
     }
 
     public List<bool> ChoicesInteractable()
@@ -46,14 +51,37 @@ public class PokemonSlot : MonoBehaviour
         {
             bool choiceInteractable = true;
 
+            if (isBenchSlot)
+                choiceInteractable = false;
+
             if (data.hasChosen)
                 choiceInteractable = false;
 
-            //other fail conditions here
+            // New fail conditions here
 
             choicesInteractable.Add(choiceInteractable);
         }
 
         return choicesInteractable;
+    }
+
+    public void HPChange(int amount)
+    {
+        data.currentHP += amount;
+        if (data.currentHP <= 0)
+            Faint();
+        else
+            ReloadPokemon();
+    }
+
+    private void Faint()
+    {
+        button.interactable = false;
+        slotIsEmpty = true;
+
+        pokemonImage.enabled = false;
+        if (!isBenchSlot)
+            healthBarActive.SetActive(false);
+        data = default;
     }
 }

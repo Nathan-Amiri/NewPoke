@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     // Todo:
-    // End Game
     // Repopulation
     // Complete Loop
     // Moves that:
@@ -15,6 +14,7 @@ public class GameManager : MonoBehaviour
         // Inflict Status
         // Create field effect
     // Types
+    // Battlefield, front/back facing sprites
     // Draft & Quit Game
 
     // SCENE REFERENCE:
@@ -23,8 +23,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private MoveEffectIndex moveEffectIndex;
 
     [SerializeField] private Button resetChoicesButton;
-    [SerializeField] private Button submitChoicesButton;
     [SerializeField] private Button replayButton;
+
+    [SerializeField] private GameObject submitChoicesButton;
 
     [SerializeField] private GameObject infoScreen;
 
@@ -79,10 +80,21 @@ public class GameManager : MonoBehaviour
     {
         foreach (PokemonSlot pokemonSlot in pokemonSlots)
             pokemonSlot.FirstLoadPokemon(0);
+
+        PrepareForNextChoice();
+    }
+
+    private void PrepareForNextChoice()
+    {
+        infoScreen.SetActive(false);
+        message.text = "Select a pokemon";
     }
 
     public void SelectPokemonSlot(int slot)
     {
+        infoScreen.SetActive(true);
+        message.text = string.Empty;
+
         selectedSlot = slot;
 
         PokemonData data = pokemonSlots[slot].data;
@@ -247,7 +259,14 @@ public class GameManager : MonoBehaviour
         ResetInteractable();
 
         if (choices.Count == 4)
-            submitChoicesButton.interactable = true;
+        {
+            infoScreen.SetActive(false);
+            message.text = string.Empty;
+
+            submitChoicesButton.SetActive(true);
+        }
+        else
+            PrepareForNextChoice();
     }
 
     public void SelectTarget(int targetSlot)
@@ -284,7 +303,7 @@ public class GameManager : MonoBehaviour
 
         infoScreen.SetActive(true);
 
-        submitChoicesButton.interactable = false;
+        submitChoicesButton.SetActive(false);
         resetChoicesButton.interactable = false;
 
         foreach (ChoiceInfo choice in choices)
@@ -295,6 +314,9 @@ public class GameManager : MonoBehaviour
 
         foreach (PokemonSlot pokemonSlot in pokemonSlots)
         {
+            if (pokemonSlot.slotIsEmpty)
+                continue;
+
             pokemonSlot.button.interactable = true;
             pokemonSlot.pokemonImage.color = Color.white;
         }
@@ -309,7 +331,7 @@ public class GameManager : MonoBehaviour
     {
         infoScreen.SetActive(false);
         resetChoicesButton.interactable = false;
-        submitChoicesButton.interactable = false;
+        submitChoicesButton.SetActive(false);
 
         pastChoices.Clear();
         foreach (ChoiceInfo currentChoice in choices)
@@ -324,8 +346,6 @@ public class GameManager : MonoBehaviour
             pastChoices.Add(pastChoice);
         }
 
-        choices.RemoveAt(0);
-
         pastPokemon.Clear();
         foreach (PokemonSlot pokemonSlot in pokemonSlots)
             pastPokemon.Add(pokemonSlot.data);
@@ -334,14 +354,14 @@ public class GameManager : MonoBehaviour
 
         random = Random.Range(0, 2) == 0;
 
-        ExecuteChoice();
+        PrepareNextChoiceExecution();
     }
 
     public void SelectReplay()
     {
         infoScreen.SetActive(false);
         resetChoicesButton.interactable = false;
-        submitChoicesButton.interactable = false;
+        submitChoicesButton.SetActive(false);
 
         choices.Clear();
         foreach (ChoiceInfo pastChoice in pastChoices)
@@ -357,23 +377,27 @@ public class GameManager : MonoBehaviour
         }
 
         for (int i = 0; i < pokemonSlots.Count; i++)
+        {
             pokemonSlots[i].data = pastPokemon[i];
+            pokemonSlots[i].ReloadPokemon();
+        }
 
         roundEnding = false;
 
-        ExecuteChoice();
+        PrepareNextChoiceExecution();
     }
 
-    private void ExecuteChoice()
+    private void PrepareNextChoiceExecution()
     {
-        // Check for game end
+        if (CheckForGameEnd())
+            return;
 
         GetNextChoice();
 
         if (nextChoice.choice == 4)
-            message.text = nextChoice.casterName + " is switching into " + nextChoice.targetSlot.data.pokemonName;
+            message.text = nextChoice.casterName + " will switch into " + nextChoice.targetSlot.data.pokemonName;
         else
-            message.text = nextChoice.casterName + " is using " + nextChoice.casterSlot.data.moves[nextChoice.choice].name;
+            message.text = nextChoice.casterName + " will use " + nextChoice.casterSlot.data.moves[nextChoice.choice].name;
 
         //add "super effective/not very effective/doesn't affect/the scale of the effectiveness exceeds mortal comprehension" to message,
         //if it hits multiple do multiple messages and make sure that there's room above the console button
@@ -451,20 +475,18 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SelectMessageButton()
+    public void SelectMessageButton() // Executes choices
     {
         if (roundEnding)
         {
             RoundEnd();
             return;
         }
-
+        
         if (nextChoice.choice == 4)
             SwitchEffect();
         else
             moveEffectIndex.MoveEffect(nextChoice, 0);
-
-        choices.Remove(nextChoice);
 
         List<ChoiceInfo> choicesToRemove = new();
         foreach (ChoiceInfo choiceInfo in choices)
@@ -474,14 +496,16 @@ public class GameManager : MonoBehaviour
                 choicesToRemove.Add(choiceInfo);
 
             // Remove any choices targeting an empty slot
-            if (choiceInfo.targetSlot.data.pokemonName == string.Empty)
+            if (choiceInfo.targetSlot != null && choiceInfo.targetSlot.data.pokemonName == string.Empty)
                 choicesToRemove.Add(choiceInfo);
         }
         foreach (ChoiceInfo choiceInfo in choicesToRemove)
             choices.Remove(choiceInfo);
 
+        choices.Remove(nextChoice);
+
         if (choices.Count > 0)
-            ExecuteChoice();
+            PrepareNextChoiceExecution();
         else
         {
             message.text = "Round will end";
@@ -507,6 +531,30 @@ public class GameManager : MonoBehaviour
         battleSlot.ReloadPokemon();
     }
 
+    private bool CheckForGameEnd()
+    {
+        // Returns true if the game is over
+
+        bool player1Loss = false;
+        bool player2Loss = false;
+
+        if (pokemonSlots[0].slotIsEmpty && pokemonSlots[1].slotIsEmpty && pokemonSlots[4].slotIsEmpty && pokemonSlots[5].slotIsEmpty)
+            player1Loss = true;
+        if (pokemonSlots[2].slotIsEmpty && !pokemonSlots[3].slotIsEmpty && pokemonSlots[6].slotIsEmpty && pokemonSlots[7].slotIsEmpty)
+            player2Loss = true;
+
+        if (player1Loss && player2Loss)
+            message.text = "All Pokemon have fainted. The game ends in a tie!";
+        else if (player1Loss)
+            message.text = "All of Player 1's Pokemon have fainted. Player 2 wins!";
+        else if (player2Loss)
+            message.text = "All of Player 2's Pokemon have fainted. Player 1 wins!";
+        else
+            return false;
+
+        return true;
+    }
+
     private void RoundEnd()
     {
         roundEnding = false;
@@ -523,9 +571,24 @@ public class GameManager : MonoBehaviour
         foreach ((ChoiceInfo, int) delayedEffectToDelete in delayedEffectsToDelete)
             delayedEffects.Remove(delayedEffectToDelete);
 
-        // Repopulation
+        //poison and sandstorm here
 
-        // Loop back to delegation
+        if (CheckForGameEnd())
+            return;
+
+        if (CheckForRepopulation())
+            return;
+
+        //loop back to delegation
+    }
+
+    private bool CheckForRepopulation()
+    {
+        // Returns false if no Repopulation was needed
+
+        //display targets on options, don't automatically repopoulate anyone, when selecting a target the pokemon doesn't switch but the target on the other option disappears if there was another. Players
+        //don't take turns, they choose at the same time, but the submit choices button appears when finished in case someone bumps another's button.
+        return false;
     }
 
     public void AddDelayedEffect(ChoiceInfo info, int occurance)

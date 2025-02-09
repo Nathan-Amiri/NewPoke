@@ -36,8 +36,8 @@ public class MoveIndex : MonoBehaviour
             name = "Protect",
             description = "I become protected from everything this round",
             priority = 7,
-            isDamaging = false,
-            isTargeted = false
+            isDamaging = true,
+            isTargeted = true
         };
     }
 
