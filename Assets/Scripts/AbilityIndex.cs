@@ -18,7 +18,7 @@ public class AbilityIndex : MonoBehaviour
         if (!indexMethods.ContainsKey(indexNumber))
         {
             Debug.LogError("The following ability index method was not found: " + indexNumber);
-            return null;
+            return default;
         }
 
         return indexMethods[indexNumber]();

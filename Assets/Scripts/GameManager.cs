@@ -7,10 +7,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     // Todo:
-    // Repopulation
-    // Complete Loop
     // Moves that:
-        // Deal damage
         // Inflict Status
         // Create field effect
     // Types
@@ -76,6 +73,9 @@ public class GameManager : MonoBehaviour
 
     private bool roundEnding; // Message Button
 
+    private bool repopulating; // Select Target
+    private readonly List<int> benchSlotsToRepopulate = new();
+
     private void Start()
     {
         foreach (PokemonSlot pokemonSlot in pokemonSlots)
@@ -127,7 +127,7 @@ public class GameManager : MonoBehaviour
         infoAbilityName.text = data.ability.name;
         infoAbilityDescription.text = data.ability.description;
 
-        if (data.status == null)
+        if (data.status.name == null)
         {
             infoNoStatusImage.SetActive(true);
 
@@ -230,9 +230,12 @@ public class GameManager : MonoBehaviour
         else // selectedSlot == 3
             targetSlots = new() { 0, 1, 2 };
 
+        List<int> targetSlotsToRemove = new();
         foreach (int targetSlot in targetSlots)
             if (pokemonSlots[targetSlot].slotIsEmpty)
-                targetSlots.Remove(targetSlot);
+                targetSlotsToRemove.Add(targetSlot);
+        foreach (int targetSlotToRemove in targetSlotsToRemove)
+            targetSlots.Remove(targetSlotToRemove);
 
         return targetSlots;
     }
@@ -244,10 +247,13 @@ public class GameManager : MonoBehaviour
             targetSlots = new() { 4, 5 };
         else // selectedSlot == 2 or 3
             targetSlots = new() { 6, 7 };
-
+        
+        List<int> targetSlotsToRemove = new();
         foreach (int targetSlot in targetSlots)
             if (pokemonSlots[targetSlot].slotIsEmpty)
-                targetSlots.Remove(targetSlot);
+                targetSlotsToRemove.Add(targetSlot);
+        foreach (int targetSlotToRemove in targetSlotsToRemove)
+            targetSlots.Remove(targetSlotToRemove);
 
         return targetSlots;
     }
@@ -258,12 +264,23 @@ public class GameManager : MonoBehaviour
 
         ResetInteractable();
 
-        if (choices.Count == 4)
+        if (choices[^1].choice == 4)
+            choices[^1].targetSlot.data.availableToSwitchIn = false;
+
+        int choicesNeeded = 0;
+        for (int i = 0; i < 4; i++)
+            if (!pokemonSlots[i].slotIsEmpty)
+                choicesNeeded++;
+
+        if (choices.Count == choicesNeeded)
         {
             infoScreen.SetActive(false);
             message.text = string.Empty;
 
             submitChoicesButton.SetActive(true);
+
+            foreach (PokemonSlot pokemonSlot in pokemonSlots)
+                pokemonSlot.button.interactable = false;
         }
         else
             PrepareForNextChoice();
@@ -271,6 +288,12 @@ public class GameManager : MonoBehaviour
 
     public void SelectTarget(int targetSlot)
     {
+        if (repopulating)
+        {
+            SelectRepopulationTarget(targetSlot);
+            return;
+        }
+
         ChoiceInfo temp = choices[^1];
         temp.targetSlot = pokemonSlots[targetSlot];
         choices[^1] = temp;
@@ -297,9 +320,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void ResetChoices()
+    public void SelectResetChoices()
     {
-        // remove targets
+        if (repopulating)
+        {
+            SelectResetRepopulationChoices();
+            return;
+        }
 
         infoScreen.SetActive(true);
 
@@ -319,16 +346,23 @@ public class GameManager : MonoBehaviour
 
             pokemonSlot.button.interactable = true;
             pokemonSlot.pokemonImage.color = Color.white;
+
+            pokemonSlot.data.availableToSwitchIn = true; // See note in ResetForNewRound
         }
 
         ResetTargetButtons();
 
-
-        message.text = string.Empty;
+        PrepareForNextChoice();
     }
 
-    public void SubmitChoices()
+    public void SelectSubmitChoices()
     {
+        if (repopulating)
+        {
+            SelectSubmitRepopulationChoices();
+            return;
+        }
+
         infoScreen.SetActive(false);
         resetChoicesButton.interactable = false;
         submitChoicesButton.SetActive(false);
@@ -389,9 +423,6 @@ public class GameManager : MonoBehaviour
 
     private void PrepareNextChoiceExecution()
     {
-        if (CheckForGameEnd())
-            return;
-
         GetNextChoice();
 
         if (nextChoice.choice == 4)
@@ -484,7 +515,7 @@ public class GameManager : MonoBehaviour
         }
         
         if (nextChoice.choice == 4)
-            SwitchEffect();
+            Switch(nextChoice.casterSlot, nextChoice.targetSlot);
         else
             moveEffectIndex.MoveEffect(nextChoice, 0);
 
@@ -496,13 +527,16 @@ public class GameManager : MonoBehaviour
                 choicesToRemove.Add(choiceInfo);
 
             // Remove any choices targeting an empty slot
-            if (choiceInfo.targetSlot != null && choiceInfo.targetSlot.data.pokemonName == string.Empty)
+            if (choiceInfo.targetSlot != null && choiceInfo.targetSlot.data.pokemonName == null)
                 choicesToRemove.Add(choiceInfo);
         }
         foreach (ChoiceInfo choiceInfo in choicesToRemove)
             choices.Remove(choiceInfo);
 
         choices.Remove(nextChoice);
+
+        if (CheckForGameEnd())
+            return;
 
         if (choices.Count > 0)
             PrepareNextChoiceExecution();
@@ -522,13 +556,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void SwitchEffect()
+    private void Switch(PokemonSlot slot1, PokemonSlot slot2)
     {
-        PokemonSlot battleSlot = pokemonSlots[nextChoice.casterSlot.slotNumber];
+        (slot1.data, slot2.data) = (slot2.data, slot1.data);
 
-        (nextChoice.targetSlot.data, battleSlot.data) = (battleSlot.data, nextChoice.targetSlot.data);
-
-        battleSlot.ReloadPokemon();
+        slot1.ReloadPokemon();
+        slot2.ReloadPokemon();
     }
 
     private bool CheckForGameEnd()
@@ -552,6 +585,10 @@ public class GameManager : MonoBehaviour
         else
             return false;
 
+        messageButton.SetActive(false);
+        ResetTargetButtons();
+        replayButton.interactable = false;
+
         return true;
     }
 
@@ -561,6 +598,8 @@ public class GameManager : MonoBehaviour
 
         message.text = string.Empty;
         messageButton.SetActive(false);
+
+        replayButton.interactable = false;
 
         List<(ChoiceInfo, int)> delayedEffectsToDelete = new();
         foreach ((ChoiceInfo, int) delayedEffect in delayedEffects)
@@ -579,21 +618,128 @@ public class GameManager : MonoBehaviour
         if (CheckForRepopulation())
             return;
 
-        //loop back to delegation
+        ResetForNewRound();
+    }
+    public void AddDelayedEffect(ChoiceInfo info, int occurance)
+    {
+        delayedEffects.Add((info, occurance));
     }
 
     private bool CheckForRepopulation()
     {
         // Returns false if no Repopulation was needed
 
-        //display targets on options, don't automatically repopoulate anyone, when selecting a target the pokemon doesn't switch but the target on the other option disappears if there was another. Players
-        //don't take turns, they choose at the same time, but the submit choices button appears when finished in case someone bumps another's button.
+        benchSlotsToRepopulate.Clear();
+
+        RepopulateTargetButtons(new() { 0, 1, 4, 5 });
+        RepopulateTargetButtons(new() { 2, 3, 6, 7 });
+
+        foreach (Button targetButton in targetButtons)
+            if (targetButton.gameObject.activeSelf)
+            {
+                message.text = "Select Pokemon to Switch in";
+
+                repopulating = true;
+                return true;
+            }
+
         return false;
     }
-
-    public void AddDelayedEffect(ChoiceInfo info, int occurance)
+    private void RepopulateTargetButtons(List<int> targetSlots)
     {
-        delayedEffects.Add((info, occurance));
+        if (pokemonSlots[targetSlots[0]].slotIsEmpty || pokemonSlots[targetSlots[1]].slotIsEmpty)
+        {
+            if (!pokemonSlots[targetSlots[2]].slotIsEmpty && !pokemonSlots[targetSlots[3]].slotIsEmpty)
+            {
+                targetButtons[targetSlots[2]].gameObject.SetActive(true);
+                targetButtons[targetSlots[3]].gameObject.SetActive(true);
+            }
+            else if (!pokemonSlots[targetSlots[2]].slotIsEmpty)
+                targetButtons[targetSlots[2]].gameObject.SetActive(true);
+            else if (!pokemonSlots[targetSlots[3]].slotIsEmpty)
+                targetButtons[targetSlots[3]].gameObject.SetActive(true);
+        }
+    }
+
+    private void SelectRepopulationTarget(int targetSlot)
+    {
+        benchSlotsToRepopulate.Add(targetSlot);
+
+        targetButtons[targetSlot].gameObject.SetActive(false);
+        TurnOffRepopulationTargets(targetSlot, new() { 0, 1, 4, 5 });
+        TurnOffRepopulationTargets(targetSlot, new() { 2, 3, 6, 7 });
+
+        resetChoicesButton.interactable = true;
+
+        foreach (Button targetButton in targetButtons)
+            if (targetButton.gameObject.activeSelf)
+                return;
+
+        message.text = string.Empty;
+        submitChoicesButton.SetActive(true);
+    }
+    private void TurnOffRepopulationTargets(int selectedTarget, List<int> targetSlots)
+    {
+        if (selectedTarget == targetSlots[2] || selectedTarget == targetSlots[3])
+        {
+            if (!pokemonSlots[targetSlots[0]].slotIsEmpty || !pokemonSlots[targetSlots[1]].slotIsEmpty)
+            {
+                targetButtons[targetSlots[2]].gameObject.SetActive(false);
+                targetButtons[targetSlots[3]].gameObject.SetActive(false);
+            }
+        }
+    }
+
+    private void SelectResetRepopulationChoices()
+    {
+        resetChoicesButton.interactable = false;
+        submitChoicesButton.SetActive(false);
+
+        CheckForRepopulation();
+    }
+
+    private void SelectSubmitRepopulationChoices()
+    {
+        repopulating = false;
+        resetChoicesButton.interactable = false;
+        submitChoicesButton.SetActive(false);
+
+        foreach (int benchSlot in benchSlotsToRepopulate)
+        {
+            if (benchSlot == 4 || benchSlot == 5)
+            {
+                if (pokemonSlots[0].slotIsEmpty)
+                    Switch(pokemonSlots[benchSlot], pokemonSlots[0]);
+                else
+                    Switch(pokemonSlots[benchSlot], pokemonSlots[1]);
+            }
+            else
+            {
+                if (pokemonSlots[2].slotIsEmpty)
+                    Switch(pokemonSlots[benchSlot], pokemonSlots[2]);
+                else
+                    Switch(pokemonSlots[benchSlot], pokemonSlots[3]);
+            }
+        }
+
+        ResetForNewRound();
+    }
+
+    private void ResetForNewRound()
+    {
+        foreach (PokemonSlot pokemonSlot in pokemonSlots)
+        {
+            pokemonSlot.button.interactable = true;
+            pokemonSlot.pokemonImage.color = Color.white;
+
+            pokemonSlot.data.hasChosen = false;
+
+            // This check is necessary so that PokemonSlot's ChoiceInteractable can use availableToSwitchIn to ensure that slot isn't empty AND pokemon is available to switch
+            if (!pokemonSlot.slotIsEmpty)
+                pokemonSlot.data.availableToSwitchIn = true;
+        }
+
+        PrepareForNextChoice();
     }
 }
 public struct ChoiceInfo

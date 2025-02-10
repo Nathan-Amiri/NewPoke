@@ -2261,6 +2261,18 @@ PrefabInstance:
       propertyPath: pokemonIndex
       value: 
       objectReference: {fileID: 1092461928}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: benchedAllySlots.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: benchedAllySlots.Array.data[0]
+      value: 
+      objectReference: {fileID: 1979912382}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: benchedAllySlots.Array.data[1]
+      value: 
+      objectReference: {fileID: 489497926}
     - target: {fileID: 3689600461146886012, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: m_Color.b
       value: 1
@@ -5402,6 +5414,18 @@ PrefabInstance:
       propertyPath: pokemonIndex
       value: 
       objectReference: {fileID: 1092461928}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: benchedAllySlots.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: benchedAllySlots.Array.data[0]
+      value: 
+      objectReference: {fileID: 1979912382}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: benchedAllySlots.Array.data[1]
+      value: 
+      objectReference: {fileID: 489497926}
     - target: {fileID: 3689600461146886012, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: m_Color.b
       value: 1
@@ -7828,7 +7852,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1092461925}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: SubmitChoices
+        m_MethodName: SelectSubmitChoices
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8919,6 +8943,18 @@ PrefabInstance:
       propertyPath: pokemonIndex
       value: 
       objectReference: {fileID: 1092461928}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: benchedAllySlots.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: benchedAllySlots.Array.data[0]
+      value: 
+      objectReference: {fileID: 453306947}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: benchedAllySlots.Array.data[1]
+      value: 
+      objectReference: {fileID: 1461273278}
     - target: {fileID: 3689600461146886012, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: m_Color.b
       value: 1
@@ -11434,7 +11470,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1092461925}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: ResetChoices
+        m_MethodName: SelectResetChoices
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12485,6 +12521,18 @@ PrefabInstance:
       propertyPath: pokemonIndex
       value: 
       objectReference: {fileID: 1092461928}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: benchedAllySlots.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: benchedAllySlots.Array.data[0]
+      value: 
+      objectReference: {fileID: 453306947}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: benchedAllySlots.Array.data[1]
+      value: 
+      objectReference: {fileID: 1461273278}
     - target: {fileID: 3689600461146886012, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: m_Sprite
       value: 

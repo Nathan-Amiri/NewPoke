@@ -21,8 +21,10 @@ public struct PokemonData
     public StatusData status;
 
     public bool hasChosen;
+
+    public bool availableToSwitchIn;
 }
-public class MoveData
+public struct MoveData
 {
     public int pokeType;
 
@@ -37,12 +39,12 @@ public class MoveData
 
     public int indexNumber; // MoveEffect
 }
-public class AbilityData
+public struct AbilityData
 {
     public string name;
     public string description;
 }
-public class StatusData
+public struct StatusData
 {
     public Sprite icon;
 

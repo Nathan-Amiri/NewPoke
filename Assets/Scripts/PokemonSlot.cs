@@ -16,6 +16,7 @@ public class PokemonSlot : MonoBehaviour
 
     // SCENE REFERENCE:
     [SerializeField] private PokemonIndex pokemonIndex;
+    [SerializeField] private List<PokemonSlot> benchedAllySlots = new();
 
     public bool isBenchSlot;
     public int slotNumber;
@@ -29,6 +30,8 @@ public class PokemonSlot : MonoBehaviour
     {
         data = pokemonIndex.LoadPokemonFromIndex(indexNumber);
 
+        data.availableToSwitchIn = true;
+
         ReloadPokemon();
     }
     public void ReloadPokemon()
@@ -41,25 +44,29 @@ public class PokemonSlot : MonoBehaviour
             healthBarActive.SetActive(true);
             healthBarPivot.localScale = new Vector2(data.currentHP / data.baseHP, healthBarPivot.localScale.y);
         }
+
+        slotIsEmpty = data.pokemonName == null;
     }
 
     public List<bool> ChoicesInteractable()
     {
         List<bool> choicesInteractable = new();
 
-        for (int i = 0; i < 5; i++) // 5 = Switch interactable
+        for (int i = 0; i < 5; i++) // 4 = Switch interactable
         {
-            bool choiceInteractable = true;
+            choicesInteractable.Add(false);
 
             if (isBenchSlot)
-                choiceInteractable = false;
+                continue;
 
             if (data.hasChosen)
-                choiceInteractable = false;
+                continue;
 
-            // New fail conditions here
+            // If both bench slots are empty or unavailable
+            if (i == 4 && !benchedAllySlots[0].data.availableToSwitchIn && !benchedAllySlots[1].data.availableToSwitchIn)
+                continue;
 
-            choicesInteractable.Add(choiceInteractable);
+            choicesInteractable[^1] = true;
         }
 
         return choicesInteractable;
@@ -70,6 +77,8 @@ public class PokemonSlot : MonoBehaviour
         data.currentHP += amount;
         if (data.currentHP <= 0)
             Faint();
+        else if (data.currentHP > data.baseHP)
+            data.currentHP = data.baseHP;
         else
             ReloadPokemon();
     }

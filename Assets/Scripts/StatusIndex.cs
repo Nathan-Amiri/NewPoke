@@ -20,7 +20,7 @@ public class StatusIndex : MonoBehaviour
         if (!indexMethods.ContainsKey(indexNumber))
         {
             Debug.LogError("The following status index method was not found: " + indexNumber);
-            return null;
+            return default;
         }
 
         return indexMethods[indexNumber]();

@@ -18,7 +18,7 @@ public class MoveIndex : MonoBehaviour
         if (!indexMethods.ContainsKey(indexNumber))
         {
             Debug.LogError("The following move index method was not found: " + indexNumber);
-            return null;
+            return default;
         }
 
         MoveData data = indexMethods[indexNumber]();
