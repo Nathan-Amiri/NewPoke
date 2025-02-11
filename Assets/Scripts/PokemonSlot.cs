@@ -16,6 +16,7 @@ public class PokemonSlot : MonoBehaviour
 
     // SCENE REFERENCE:
     [SerializeField] private PokemonIndex pokemonIndex;
+    [SerializeField] private StatusIndex statusIndex;
     [SerializeField] private List<PokemonSlot> benchedAllySlots = new();
 
     public bool isBenchSlot;
@@ -43,6 +44,14 @@ public class PokemonSlot : MonoBehaviour
         {
             healthBarActive.SetActive(true);
             healthBarPivot.localScale = new Vector2(data.currentHP / data.baseHP, healthBarPivot.localScale.y);
+
+            if (data.status.name != null)
+            {
+                statusActive.SetActive(true);
+                statusIcon.sprite = data.status.icon;
+            }
+            else
+                statusActive.SetActive(false);
         }
 
         slotIsEmpty = data.pokemonName == null;
@@ -81,6 +90,22 @@ public class PokemonSlot : MonoBehaviour
             data.currentHP = data.baseHP;
         else
             ReloadPokemon();
+    }
+
+    public void NewStatus(int newStatus)
+    {
+        if (newStatus == 1 && data.pokeTypes.Contains(1)) // Fire types can't be Burned
+            return;
+        if (newStatus == 2 && data.pokeTypes.Contains(4)) // Electric types can't be Paralyzed
+            return;
+        if (newStatus == 3 && (data.pokeTypes.Contains(7) || data.pokeTypes.Contains(16))) // Poison and Steel types can't be Poisoned
+            return;
+
+        data.status = statusIndex.LoadStatusFromIndex(newStatus);
+    }
+    public void ClearStatus()
+    {
+        data.status = default;
     }
 
     private void Faint()

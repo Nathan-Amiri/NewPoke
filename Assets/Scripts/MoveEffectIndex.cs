@@ -36,12 +36,11 @@ public class MoveEffectIndex : MonoBehaviour
         if (occurance == 0)
         {
             choiceInfo.targetSlot.HPChange(-10);
-            //gameManager.AddDelayedEffect(choiceInfo, 1);
+
+            gameManager.ToggleFieldEffect("Rain", true, 2);
+
+            choiceInfo.casterSlot.NewStatus(0);
         }
-        //else
-        //{
-        //    Debug.Log("protect again");
-        //}
     }
 
 

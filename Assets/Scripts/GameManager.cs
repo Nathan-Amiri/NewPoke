@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -9,7 +10,6 @@ public class GameManager : MonoBehaviour
     // Todo:
     // Moves that:
         // Inflict Status
-        // Create field effect
     // Types
     // Battlefield, front/back facing sprites
     // Draft & Quit Game
@@ -55,12 +55,18 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private List<Button> targetButtons = new();
 
+    [SerializeField] private TMP_Text fieldEffectsText;
+
     // CONSTANT:
     private readonly List<ChoiceInfo> choices = new();
     private readonly List<ChoiceInfo> pastChoices = new(); // Replay
     private readonly List<PokemonData> pastPokemon = new(); // Replay
 
     private readonly List<(ChoiceInfo, int)> delayedEffects = new();
+
+    private readonly List<int> benchSlotsToRepopulate = new();
+
+    [NonSerialized] public readonly Dictionary<string, int> fieldEffects = new(); // int = duration
 
     // DYNAMIC:
     private int selectedSlot;
@@ -74,7 +80,6 @@ public class GameManager : MonoBehaviour
     private bool roundEnding; // Message Button
 
     private bool repopulating; // Select Target
-    private readonly List<int> benchSlotsToRepopulate = new();
 
     private void Start()
     {
@@ -121,8 +126,8 @@ public class GameManager : MonoBehaviour
         }
 
         infoHP.text = data.currentHP.ToString();
-        infoAttack.text = data.attack.ToString();
-        infoSpeed.text = data.speed.ToString("0.0");
+        infoAttack.text = data.currentAttack.ToString();
+        infoSpeed.text = data.currentSpeed.ToString("0.0");
 
         infoAbilityName.text = data.ability.name;
         infoAbilityDescription.text = data.ability.description;
@@ -386,7 +391,7 @@ public class GameManager : MonoBehaviour
 
         replayButton.interactable = true;
 
-        random = Random.Range(0, 2) == 0;
+        random = UnityEngine.Random.Range(0, 2) == 0;
 
         PrepareNextChoiceExecution();
     }
@@ -473,8 +478,8 @@ public class GameManager : MonoBehaviour
                 continue;
             }
 
-            if (choiceInfo.casterSlot.data.speed > nextChoice.casterSlot.data.speed || 
-                choiceInfo.casterSlot.data.speed == nextChoice.casterSlot.data.speed && random)
+            if (choiceInfo.casterSlot.data.currentSpeed > nextChoice.casterSlot.data.currentSpeed || 
+                choiceInfo.casterSlot.data.currentSpeed == nextChoice.casterSlot.data.currentSpeed && random)
                 nextChoice = choiceInfo;
         }
 
@@ -500,8 +505,8 @@ public class GameManager : MonoBehaviour
                 continue;
             }
 
-            if (choiceInfo.casterSlot.data.speed > nextChoice.casterSlot.data.speed ||
-                choiceInfo.casterSlot.data.speed == nextChoice.casterSlot.data.speed && random)
+            if (choiceInfo.casterSlot.data.currentSpeed > nextChoice.casterSlot.data.currentSpeed ||
+                choiceInfo.casterSlot.data.currentSpeed == nextChoice.casterSlot.data.currentSpeed && random)
                 nextChoice = choiceInfo;
         }
     }
@@ -519,6 +524,11 @@ public class GameManager : MonoBehaviour
         else
             moveEffectIndex.MoveEffect(nextChoice, 0);
 
+        foreach (PokemonSlot pokemonSlot in pokemonSlots)
+            pokemonSlot.ReloadPokemon();
+
+        choices.Remove(nextChoice);
+
         List<ChoiceInfo> choicesToRemove = new();
         foreach (ChoiceInfo choiceInfo in choices)
         {
@@ -532,8 +542,6 @@ public class GameManager : MonoBehaviour
         }
         foreach (ChoiceInfo choiceInfo in choicesToRemove)
             choices.Remove(choiceInfo);
-
-        choices.Remove(nextChoice);
 
         if (CheckForGameEnd())
             return;
@@ -573,7 +581,7 @@ public class GameManager : MonoBehaviour
 
         if (pokemonSlots[0].slotIsEmpty && pokemonSlots[1].slotIsEmpty && pokemonSlots[4].slotIsEmpty && pokemonSlots[5].slotIsEmpty)
             player1Loss = true;
-        if (pokemonSlots[2].slotIsEmpty && !pokemonSlots[3].slotIsEmpty && pokemonSlots[6].slotIsEmpty && pokemonSlots[7].slotIsEmpty)
+        if (pokemonSlots[2].slotIsEmpty && pokemonSlots[3].slotIsEmpty && pokemonSlots[6].slotIsEmpty && pokemonSlots[7].slotIsEmpty)
             player2Loss = true;
 
         if (player1Loss && player2Loss)
@@ -611,9 +619,21 @@ public class GameManager : MonoBehaviour
             delayedEffects.Remove(delayedEffectToDelete);
 
         //poison and sandstorm here
-
         if (CheckForGameEnd())
             return;
+
+        List<KeyValuePair<string, int>> cachedFieldEffects = new();
+        foreach (KeyValuePair<string, int> fieldEffect in fieldEffects)
+            cachedFieldEffects.Add(fieldEffect);
+        foreach(KeyValuePair<string, int> cachedFieldEffect in cachedFieldEffects)
+        {
+            fieldEffects.Remove(cachedFieldEffect.Key);
+            if (cachedFieldEffect.Value > 1)
+                fieldEffects.Add(cachedFieldEffect.Key, cachedFieldEffect.Value - 1);
+        }
+        UpdateFieldEffectsText();
+
+
 
         if (CheckForRepopulation())
             return;
@@ -740,6 +760,23 @@ public class GameManager : MonoBehaviour
         }
 
         PrepareForNextChoice();
+    }
+
+    public void ToggleFieldEffect(string newFieldEffect, bool on, int duration = 0)
+    {
+        if (!on)
+            fieldEffects.Remove(newFieldEffect);
+        else if (!fieldEffects.ContainsKey(newFieldEffect))
+            fieldEffects.Add(newFieldEffect, duration);
+
+        UpdateFieldEffectsText();
+    }
+    private void UpdateFieldEffectsText()
+    {
+        string newFieldEffectsText = string.Empty;
+        foreach (KeyValuePair<string, int> fieldEffect in fieldEffects)
+            newFieldEffectsText += fieldEffect.Key + " (" + fieldEffect.Value + " rounds)\n";
+        fieldEffectsText.text = newFieldEffectsText;
     }
 }
 public struct ChoiceInfo

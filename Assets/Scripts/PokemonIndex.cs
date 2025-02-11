@@ -48,8 +48,8 @@ public class PokemonIndex : MonoBehaviour
                 moveIndex.LoadMoveFromIndex(0)
                 },
             baseHP = 5,
-            attack = 5,
-            speed = 5.5f
+            baseAttack = 5,
+            baseSpeed = 5.5f
         };
     }
 

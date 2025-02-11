@@ -27,14 +27,40 @@ public class StatusIndex : MonoBehaviour
     }
 
 
-
-    private StatusData Poison() // 0
+    private StatusData Asleep() // 0
     {
         return new StatusData
         {
             icon = statusIcons[0],
-            name = "Poison",
-            description = "I lose 1 hp at the end of each round"
+            name = "Asleep",
+            description = "The next 2 times I move, the move fails. Then, I wake up"
+        };
+    }
+    private StatusData Burned() // 1
+    {
+        return new StatusData
+        {
+            icon = statusIcons[1],
+            name = "Burned",
+            description = "My Attack is halved, rounding up. Fire types can't be Burned"
+        };
+    }
+    private StatusData Paralyzed() // 2
+    {
+        return new StatusData
+        {
+            icon = statusIcons[2],
+            name = "Poisoned",
+            description = "My Speed is halved, rounding up. Electric types can't be Paralyzed"
+        };
+    }
+    private StatusData Poisoned() // 3
+    {
+        return new StatusData
+        {
+            icon = statusIcons[3],
+            name = "Poisoned",
+            description = "I lose 1 hp at the end of each round. Poison and Steel types can't be Poisoned"
         };
     }
 
@@ -42,6 +68,9 @@ public class StatusIndex : MonoBehaviour
 
     private void PopulateIndex()
     {
-        indexMethods.Add(0, Poison);
+        indexMethods.Add(0, Asleep);
+        indexMethods.Add(1, Burned);
+        indexMethods.Add(2, Paralyzed);
+        indexMethods.Add(3, Poisoned);
     }
 }

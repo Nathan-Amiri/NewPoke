@@ -930,6 +930,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 105776069}
   m_CullTransparentMesh: 1
+--- !u!114 &123640584 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5158049225388332955, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+  m_PrefabInstance: {fileID: 1540209473}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &141957383
 GameObject:
   m_ObjectHideFlags: 0
@@ -967,17 +978,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 80}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &157091998 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6400104671227407313, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
-  m_PrefabInstance: {fileID: 1540209473}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &157772024
 GameObject:
   m_ObjectHideFlags: 0
@@ -2258,6 +2258,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: statusIndex
+      value: 
+      objectReference: {fileID: 1092461930}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: pokemonIndex
       value: 
       objectReference: {fileID: 1092461928}
@@ -3095,6 +3099,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: statusIndex
+      value: 
+      objectReference: {fileID: 1092461930}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: pokemonIndex
       value: 
       objectReference: {fileID: 1092461928}
@@ -3380,6 +3388,10 @@ PrefabInstance:
       propertyPath: isBenchSlot
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: statusIndex
+      value: 
+      objectReference: {fileID: 1092461930}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: pokemonIndex
       value: 
@@ -4985,8 +4997,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Trick Room (4 turns)\nTailwind (2 turns)\nPsychic Terrain (5 turns)\nRain
-    (1 turn)
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5410,6 +5421,10 @@ PrefabInstance:
       propertyPath: slotNumber
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: statusIndex
+      value: 
+      objectReference: {fileID: 1092461930}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: pokemonIndex
       value: 
@@ -6158,6 +6173,81 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!1 &1028868189
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1028868190}
+  - component: {fileID: 1028868192}
+  - component: {fileID: 1028868191}
+  m_Layer: 5
+  m_Name: WhiteBack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1028868190
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1028868189}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1064183221}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 50, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1028868191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1028868189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1028868192
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1028868189}
+  m_CullTransparentMesh: 1
 --- !u!1 &1044202496
 GameObject:
   m_ObjectHideFlags: 0
@@ -6321,6 +6411,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 283695804}
+  - {fileID: 1028868190}
   - {fileID: 1696344087}
   - {fileID: 1503888707}
   m_Father: {fileID: 1757950508}
@@ -6565,6 +6656,7 @@ MonoBehaviour:
   - {fileID: 702263983}
   - {fileID: 972551237}
   - {fileID: 103632535}
+  fieldEffectsText: {fileID: 766199677}
   pokemonDim: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
 --- !u!114 &1092461926
 MonoBehaviour:
@@ -6632,7 +6724,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9ae445b8544a924fb1512a9e192446f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statusIcons: []
+  statusIcons:
+  - {fileID: 21300000, guid: a812eb1c6cb112e47a1388b8bce6a975, type: 3}
+  - {fileID: 21300000, guid: f390ef5da130d7b4c994584713cb5b17, type: 3}
+  - {fileID: 21300000, guid: 255507a4bb3f0cd469bf51987b4be2c1, type: 3}
+  - {fileID: 21300000, guid: e8c7fcd226f19d2478fb5c4d764d2fcc, type: 3}
 --- !u!1 &1167782775
 GameObject:
   m_ObjectHideFlags: 0
@@ -8234,6 +8330,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: statusIndex
+      value: 
+      objectReference: {fileID: 1092461930}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: pokemonIndex
       value: 
       objectReference: {fileID: 1092461928}
@@ -8938,7 +9038,11 @@ PrefabInstance:
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: statusIcon
       value: 
-      objectReference: {fileID: 157091998}
+      objectReference: {fileID: 123640584}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: statusIndex
+      value: 
+      objectReference: {fileID: 1092461930}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: pokemonIndex
       value: 
@@ -11073,6 +11177,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: statusIndex
+      value: 
+      objectReference: {fileID: 1092461930}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: pokemonIndex
       value: 
       objectReference: {fileID: 1092461928}
@@ -12517,6 +12625,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slot0Pokemon
       objectReference: {fileID: 0}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: statusIndex
+      value: 
+      objectReference: {fileID: 1092461930}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: pokemonIndex
       value: 

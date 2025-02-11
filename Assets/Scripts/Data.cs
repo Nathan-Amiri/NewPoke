@@ -13,8 +13,10 @@ public struct PokemonData
 
     public int baseHP;
     public int currentHP;
-    public int attack;
-    public float speed;
+    public int baseAttack;
+    public int currentAttack;
+    public float baseSpeed;
+    public float currentSpeed;
 
     public AbilityData ability;
     public List<MoveData> moves;
