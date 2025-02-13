@@ -37,6 +37,13 @@ public class PokemonSlot : MonoBehaviour
     }
     public void ReloadPokemon()
     {
+        slotIsEmpty = data.pokemonName == null;
+        if (slotIsEmpty)
+        {
+            pokemonImage.sprite = null; // Used for bench slots
+            return;
+        }
+
         pokemonImage.enabled = true;
         pokemonImage.sprite = data.sprite;
 
@@ -53,8 +60,6 @@ public class PokemonSlot : MonoBehaviour
             else
                 statusActive.SetActive(false);
         }
-
-        slotIsEmpty = data.pokemonName == null;
     }
 
     public List<bool> ChoicesInteractable()

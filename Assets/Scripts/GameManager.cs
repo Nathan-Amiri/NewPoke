@@ -129,7 +129,7 @@ public class GameManager : MonoBehaviour
         infoAttack.text = data.currentAttack.ToString();
         infoSpeed.text = data.currentSpeed.ToString("0.0");
 
-        infoAbilityName.text = data.ability.name;
+        infoAbilityName.text = "Ability = " + data.ability.name;
         infoAbilityDescription.text = data.ability.description;
 
         if (data.status.name == null)
@@ -144,7 +144,7 @@ public class GameManager : MonoBehaviour
             infoNoStatusImage.SetActive(false);
 
             infoStatusIcon.sprite = data.status.icon;
-            infoStatusName.text = data.status.name;
+            infoStatusName.text = "Status - " + data.status.name;
             infoStatusDescription.text = data.status.description;
         }
 
@@ -255,7 +255,7 @@ public class GameManager : MonoBehaviour
         
         List<int> targetSlotsToRemove = new();
         foreach (int targetSlot in targetSlots)
-            if (pokemonSlots[targetSlot].slotIsEmpty)
+            if (pokemonSlots[targetSlot].slotIsEmpty || !pokemonSlots[targetSlot].data.availableToSwitchIn)
                 targetSlotsToRemove.Add(targetSlot);
         foreach (int targetSlotToRemove in targetSlotsToRemove)
             targetSlots.Remove(targetSlotToRemove);
