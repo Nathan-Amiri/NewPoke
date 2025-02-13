@@ -60,7 +60,7 @@ public class StatusIndex : MonoBehaviour
         {
             icon = statusIcons[3],
             name = "Poisoned",
-            description = "I lose 1 hp at the end of each round. Poison and Steel types can't be Poisoned"
+            description = "I lose 1 Health at the end of each round. Poison and Steel types can't be Poisoned"
         };
     }
 

@@ -41,7 +41,7 @@ public class MoveIndex : MonoBehaviour
         };
     }
 
-
+    //an amount equal to my Attack +1 (remove this comment once I have added a damaging move that has this syntax or similar)
 
     private void PopulateIndex()
     {

@@ -45,12 +45,13 @@ public class PokemonSlot : MonoBehaviour
         }
 
         pokemonImage.enabled = true;
-        pokemonImage.sprite = data.sprite;
+        pokemonImage.sprite = (slotNumber == 0 || slotNumber == 1) ? data.backSprite : data.frontSprite;
+        pokemonImage.SetNativeSize();
 
         if (!isBenchSlot)
         {
             healthBarActive.SetActive(true);
-            healthBarPivot.localScale = new Vector2(data.currentHP / data.baseHP, healthBarPivot.localScale.y);
+            healthBarPivot.localScale = new Vector2(data.currentHealth / data.baseHealth, healthBarPivot.localScale.y);
 
             if (data.status.name != null)
             {
@@ -86,13 +87,13 @@ public class PokemonSlot : MonoBehaviour
         return choicesInteractable;
     }
 
-    public void HPChange(int amount)
+    public void HealthChange(int amount)
     {
-        data.currentHP += amount;
-        if (data.currentHP <= 0)
+        data.currentHealth += amount;
+        if (data.currentHealth <= 0)
             Faint();
-        else if (data.currentHP > data.baseHP)
-            data.currentHP = data.baseHP;
+        else if (data.currentHealth > data.baseHealth)
+            data.currentHealth = data.baseHealth;
         else
             ReloadPokemon();
     }

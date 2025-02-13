@@ -31,7 +31,7 @@ public class AbilityIndex : MonoBehaviour
         return new AbilityData
         {
             name = "Intimidate",
-            description = "Enemies lose 1 Attack when I enter battle"
+            description = "When I enter the field, enemies on the field lose 1 Attack (Attack can't be lowered below 1)"
         };
     }
 

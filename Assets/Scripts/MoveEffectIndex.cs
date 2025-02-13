@@ -5,7 +5,6 @@ using UnityEngine;
 public class MoveEffectIndex : MonoBehaviour
 {
     [SerializeField] private GameManager gameManager;
-    [SerializeField] private List<Sprite> statusIcons = new();
 
     private delegate void IndexMethod(ChoiceInfo choiceInfo, int occurance);
 
@@ -35,7 +34,7 @@ public class MoveEffectIndex : MonoBehaviour
     {
         if (occurance == 0)
         {
-            choiceInfo.targetSlot.HPChange(-10);
+            choiceInfo.targetSlot.HealthChange(-10);
 
             gameManager.ToggleFieldEffect("Rain", true, 2);
 

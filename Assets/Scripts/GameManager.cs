@@ -8,11 +8,10 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     // Todo:
-    // Moves that:
-        // Inflict Status
-    // Types
     // Battlefield, front/back facing sprites
+    // Types (type effectiveness is the only thing that's percentage based) Add message from takedamage after moveeffect occurs
     // Draft & Quit Game
+    // Account for Pokemon that can't move or switch
 
     // SCENE REFERENCE:
     [SerializeField] private List<PokemonSlot> pokemonSlots = new();
@@ -30,9 +29,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TMP_Text infoName;
     [SerializeField] private Transform infoHealthBar;
     [SerializeField] private List<Image> infoTypes = new();
-    [SerializeField] private TMP_Text infoHP;
-    [SerializeField] private TMP_Text infoAttack;
-    [SerializeField] private TMP_Text infoSpeed;
+    [SerializeField] private TMP_Text infoCurrentHealth;
+    [SerializeField] private TMP_Text infoBaseHealth;
+    [SerializeField] private TMP_Text infoCurrentAttack;
+    [SerializeField] private TMP_Text infoBaseAttack;
+    [SerializeField] private TMP_Text infoCurrentSpeed;
+    [SerializeField] private TMP_Text infoBaseSpeed;
     [SerializeField] private TMP_Text infoAbilityName;
     [SerializeField] private TMP_Text infoAbilityDescription;
     [SerializeField] private GameObject infoNoStatusImage;
@@ -104,9 +106,10 @@ public class GameManager : MonoBehaviour
 
         PokemonData data = pokemonSlots[slot].data;
 
-        infoSprite.sprite = data.sprite;
+        infoSprite.sprite = data.frontSprite;
+        infoSprite.SetNativeSize();
         infoName.text = data.pokemonName;
-        infoHealthBar.localScale = new Vector2(data.currentHP / data.baseHP, infoHealthBar.localScale.y);
+        infoHealthBar.localScale = new Vector2(data.currentHealth / data.baseHealth, infoHealthBar.localScale.y);
         
         foreach (Image type in infoTypes)
         {
@@ -125,9 +128,12 @@ public class GameManager : MonoBehaviour
             infoTypes[2].gameObject.SetActive(true);
         }
 
-        infoHP.text = data.currentHP.ToString();
-        infoAttack.text = data.currentAttack.ToString();
-        infoSpeed.text = data.currentSpeed.ToString("0.0");
+        infoCurrentHealth.text = data.currentHealth.ToString();
+        infoBaseHealth.text = data.currentHealth == data.baseHealth ? string.Empty : data.baseHealth.ToString();
+        infoCurrentAttack.text = data.currentAttack.ToString();
+        infoBaseAttack.text = data.currentAttack == data.baseAttack ? string.Empty : data.baseAttack.ToString();
+        infoCurrentSpeed.text = data.currentSpeed.ToString("0.0");
+        infoBaseSpeed.text = data.currentSpeed == data.baseSpeed ? string.Empty : data.baseSpeed.ToString("0.0");
 
         infoAbilityName.text = "Ability = " + data.ability.name;
         infoAbilityDescription.text = data.ability.description;
@@ -180,7 +186,7 @@ public class GameManager : MonoBehaviour
 
         if (choice == 4) // Switch
         {
-            message.text = "Select a target";
+            message.text = "Select a target\n\n(Switching resets stat changes, but not status conditions)";
             infoScreen.SetActive(false);
 
             foreach (PokemonSlot pokemonSlot in pokemonSlots)
@@ -434,9 +440,6 @@ public class GameManager : MonoBehaviour
             message.text = nextChoice.casterName + " will switch into " + nextChoice.targetSlot.data.pokemonName;
         else
             message.text = nextChoice.casterName + " will use " + nextChoice.casterSlot.data.moves[nextChoice.choice].name;
-
-        //add "super effective/not very effective/doesn't affect/the scale of the effectiveness exceeds mortal comprehension" to message,
-        //if it hits multiple do multiple messages and make sure that there's room above the console button
 
         messageButton.SetActive(true);
 

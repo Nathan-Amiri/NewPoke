@@ -8,7 +8,8 @@ public class PokemonIndex : MonoBehaviour
 
     private readonly Dictionary<int, IndexMethod> indexMethods = new();
 
-    [SerializeField] private List<Sprite> pokemonSprites = new();
+    [SerializeField] private List<Sprite> pokemonFrontSprites = new();
+    [SerializeField] private List<Sprite> pokemonBackSprites = new();
 
     [SerializeField] private AbilityIndex abilityIndex;
     [SerializeField] private MoveIndex moveIndex;
@@ -27,7 +28,9 @@ public class PokemonIndex : MonoBehaviour
         }
 
         PokemonData data = indexMethods[indexNumber]();
-        data.currentHP = data.baseHP;
+        data.currentHealth = data.baseHealth;
+        data.currentAttack = data.baseAttack;
+        data.currentSpeed = data.baseSpeed;
         return data;
     }
 
@@ -38,7 +41,8 @@ public class PokemonIndex : MonoBehaviour
         return new PokemonData
         {
             pokemonName = "Incineroar",
-            sprite = pokemonSprites[0],
+            frontSprite = pokemonFrontSprites[0],
+            backSprite = pokemonBackSprites[0],
             pokeTypes = new() { 0, 0 },
             ability = abilityIndex.LoadAbilityFromIndex(0),
             moves = new List<MoveData>() {
@@ -47,13 +51,11 @@ public class PokemonIndex : MonoBehaviour
                 moveIndex.LoadMoveFromIndex(0),
                 moveIndex.LoadMoveFromIndex(0)
                 },
-            baseHP = 5,
+            baseHealth = 5,
             baseAttack = 5,
             baseSpeed = 5.5f
         };
     }
-
-
 
     private void PopulateIndex()
     {
