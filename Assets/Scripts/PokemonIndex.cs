@@ -41,7 +41,7 @@ public class PokemonIndex : MonoBehaviour
         {
             pokemonName = "Incineroar",
             sprite = pokemonSprites[0],
-            pokeTypes = new() { 0, 0 },
+            pokeTypes = new() { 1, 15 },
             ability = abilityIndex.LoadAbilityFromIndex(0),
             moves = new List<MoveData>() {
                 moveIndex.LoadMoveFromIndex(0),

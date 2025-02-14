@@ -15,8 +15,10 @@ public class PokemonSlot : MonoBehaviour
     public Button button;
 
     // SCENE REFERENCE:
+    [SerializeField] private GameManager gameManager;
     [SerializeField] private PokemonIndex pokemonIndex;
     [SerializeField] private StatusIndex statusIndex;
+    [SerializeField] private TypeChart typeChart;
     [SerializeField] private List<PokemonSlot> benchedAllySlots = new();
 
     public bool isBenchSlot;
@@ -40,7 +42,14 @@ public class PokemonSlot : MonoBehaviour
         slotIsEmpty = data.pokemonName == null;
         if (slotIsEmpty)
         {
-            pokemonImage.sprite = null; // Used for bench slots
+            pokemonImage.sprite = null;
+
+            if (!isBenchSlot)
+            {
+                healthBarActive.SetActive(false);
+                statusActive.SetActive(false);
+            }
+
             return;
         }
 
@@ -87,11 +96,19 @@ public class PokemonSlot : MonoBehaviour
         return choicesInteractable;
     }
 
-    public void HealthChange(int amount)
+    public void HealthChange(int amount, int moveType)
     {
+        float effectivenessMultiplier = typeChart.GetEffectivenessMultiplier(moveType, data.pokeTypes);
+        amount = Mathf.FloorToInt(amount * effectivenessMultiplier);
+
+        gameManager.AddEffectivenessMessage(effectivenessMultiplier, data.pokemonName);
+
         data.currentHealth += amount;
         if (data.currentHealth <= 0)
+        {
+            gameManager.AddMiscAfterEffectMessage(data.pokemonName + " has Fainted!");
             Faint();
+        }
         else if (data.currentHealth > data.baseHealth)
             data.currentHealth = data.baseHealth;
         else

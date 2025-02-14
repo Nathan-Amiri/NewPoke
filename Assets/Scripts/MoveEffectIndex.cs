@@ -6,7 +6,7 @@ public class MoveEffectIndex : MonoBehaviour
 {
     [SerializeField] private GameManager gameManager;
 
-    private delegate void IndexMethod(ChoiceInfo choiceInfo, int occurance);
+    private delegate void IndexMethod(ChoiceInfo choiceInfo, int moveType, int occurance);
 
     private readonly Dictionary<int, IndexMethod> indexMethods = new();
 
@@ -25,16 +25,17 @@ public class MoveEffectIndex : MonoBehaviour
             return;
         }
 
-        indexMethods[indexNumber](choiceInfo, occurance);
+        int moveType = choiceInfo.casterSlot.data.moves[choiceInfo.choice].pokeType;
+        indexMethods[indexNumber](choiceInfo, moveType, occurance);
     }
 
 
 
-    private void Protect(ChoiceInfo choiceInfo, int occurance) // 0
+    private void Protect(ChoiceInfo choiceInfo, int moveType, int occurance) // 0
     {
         if (occurance == 0)
         {
-            choiceInfo.targetSlot.HealthChange(-10);
+            choiceInfo.targetSlot.HealthChange(-10, moveType);
 
             gameManager.ToggleFieldEffect("Rain", true, 2);
 

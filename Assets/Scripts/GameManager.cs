@@ -8,10 +8,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     // Todo:
-    // Make pokemon buttons respond when clicked, put target buttons in right spots
-    // Types (type effectiveness is the only thing that's percentage based) Add message from takedamage after moveeffect occurs
     // Draft & Quit Game
-    // Account for Pokemon that can't move or switch
 
     // SCENE REFERENCE:
     [SerializeField] private List<PokemonSlot> pokemonSlots = new();
@@ -70,6 +67,8 @@ public class GameManager : MonoBehaviour
 
     [NonSerialized] public readonly Dictionary<string, int> fieldEffects = new(); // int = duration
 
+    private readonly List<string> afterEffectMessages = new();
+
     // DYNAMIC:
     private int selectedSlot;
 
@@ -79,6 +78,7 @@ public class GameManager : MonoBehaviour
 
     private ChoiceInfo nextChoice;
 
+    private bool readyForNextEffect = true; // Message Button
     private bool roundEnding; // Message Button
 
     private bool repopulating; // Select Target
@@ -521,14 +521,33 @@ public class GameManager : MonoBehaviour
             RoundEnd();
             return;
         }
-        
-        if (nextChoice.choice == 4)
-            Switch(nextChoice.casterSlot, nextChoice.targetSlot);
-        else
-            moveEffectIndex.MoveEffect(nextChoice, 0);
 
-        foreach (PokemonSlot pokemonSlot in pokemonSlots)
-            pokemonSlot.ReloadPokemon();
+        if (readyForNextEffect)
+        {
+            afterEffectMessages.Clear();
+
+
+
+            if (nextChoice.choice == 4)
+                Switch(nextChoice.casterSlot, nextChoice.targetSlot);
+            else
+                moveEffectIndex.MoveEffect(nextChoice, 0); // HealthChange adds afterEffectMessages
+
+            foreach (PokemonSlot pokemonSlot in pokemonSlots)
+                pokemonSlot.ReloadPokemon();
+
+
+
+            message.text = string.Empty;
+            foreach (string effectivenessMessage in afterEffectMessages)
+                message.text += effectivenessMessage;
+
+            readyForNextEffect = false;
+
+            if (afterEffectMessages.Count > 0)
+                return; // Only return if there were messages to display
+        }
+        readyForNextEffect = true;
 
         choices.Remove(nextChoice);
 
@@ -566,6 +585,35 @@ public class GameManager : MonoBehaviour
             roundEnding = true;
         }
     }
+
+    public void AddEffectivenessMessage(float effectivenessMultiplier, string targetName)
+    {
+        string messageAddition;
+        if (effectivenessMultiplier == 0)
+            messageAddition = "It doesn't affect " + targetName + "...";
+        else if (effectivenessMultiplier == .25f)
+            messageAddition = "Its effectiveness into " + targetName + " is just the worst...";
+        else if (effectivenessMultiplier == .5f)
+            messageAddition = "It's not very effective into " + targetName + "...";
+        else if (effectivenessMultiplier == 1)
+            messageAddition = "It's neutrally effective into " + targetName;
+        else if (effectivenessMultiplier == 2)
+            messageAddition = "It's super effective into " + targetName + "!";
+        else if (effectivenessMultiplier == 4)
+            messageAddition = "Its effectiveness into " + targetName + "exceeds mortal comprehension!";
+        else
+        {
+            Debug.LogError(effectivenessMultiplier + " is not an acceptable effectivenessMultiplier. The target was " + targetName);
+            return;
+        }
+
+        afterEffectMessages.Add(messageAddition + "\n");
+    }
+    public void AddMiscAfterEffectMessage(string messageAddition)
+    {
+        afterEffectMessages.Add(messageAddition + "\n");
+    }
+
 
     private void Switch(PokemonSlot slot1, PokemonSlot slot2)
     {

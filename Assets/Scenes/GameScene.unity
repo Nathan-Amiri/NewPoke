@@ -1872,9 +1872,17 @@ PrefabInstance:
       value: Slot2Pokemon
       objectReference: {fileID: 0}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: typeChart
+      value: 
+      objectReference: {fileID: 1092461931}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: slotNumber
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 1092461925}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: statusIndex
       value: 
@@ -2634,6 +2642,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1092461927}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: typeChart
+      value: 
+      objectReference: {fileID: 1092461931}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: slotNumber
       value: 4
       objectReference: {fileID: 0}
@@ -2641,6 +2653,10 @@ PrefabInstance:
       propertyPath: statusIcon
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 1092461925}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: isBenchSlot
       value: 1
@@ -2971,6 +2987,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1092461927}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: typeChart
+      value: 
+      objectReference: {fileID: 1092461931}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: slotNumber
       value: 7
       objectReference: {fileID: 0}
@@ -2978,6 +2998,10 @@ PrefabInstance:
       propertyPath: statusIcon
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 1092461925}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: isBenchSlot
       value: 1
@@ -4537,7 +4561,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -300}
+  m_AnchoredPosition: {x: 0, y: -375}
   m_SizeDelta: {x: 190, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &737024611
@@ -5313,9 +5337,17 @@ PrefabInstance:
       value: Slot3Pokemon
       objectReference: {fileID: 0}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: typeChart
+      value: 
+      objectReference: {fileID: 1092461931}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: slotNumber
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 1092461925}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: statusIndex
       value: 
@@ -6469,9 +6501,43 @@ MonoBehaviour:
   - {fileID: 1524343214}
   switchButton: {fileID: 1770183583}
   pokemonTypeSprites:
+  - {fileID: 21300000, guid: 59a0e0de370ca6546a46ee8479742084, type: 3}
   - {fileID: 21300000, guid: 38e71015792532b4aa3ef6aa0feffabd, type: 3}
+  - {fileID: 21300000, guid: 9c7016bbf360ff14cbd7af01f856df8a, type: 3}
+  - {fileID: 21300000, guid: a32e57e8be933304eaac16776d814afe, type: 3}
+  - {fileID: 21300000, guid: de895f43bee3ec347b4b4ac24baa4141, type: 3}
+  - {fileID: 21300000, guid: 1b16f0483799bb0468619cf2e778d524, type: 3}
+  - {fileID: 21300000, guid: afda459adfa851141ae0513f52752de9, type: 3}
+  - {fileID: 21300000, guid: 638a9aa4887a3274b88326731fee46de, type: 3}
+  - {fileID: 21300000, guid: cdc79c4e8558959489b91681c5e34f9d, type: 3}
+  - {fileID: 21300000, guid: 20d785e1811cd8240b7322ffc18bc16f, type: 3}
+  - {fileID: 21300000, guid: 54054ff818221044f81ce35e38ada91a, type: 3}
+  - {fileID: 21300000, guid: 9ed4d92d1f6479b4d8c682245f2aad1d, type: 3}
+  - {fileID: 21300000, guid: ead524890ed5bfe428fdd218adcab57a, type: 3}
+  - {fileID: 21300000, guid: a691ccdacdcd4df4cad98ed2bf21473f, type: 3}
+  - {fileID: 21300000, guid: 92e4e585eff8d60438018e5e754c1b4c, type: 3}
+  - {fileID: 21300000, guid: 67b25f356ca899a419cbd8e0e28fd7dc, type: 3}
+  - {fileID: 21300000, guid: 5ed5eefc02727d74da0b88795ddaebdb, type: 3}
+  - {fileID: 21300000, guid: 624475670b41a364597737e1153b9d00, type: 3}
   moveTypeSprites:
   - {fileID: 21300000, guid: 2080fc43a17c9824488265a2afdc84e1, type: 3}
+  - {fileID: 21300000, guid: f4b10d3f41d10f9469b71d69824b080a, type: 3}
+  - {fileID: 21300000, guid: a883c1818c70f6148ac28b7d834bde90, type: 3}
+  - {fileID: 21300000, guid: 24f2d7348c674f84b9533433a9fab175, type: 3}
+  - {fileID: 21300000, guid: a87d75b1abb1cc844aff432aac9ce349, type: 3}
+  - {fileID: 21300000, guid: 9c30dd33c2dea1246bb0d9048f35c3ae, type: 3}
+  - {fileID: 21300000, guid: 7bc8a771b0d17c6408be5d58816634b1, type: 3}
+  - {fileID: 21300000, guid: 9a2340030f6c3d541896215e2604994d, type: 3}
+  - {fileID: 21300000, guid: 4784f5a0b93f34a4fbd6fecd96ee00c0, type: 3}
+  - {fileID: 21300000, guid: 6b764c53e459d684b99d88f357022462, type: 3}
+  - {fileID: 21300000, guid: b309840defd9c754e8f6ced709a32ece, type: 3}
+  - {fileID: 21300000, guid: 48867e6469bac814db2a5807a708c1b4, type: 3}
+  - {fileID: 21300000, guid: 86c77df86a988f746a5231946660450e, type: 3}
+  - {fileID: 21300000, guid: 67667771394aefa48bb7ba71e07bb402, type: 3}
+  - {fileID: 21300000, guid: 7809541bf96c48b49afc2507086c14be, type: 3}
+  - {fileID: 21300000, guid: 0729861119af3534d8cde835600ea9d2, type: 3}
+  - {fileID: 21300000, guid: 3c3bbba946352814e98fd5dedaf1c4fd, type: 3}
+  - {fileID: 21300000, guid: f28fe7cb2b2f11548973427ff87305da, type: 3}
   message: {fileID: 1715574200}
   messageButton: {fileID: 737024609}
   targetButtons:
@@ -8389,6 +8455,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1092461927}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: typeChart
+      value: 
+      objectReference: {fileID: 1092461931}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: slotNumber
       value: 5
       objectReference: {fileID: 0}
@@ -8396,6 +8466,10 @@ PrefabInstance:
       propertyPath: statusIcon
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 1092461925}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: isBenchSlot
       value: 1
@@ -9099,9 +9173,17 @@ PrefabInstance:
       value: Slot1Pokemon
       objectReference: {fileID: 0}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: typeChart
+      value: 
+      objectReference: {fileID: 1092461931}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: slotNumber
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 1092461925}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: statusIndex
       value: 
@@ -10214,8 +10296,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -150}
-  m_SizeDelta: {x: 1200, y: 50}
+  m_AnchoredPosition: {x: 0, y: -200}
+  m_SizeDelta: {x: 1200, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1715574200
 MonoBehaviour:
@@ -10435,12 +10517,12 @@ RectTransform:
   - {fileID: 1718022382}
   - {fileID: 1076669104}
   - {fileID: 1226879205}
+  - {fileID: 1715574199}
+  - {fileID: 737024610}
   - {fileID: 2011102765}
   - {fileID: 659132909}
   - {fileID: 1431021328}
   - {fileID: 1920952583493493444}
-  - {fileID: 1715574199}
-  - {fileID: 737024610}
   - {fileID: 812933875}
   - {fileID: 2022579407}
   - {fileID: 1820274827}
@@ -10894,6 +10976,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1092461927}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: typeChart
+      value: 
+      objectReference: {fileID: 1092461931}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: slotNumber
       value: 6
       objectReference: {fileID: 0}
@@ -10901,6 +10987,10 @@ PrefabInstance:
       propertyPath: statusIcon
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 1092461925}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: isBenchSlot
       value: 1
@@ -12679,6 +12769,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Slot0Pokemon
       objectReference: {fileID: 0}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: typeChart
+      value: 
+      objectReference: {fileID: 1092461931}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: gameManager
+      value: 
+      objectReference: {fileID: 1092461925}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: statusIndex
       value: 

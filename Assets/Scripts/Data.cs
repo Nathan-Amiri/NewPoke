@@ -63,3 +63,4 @@ public struct StatusData
 ///     Trick Room
 ///     Tailwind
 ///     1 more, max of 5 (Light Screen? Safeguard?)
+/// If it's ever possible for a Pokemon to be unable to move, account for Pokemon that can't move or switch (make submit choices appear sooner in ChoiceComplete)
