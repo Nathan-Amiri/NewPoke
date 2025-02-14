@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     // Todo:
-    // Battlefield, front/back facing sprites
+    // Make pokemon buttons respond when clicked, put target buttons in right spots
     // Types (type effectiveness is the only thing that's percentage based) Add message from takedamage after moveeffect occurs
     // Draft & Quit Game
     // Account for Pokemon that can't move or switch
@@ -106,7 +106,7 @@ public class GameManager : MonoBehaviour
 
         PokemonData data = pokemonSlots[slot].data;
 
-        infoSprite.sprite = data.frontSprite;
+        infoSprite.sprite = data.sprite;
         infoSprite.SetNativeSize();
         infoName.text = data.pokemonName;
         infoHealthBar.localScale = new Vector2(data.currentHealth / data.baseHealth, infoHealthBar.localScale.y);

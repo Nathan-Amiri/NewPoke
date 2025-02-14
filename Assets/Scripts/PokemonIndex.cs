@@ -8,8 +8,7 @@ public class PokemonIndex : MonoBehaviour
 
     private readonly Dictionary<int, IndexMethod> indexMethods = new();
 
-    [SerializeField] private List<Sprite> pokemonFrontSprites = new();
-    [SerializeField] private List<Sprite> pokemonBackSprites = new();
+    [SerializeField] private List<Sprite> pokemonSprites = new();
 
     [SerializeField] private AbilityIndex abilityIndex;
     [SerializeField] private MoveIndex moveIndex;
@@ -41,8 +40,7 @@ public class PokemonIndex : MonoBehaviour
         return new PokemonData
         {
             pokemonName = "Incineroar",
-            frontSprite = pokemonFrontSprites[0],
-            backSprite = pokemonBackSprites[0],
+            sprite = pokemonSprites[0],
             pokeTypes = new() { 0, 0 },
             ability = abilityIndex.LoadAbilityFromIndex(0),
             moves = new List<MoveData>() {

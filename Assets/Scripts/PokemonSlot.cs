@@ -45,7 +45,7 @@ public class PokemonSlot : MonoBehaviour
         }
 
         pokemonImage.enabled = true;
-        pokemonImage.sprite = (slotNumber == 0 || slotNumber == 1) ? data.backSprite : data.frontSprite;
+        pokemonImage.sprite = data.sprite;
         pokemonImage.SetNativeSize();
 
         if (!isBenchSlot)
