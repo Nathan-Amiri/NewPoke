@@ -68,6 +68,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<Image> effectivenessIcons2x = new();
     [SerializeField] private List<Image> effectivenessIcons4x = new();
 
+    [SerializeField] private GameObject shopUI;
+    [SerializeField] private List<Image> optionSprites = new();
+    [SerializeField] private GameObject confirmUI;
+    [SerializeField] private Button chooseButton;
+
+
     // CONSTANT:
     private readonly List<ChoiceInfo> choices = new();
     private readonly List<ChoiceInfo> pastChoices = new(); // Replay
@@ -94,6 +100,8 @@ public class GameManager : MonoBehaviour
     private bool roundEnding; // Message Button
 
     private bool repopulating; // Select Target
+
+    private bool drafting;
 
     private void Start()
     {
@@ -602,17 +610,17 @@ public class GameManager : MonoBehaviour
     {
         string messageAddition;
         if (effectivenessMultiplier == 0)
-            messageAddition = "It doesn't affect " + targetName + "... (damage x0)";
+            messageAddition = "It doesn't affect " + targetName + "... (Damage x0)";
         else if (effectivenessMultiplier == .25f)
-            messageAddition = "Its effectiveness into " + targetName + " is just the worst... (damage x0.25)";
+            messageAddition = "Its effectiveness into " + targetName + " is just the worst... (Damage x0.25)";
         else if (effectivenessMultiplier == .5f)
-            messageAddition = "It's not very effective into " + targetName + "... (damage x0.5)";
+            messageAddition = "It's not very effective into " + targetName + "... (Damage x0.5)";
         else if (effectivenessMultiplier == 1)
-            messageAddition = "It's neutrally effective into " + targetName + " (damage x1)";
+            messageAddition = "It's neutrally effective into " + targetName + " (Damage x1)";
         else if (effectivenessMultiplier == 2)
-            messageAddition = "It's super effective into " + targetName + "! (damage x2)";
+            messageAddition = "It's super effective into " + targetName + "! (Damage x2)";
         else if (effectivenessMultiplier == 4)
-            messageAddition = "Its effectiveness into " + targetName + "exceeds mortal comprehension! (damage x4)";
+            messageAddition = "Its effectiveness into " + targetName + "exceeds mortal comprehension! (Damage x4)";
         else
         {
             Debug.LogError(effectivenessMultiplier + " is not an acceptable effectivenessMultiplier. The target was " + targetName);
@@ -925,6 +933,21 @@ public class GameManager : MonoBehaviour
     {
 
     }
+
+
+
+
+
+    public void SelectDraftOption(int option)
+    {
+
+    }
+
+
+
+
+
+    // can click one already chosen, displays just the cancel button
 }
 public struct ChoiceInfo
 {
