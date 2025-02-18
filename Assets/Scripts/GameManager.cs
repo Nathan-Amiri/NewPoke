@@ -8,12 +8,13 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     // Todo:
-    // Draft & Quit Game
+    // Draft/quit/PvP (Pass and Play)/Vs CPU (Coming soon!)
 
     // SCENE REFERENCE:
     [SerializeField] private List<PokemonSlot> pokemonSlots = new();
     [SerializeField] private StatusIndex statusIndex;
     [SerializeField] private MoveEffectIndex moveEffectIndex;
+    [SerializeField] private TypeChart typeChart;
 
     [SerializeField] private Button resetChoicesButton;
     [SerializeField] private Button replayButton;
@@ -55,6 +56,17 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<Button> targetButtons = new();
 
     [SerializeField] private TMP_Text fieldEffectsText;
+
+    [SerializeField] private GameObject rulesScreen;
+
+    [SerializeField] private GameObject effectivenessScreen;
+    [SerializeField] private List<Image> effectivenessTypes = new();
+    [SerializeField] private List<Image> effectivenessIcons0x = new();
+    [SerializeField] private List<Image> effectivenessIcons25x = new();
+    [SerializeField] private List<Image> effectivenessIcons5x = new();
+    [SerializeField] private List<Image> effectivenessIcons1x = new();
+    [SerializeField] private List<Image> effectivenessIcons2x = new();
+    [SerializeField] private List<Image> effectivenessIcons4x = new();
 
     // CONSTANT:
     private readonly List<ChoiceInfo> choices = new();
@@ -186,7 +198,7 @@ public class GameManager : MonoBehaviour
 
         if (choice == 4) // Switch
         {
-            message.text = "Select a target\n\n(Switching resets stat changes, but not status conditions)";
+            message.text = "Select a target";
             infoScreen.SetActive(false);
 
             foreach (PokemonSlot pokemonSlot in pokemonSlots)
@@ -590,17 +602,17 @@ public class GameManager : MonoBehaviour
     {
         string messageAddition;
         if (effectivenessMultiplier == 0)
-            messageAddition = "It doesn't affect " + targetName + "...";
+            messageAddition = "It doesn't affect " + targetName + "... (damage x0)";
         else if (effectivenessMultiplier == .25f)
-            messageAddition = "Its effectiveness into " + targetName + " is just the worst...";
+            messageAddition = "Its effectiveness into " + targetName + " is just the worst... (damage x0.25)";
         else if (effectivenessMultiplier == .5f)
-            messageAddition = "It's not very effective into " + targetName + "...";
+            messageAddition = "It's not very effective into " + targetName + "... (damage x0.5)";
         else if (effectivenessMultiplier == 1)
-            messageAddition = "It's neutrally effective into " + targetName;
+            messageAddition = "It's neutrally effective into " + targetName + " (damage x1)";
         else if (effectivenessMultiplier == 2)
-            messageAddition = "It's super effective into " + targetName + "!";
+            messageAddition = "It's super effective into " + targetName + "! (damage x2)";
         else if (effectivenessMultiplier == 4)
-            messageAddition = "Its effectiveness into " + targetName + "exceeds mortal comprehension!";
+            messageAddition = "Its effectiveness into " + targetName + "exceeds mortal comprehension! (damage x4)";
         else
         {
             Debug.LogError(effectivenessMultiplier + " is not an acceptable effectivenessMultiplier. The target was " + targetName);
@@ -708,7 +720,7 @@ public class GameManager : MonoBehaviour
         foreach (Button targetButton in targetButtons)
             if (targetButton.gameObject.activeSelf)
             {
-                message.text = "Select Pokemon to Switch in";
+                message.text = "Select a Pokemon to Switch in";
 
                 repopulating = true;
                 return true;
@@ -828,6 +840,90 @@ public class GameManager : MonoBehaviour
         foreach (KeyValuePair<string, int> fieldEffect in fieldEffects)
             newFieldEffectsText += fieldEffect.Key + " (" + fieldEffect.Value + " rounds)\n";
         fieldEffectsText.text = newFieldEffectsText;
+    }
+
+    public void SelectHowToPlay()
+    {
+        rulesScreen.SetActive(true);
+    }
+    public void SelectCloseRulesScreen()
+    {
+        rulesScreen.SetActive(false);
+    }
+
+    public void SelectEffectivenessButton()
+    {
+        effectivenessScreen.SetActive(true);
+
+        if (infoTypes[0].gameObject.activeSelf)
+        {
+            effectivenessTypes[0].sprite = infoTypes[0].sprite;
+            effectivenessTypes[0].gameObject.SetActive(true);
+        }
+        else
+        {
+            effectivenessTypes[1].sprite = infoTypes[1].sprite;
+            effectivenessTypes[1].gameObject.SetActive(true);
+            effectivenessTypes[2].sprite = infoTypes[2].sprite;
+            effectivenessTypes[2].gameObject.SetActive(true);
+        }
+
+        for (int i = 0; i < 18; i++)
+        {
+            float multiplier = typeChart.GetEffectivenessMultiplier(i, pokemonSlots[selectedSlot].data.pokeTypes);
+
+            List<Image> iconList;
+
+            if (multiplier == 0)
+                iconList = effectivenessIcons0x;
+            else if (multiplier == .25f)
+                iconList = effectivenessIcons25x;
+            else if (multiplier == .5f)
+                iconList = effectivenessIcons5x;
+            else if (multiplier == 1)
+                iconList = effectivenessIcons1x;
+            else if (multiplier == 2)
+                iconList = effectivenessIcons2x;
+            else if (multiplier == 4)
+                iconList = effectivenessIcons4x;
+            else
+            {
+                Debug.LogError(multiplier + " is not an acceptable effectivenessMultiplier.");
+                return;
+            }
+
+            foreach (Image icon in iconList)
+            {
+                if (icon.gameObject.activeSelf)
+                    continue;
+
+                icon.gameObject.SetActive(true);
+                icon.sprite = moveTypeSprites[i];
+                break;
+            }
+        }
+    }
+    public void SelectCloseEffectivenessScreen()
+    {
+        effectivenessScreen.SetActive(false);
+
+        foreach (Image icon in effectivenessIcons0x)
+            icon.gameObject.SetActive(false);
+        foreach (Image icon in effectivenessIcons25x)
+            icon.gameObject.SetActive(false);
+        foreach (Image icon in effectivenessIcons5x)
+            icon.gameObject.SetActive(false);
+        foreach (Image icon in effectivenessIcons1x)
+            icon.gameObject.SetActive(false);
+        foreach (Image icon in effectivenessIcons2x)
+            icon.gameObject.SetActive(false);
+        foreach (Image icon in effectivenessIcons4x)
+            icon.gameObject.SetActive(false);
+    }
+
+    public void SelectQuitGame()
+    {
+
     }
 }
 public struct ChoiceInfo
