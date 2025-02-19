@@ -18,6 +18,11 @@ public class PokemonIndex : MonoBehaviour
         PopulateIndex();
     }
 
+    public int GetNumberOfPokemon()
+    {
+        return indexMethods.Count;
+    }
+
     public PokemonData LoadPokemonFromIndex(int indexNumber)
     {
         if (!indexMethods.ContainsKey(indexNumber))

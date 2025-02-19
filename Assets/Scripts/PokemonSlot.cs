@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,11 +28,11 @@ public class PokemonSlot : MonoBehaviour
     // DYNAMIC:
     public PokemonData data;
 
-    public bool slotIsEmpty;
+    [NonSerialized] public bool slotIsEmpty = true;
 
-    public void FirstLoadPokemon(int indexNumber)
+    public void FirstLoadPokemon(PokemonData newData)
     {
-        data = pokemonIndex.LoadPokemonFromIndex(indexNumber);
+        data = newData;
 
         data.availableToSwitchIn = true;
 
@@ -40,6 +41,7 @@ public class PokemonSlot : MonoBehaviour
     public void ReloadPokemon()
     {
         slotIsEmpty = data.pokemonName == null;
+
         if (slotIsEmpty)
         {
             pokemonImage.sprite = null;
@@ -133,7 +135,6 @@ public class PokemonSlot : MonoBehaviour
 
     private void Faint()
     {
-        button.interactable = false;
         slotIsEmpty = true;
 
         pokemonImage.enabled = false;

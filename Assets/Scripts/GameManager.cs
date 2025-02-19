@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -12,6 +13,7 @@ public class GameManager : MonoBehaviour
 
     // SCENE REFERENCE:
     [SerializeField] private List<PokemonSlot> pokemonSlots = new();
+    [SerializeField] private PokemonIndex pokemonIndex;
     [SerializeField] private StatusIndex statusIndex;
     [SerializeField] private MoveEffectIndex moveEffectIndex;
     [SerializeField] private TypeChart typeChart;
@@ -72,7 +74,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private List<Image> optionSprites = new();
     [SerializeField] private GameObject confirmUI;
     [SerializeField] private Button chooseButton;
+    [SerializeField] private TMP_Text shopText;
 
+    [SerializeField] private Color pokemonDim;
+
+    [SerializeField] private GameObject quitScreen;
 
     // CONSTANT:
     private readonly List<ChoiceInfo> choices = new();
@@ -87,12 +93,15 @@ public class GameManager : MonoBehaviour
 
     private readonly List<string> afterEffectMessages = new();
 
+    private readonly List<int> usedIndexNumbers = new();
+    private readonly List<PokemonData> shopOptions = new();
+
+    private readonly List<int> draftOrder = new() { 0, 2, 1, 3, 4, 6, 5, 7 };
+
     // DYNAMIC:
     private int selectedSlot;
 
     private bool random; // Cached for Replay
-
-    [SerializeField] private Color pokemonDim;
 
     private ChoiceInfo nextChoice;
 
@@ -101,40 +110,132 @@ public class GameManager : MonoBehaviour
 
     private bool repopulating; // Select Target
 
-    private bool drafting;
+    private bool drafting = true;
+    private PokemonData selectedData; // Used for effectivenessScreen instead of selectedSlot because drafting doesn't set selectedSlot
+    private bool player1Drafting = true;
 
     private void Start()
     {
-        foreach (PokemonSlot pokemonSlot in pokemonSlots)
-            pokemonSlot.FirstLoadPokemon(0);
-
-        PrepareForNextChoice();
+        NewShopOptions();
     }
 
-    private void PrepareForNextChoice()
+    private void NewShopOptions()
+    {
+        shopOptions.Clear();
+
+        List<int> pokemonList = new();
+        int availablePokemon = pokemonIndex.GetNumberOfPokemon();
+
+        for (int i = 0; i < availablePokemon; i++)
+            pokemonList.Add(i);
+
+        foreach (int usedNumber in usedIndexNumbers)
+            pokemonList.Remove(usedNumber);
+
+        for (int i = 0; i < 3; i++)
+        {
+            int randomIndex = UnityEngine.Random.Range(0, pokemonList.Count);
+            int newPokemon = pokemonList[randomIndex];
+            PokemonData newData = pokemonIndex.LoadPokemonFromIndex(newPokemon);
+            shopOptions.Add(newData);
+            //pokemonList.RemoveAt(randomIndex);
+
+            optionSprites[i].sprite = newData.sprite;
+        }
+    }
+
+    public void SelectDraftOption(int option)
+    {
+        shopUI.SetActive(false);
+
+        chooseButton.interactable = true;
+        confirmUI.SetActive(true);
+
+        selectedData = shopOptions[option];
+        LoadMainInfo(selectedData);
+    }
+
+    public void SelectDraftChoose()
+    {
+        foreach (int i in draftOrder)
+            if (pokemonSlots[i].slotIsEmpty)
+            {
+                pokemonSlots[i].FirstLoadPokemon(selectedData);
+                pokemonSlots[i].button.interactable = true;
+                break;
+            }
+
+        confirmUI.SetActive(false);
+        infoScreen.SetActive(false);
+
+        if (!pokemonSlots[7].slotIsEmpty)
+        {
+            drafting = false;
+
+            PrepareForNextChoice(true);
+
+            return;
+        }
+
+        player1Drafting = !player1Drafting;
+        string header = player1Drafting ? "Player 1" : "Player 2";
+        shopText.text = header + "\nDraft a Pokemon";
+
+        shopUI.SetActive(true);
+
+        NewShopOptions();
+    }
+
+    public void SelectDraftCancel()
+    {
+        confirmUI.SetActive(false);
+        infoScreen.SetActive(false);
+
+        shopUI.SetActive(true);
+    }
+
+
+
+    private void PrepareForNextChoice(bool gameStart = false)
     {
         infoScreen.SetActive(false);
-        message.text = "Select a pokemon";
+        message.text = gameStart ? "The game has begun!\n\nSelect a Pokemon" : "Select a pokemon";
     }
 
     public void SelectPokemonSlot(int slot)
     {
-        infoScreen.SetActive(true);
+        if (drafting)
+        {
+            shopUI.SetActive(false);
+
+            chooseButton.interactable = false;
+            confirmUI.SetActive(true);
+
+            selectedData = pokemonSlots[slot].data;
+            LoadMainInfo(selectedData);
+
+            return;
+        }
+
         message.text = string.Empty;
 
         selectedSlot = slot;
 
-        PokemonData data = pokemonSlots[slot].data;
+        LoadMainInfo(pokemonSlots[slot].data);
+    }
+
+    private void LoadMainInfo(PokemonData data)
+    {
+        infoScreen.SetActive(true);
 
         infoSprite.sprite = data.sprite;
         infoSprite.SetNativeSize();
         infoName.text = data.pokemonName;
         infoHealthBar.localScale = new Vector2(data.currentHealth / data.baseHealth, infoHealthBar.localScale.y);
-        
+
         foreach (Image type in infoTypes)
-        {
             type.gameObject.SetActive(false);
-        }
+
         if (data.pokeTypes.Count == 1)
         {
             infoTypes[0].sprite = pokemonTypeSprites[data.pokeTypes[0]];
@@ -187,6 +288,15 @@ public class GameManager : MonoBehaviour
 
     private void ResetInteractable()
     {
+        if (drafting)
+        {
+            for (int i = 0; i < 4; i++)
+                infoMoveButtons[i].interactable = false;
+            switchButton.interactable = false;
+
+            return;
+        }
+
         List<bool> choicesInteractable = pokemonSlots[selectedSlot].ChoicesInteractable();
         for (int i = 0; i < 4; i++)
             infoMoveButtons[i].interactable = choicesInteractable[i];
@@ -595,10 +705,7 @@ public class GameManager : MonoBehaviour
             message.text = "Round will end";
 
             foreach (PokemonSlot pokemonSlot in pokemonSlots)
-            {
-                pokemonSlot.button.interactable = false;
                 pokemonSlot.pokemonImage.color = Color.white;
-            }
 
             ResetTargetButtons();
 
@@ -638,7 +745,6 @@ public class GameManager : MonoBehaviour
     private void Switch(PokemonSlot slot1, PokemonSlot slot2)
     {
         (slot1.data, slot2.data) = (slot2.data, slot1.data);
-
         slot1.ReloadPokemon();
         slot2.ReloadPokemon();
     }
@@ -820,7 +926,7 @@ public class GameManager : MonoBehaviour
     {
         foreach (PokemonSlot pokemonSlot in pokemonSlots)
         {
-            pokemonSlot.button.interactable = true;
+            pokemonSlot.button.interactable = !pokemonSlot.slotIsEmpty;
             pokemonSlot.pokemonImage.color = Color.white;
 
             pokemonSlot.data.hasChosen = false;
@@ -878,7 +984,8 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < 18; i++)
         {
-            float multiplier = typeChart.GetEffectivenessMultiplier(i, pokemonSlots[selectedSlot].data.pokeTypes);
+            List<int> pokeTypes = drafting ? selectedData.pokeTypes : pokemonSlots[selectedSlot].data.pokeTypes;
+            float multiplier = typeChart.GetEffectivenessMultiplier(i, pokeTypes);
 
             List<Image> iconList;
 
@@ -931,23 +1038,16 @@ public class GameManager : MonoBehaviour
 
     public void SelectQuitGame()
     {
-
+        quitScreen.SetActive(true);
     }
-
-
-
-
-
-    public void SelectDraftOption(int option)
+    public void SelectQuitYes()
     {
-
+        SceneManager.LoadScene(0);
     }
-
-
-
-
-
-    // can click one already chosen, displays just the cancel button
+    public void SelectQuitNo()
+    {
+        quitScreen.SetActive(false);
+    }
 }
 public struct ChoiceInfo
 {
