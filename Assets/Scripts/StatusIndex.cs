@@ -42,7 +42,7 @@ public class StatusIndex : MonoBehaviour
         {
             icon = statusIcons[1],
             name = "Burned",
-            description = "My Attack is halved, rounding up. Fire types can't be Burned"
+            description = "My Attack is decreased by -2, but not less than 1. Fire types can't be Burned"
         };
     }
     private StatusData Paralyzed() // 2
@@ -51,7 +51,7 @@ public class StatusIndex : MonoBehaviour
         {
             icon = statusIcons[2],
             name = "Poisoned",
-            description = "My Speed is halved, rounding up. Electric types can't be Paralyzed"
+            description = "My Speed decreased by -3. Electric types can't be Paralyzed"
         };
     }
     private StatusData Poisoned() // 3

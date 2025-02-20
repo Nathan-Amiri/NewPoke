@@ -256,7 +256,7 @@ public class GameManager : MonoBehaviour
         infoCurrentSpeed.text = data.currentSpeed.ToString("0.0");
         infoBaseSpeed.text = data.currentSpeed == data.baseSpeed ? string.Empty : data.baseSpeed.ToString("0.0");
 
-        infoAbilityName.text = "Ability = " + data.ability.name;
+        infoAbilityName.text = "Ability: " + data.ability.name;
         infoAbilityDescription.text = data.ability.description;
 
         if (data.status.name == null)
@@ -271,7 +271,7 @@ public class GameManager : MonoBehaviour
             infoNoStatusImage.SetActive(false);
 
             infoStatusIcon.sprite = data.status.icon;
-            infoStatusName.text = "Status - " + data.status.name;
+            infoStatusName.text = "Status: " + data.status.name;
             infoStatusDescription.text = data.status.description;
         }
 
