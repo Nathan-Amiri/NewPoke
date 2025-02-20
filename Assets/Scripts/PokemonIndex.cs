@@ -40,28 +40,28 @@ public class PokemonIndex : MonoBehaviour
 
 
 
-    private PokemonData Incineroar() // 0
+    private PokemonData Pikachu() // 0
     {
         return new PokemonData
         {
-            pokemonName = "Incineroar",
+            pokemonName = "Pikachu",
             sprite = pokemonSprites[0],
-            pokeTypes = new() { 1, 15 },
+            pokeTypes = new() { 4 },
             ability = abilityIndex.LoadAbilityFromIndex(0),
             moves = new List<MoveData>() {
                 moveIndex.LoadMoveFromIndex(0),
-                moveIndex.LoadMoveFromIndex(0),
-                moveIndex.LoadMoveFromIndex(0),
-                moveIndex.LoadMoveFromIndex(0)
+                moveIndex.LoadMoveFromIndex(1),
+                moveIndex.LoadMoveFromIndex(2),
+                moveIndex.LoadMoveFromIndex(3)
                 },
             baseHealth = 5,
-            baseAttack = 5,
-            baseSpeed = 5.5f
+            baseAttack = 3,
+            baseSpeed = 8.4f
         };
     }
 
     private void PopulateIndex()
     {
-        indexMethods.Add(0, Incineroar);
+        indexMethods.Add(0, Pikachu);
     }
 }

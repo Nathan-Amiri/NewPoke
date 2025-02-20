@@ -14203,7 +14203,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pokemonSprites:
-  - {fileID: 21300000, guid: c81e322d768034846a006bd9d5597114, type: 3}
+  - {fileID: 21300000, guid: be24a7063613f774881feabf31fd96d5, type: 3}
+  - {fileID: 21300000, guid: 9b39ac29fe84da243b593fe25b33ade1, type: 3}
+  - {fileID: 21300000, guid: a48cc4476e56a094aa055c1a582a7169, type: 3}
+  - {fileID: 21300000, guid: 0550cf1517cb7a24aaa9bc552287f77c, type: 3}
+  - {fileID: 21300000, guid: 0aa5bb9b4bc79854fae0c0bac253c97b, type: 3}
+  - {fileID: 21300000, guid: 6193e124e94652d45b0983156c1fee3e, type: 3}
+  - {fileID: 21300000, guid: 3695aa00bd7f1e54ba42c4c691acd638, type: 3}
+  - {fileID: 21300000, guid: 164dd4656cc3b2541be0b735dab7aebf, type: 3}
+  - {fileID: 21300000, guid: 615249cc9f9e56f458f4f83d31f6f814, type: 3}
+  - {fileID: 21300000, guid: ef30114e0f4d2f64fbc625bee90b459f, type: 3}
   abilityIndex: {fileID: 1092461929}
   moveIndex: {fileID: 1092461927}
 --- !u!114 &1092461929

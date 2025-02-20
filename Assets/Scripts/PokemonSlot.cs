@@ -117,6 +117,18 @@ public class PokemonSlot : MonoBehaviour
             ReloadPokemon();
     }
 
+    public void AttackChange(int amount)
+    {
+        data.currentAttack += amount;
+        data.currentAttack = Mathf.Clamp(data.currentAttack, 0, 9);
+    }
+
+    public void SpeedChange(int amount)
+    {
+        data.currentSpeed += amount;
+        data.currentSpeed = Mathf.Clamp(data.currentSpeed, 0.0f, 9.9f);
+    }
+
     public void NewStatus(int newStatus)
     {
         if (newStatus == 1 && data.pokeTypes.Contains(1)) // Fire types can't be Burned

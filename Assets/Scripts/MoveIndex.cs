@@ -28,16 +28,53 @@ public class MoveIndex : MonoBehaviour
 
 
 
-    private MoveData Protect() // 0
+    private MoveData FakeOut() // 0
     {
         return new MoveData
         {
-            pokeType = 2,
-            name = "Protect",
-            description = "I become protected from everything this round",
-            priority = 7,
+            pokeType = 0,
+            name = "Fake Out",
+            description = "I deal 1 damage to a target. If the target would use a move this turn, the move fails. This move fails unless I entered battle last round, or if it's the first round",
+            priority = 6,
             isDamaging = true,
             isTargeted = true
+        };
+    }
+    private MoveData Thunderbolt() // 1
+    {
+        return new MoveData
+        {
+            pokeType = 4,
+            name = "Thunderbolt",
+            description = "I deal damage to a target equal to my Attack.",
+            priority = 3,
+            isDamaging = true,
+            isTargeted = true
+        };
+    }
+    private MoveData VoltSwitch() // 2
+    {
+        return new MoveData
+        {
+            pokeType = 4,
+            name = "Volt Switch",
+            description = "I deal damage to both enemies equal to my Attack -2, but not less than 1. I switch with a target",
+            priority = 3,
+            isDamaging = true,
+            isTargeted = true,
+            targetsBench = true
+        };
+    }
+    private MoveData ThunderWave() // 3
+    {
+        return new MoveData
+        {
+            pokeType = 4,
+            name = "Thunder Wave",
+            description = "I Paralyze a target",
+            priority = 3,
+            isDamaging = false,
+            isTargeted = true,
         };
     }
 
@@ -45,6 +82,9 @@ public class MoveIndex : MonoBehaviour
 
     private void PopulateIndex()
     {
-        indexMethods.Add(0, Protect);
+        indexMethods.Add(0, FakeOut);
+        indexMethods.Add(1, Thunderbolt);
+        indexMethods.Add(2, VoltSwitch);
+        indexMethods.Add(3, ThunderWave);
     }
 }

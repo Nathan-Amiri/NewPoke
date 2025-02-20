@@ -38,6 +38,7 @@ public struct MoveData
     public bool isDamaging;
 
     public bool isTargeted;
+    public bool targetsBench;
 
     public int indexNumber; // MoveEffect
 }
