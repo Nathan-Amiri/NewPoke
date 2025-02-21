@@ -6,7 +6,7 @@ public class StatusIndex : MonoBehaviour
 {
     private delegate StatusData IndexMethod();
 
-    private readonly Dictionary<int, IndexMethod> indexMethods = new();
+    private readonly List<IndexMethod> indexMethods = new();
 
     [SerializeField] private List<Sprite> statusIcons = new();
 
@@ -17,7 +17,7 @@ public class StatusIndex : MonoBehaviour
 
     public StatusData LoadStatusFromIndex(int indexNumber)
     {
-        if (!indexMethods.ContainsKey(indexNumber))
+        if (indexMethods.Count < indexNumber + 1)
         {
             Debug.LogError("The following status index method was not found: " + indexNumber);
             return default;
@@ -68,9 +68,9 @@ public class StatusIndex : MonoBehaviour
 
     private void PopulateIndex()
     {
-        indexMethods.Add(0, Asleep);
-        indexMethods.Add(1, Burned);
-        indexMethods.Add(2, Paralyzed);
-        indexMethods.Add(3, Poisoned);
+        indexMethods.Add(Asleep);
+        indexMethods.Add(Burned);
+        indexMethods.Add(Paralyzed);
+        indexMethods.Add(Poisoned);
     }
 }

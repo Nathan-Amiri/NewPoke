@@ -8,7 +8,7 @@ public class MoveEffectIndex : MonoBehaviour
 
     private delegate void IndexMethod(ChoiceInfo choiceInfo, int moveType, int occurance);
 
-    private readonly Dictionary<int, IndexMethod> indexMethods = new();
+    private readonly List<IndexMethod> indexMethods = new();
 
     private void Awake()
     {
@@ -19,7 +19,7 @@ public class MoveEffectIndex : MonoBehaviour
     {
         int indexNumber = choiceInfo.casterSlot.data.moves[choiceInfo.choice].indexNumber;
 
-        if (!indexMethods.ContainsKey(indexNumber))
+        if (indexMethods.Count < indexNumber + 1)
         {
             Debug.LogError("The following moveEffect index method was not found: " + indexNumber);
             return;
@@ -47,6 +47,6 @@ public class MoveEffectIndex : MonoBehaviour
 
     private void PopulateIndex()
     {
-        indexMethods.Add(0, Protect);
+        indexMethods.Add(Protect);
     }
 }

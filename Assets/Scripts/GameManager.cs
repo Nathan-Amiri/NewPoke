@@ -8,9 +8,6 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    // Todo:
-    // Draft/quit/PvP (Pass and Play)/Vs CPU (Coming soon!)
-
     // SCENE REFERENCE:
     [SerializeField] private List<PokemonSlot> pokemonSlots = new();
     [SerializeField] private PokemonIndex pokemonIndex;

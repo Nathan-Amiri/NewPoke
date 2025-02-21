@@ -6,7 +6,7 @@ public class PokemonIndex : MonoBehaviour
 {
     private delegate PokemonData IndexMethod();
 
-    private readonly Dictionary<int, IndexMethod> indexMethods = new();
+    private readonly List<IndexMethod> indexMethods = new();
 
     [SerializeField] private List<Sprite> pokemonSprites = new();
 
@@ -25,7 +25,7 @@ public class PokemonIndex : MonoBehaviour
 
     public PokemonData LoadPokemonFromIndex(int indexNumber)
     {
-        if (!indexMethods.ContainsKey(indexNumber))
+        if (indexMethods.Count < indexNumber + 1)
         {
             Debug.LogError("The following pokemon index method was not found: " + indexNumber);
             return default;
@@ -135,13 +135,93 @@ public class PokemonIndex : MonoBehaviour
                 }
         };
     }
+    private PokemonData Regigigas() // 5
+    {
+        return new PokemonData
+        {
+            pokemonName = "Regigigas",
+            sprite = pokemonSprites[5],
+            pokeTypes = new() { 0 },
+            baseHealth = 11,
+            baseAttack = 2,
+            baseSpeed = 5.0f,
+            ability = abilityIndex.LoadAbilityFromIndex(5),
+            moves = new List<MoveData>() {
+                moveIndex.LoadMoveFromIndex(0),
+                moveIndex.LoadMoveFromIndex(19),
+                moveIndex.LoadMoveFromIndex(14),
+                moveIndex.LoadMoveFromIndex(20)
+                }
+        };
+    }
+    private PokemonData Rotom() // 6
+    {
+        return new PokemonData
+        {
+            pokemonName = "Rotom",
+            sprite = pokemonSprites[6],
+            pokeTypes = new() { 4, 1 },
+            baseHealth = 9,
+            baseAttack = 2,
+            baseSpeed = 4.7f,
+            ability = abilityIndex.LoadAbilityFromIndex(6),
+            moves = new List<MoveData>() {
+                moveIndex.LoadMoveFromIndex(0),
+                moveIndex.LoadMoveFromIndex(21),
+                moveIndex.LoadMoveFromIndex(2),
+                moveIndex.LoadMoveFromIndex(22)
+                }
+        };
+    }
+    private PokemonData Ninetales() // 7
+    {
+        return new PokemonData
+        {
+            pokemonName = "Ninetales",
+            sprite = pokemonSprites[7],
+            pokeTypes = new() { 5, 17 },
+            baseHealth = 5,
+            baseAttack = 3,
+            baseSpeed = 5.2f,
+            ability = abilityIndex.LoadAbilityFromIndex(6),
+            moves = new List<MoveData>() {
+                moveIndex.LoadMoveFromIndex(0),
+                moveIndex.LoadMoveFromIndex(23),
+                moveIndex.LoadMoveFromIndex(24),
+                moveIndex.LoadMoveFromIndex(25)
+                }
+        };
+    }
+    private PokemonData Indeedee() // 8
+    {
+        return new PokemonData
+        {
+            pokemonName = "Indeedee",
+            sprite = pokemonSprites[8],
+            pokeTypes = new() { 10, 0 },
+            baseHealth = 7,
+            baseAttack = 2,
+            baseSpeed = 4.3f,
+            ability = abilityIndex.LoadAbilityFromIndex(6),
+            moves = new List<MoveData>() {
+                moveIndex.LoadMoveFromIndex(0),
+                moveIndex.LoadMoveFromIndex(23),
+                moveIndex.LoadMoveFromIndex(24),
+                moveIndex.LoadMoveFromIndex(25)
+                }
+        };
+    }
 
     private void PopulateIndex()
     {
-        indexMethods.Add(0, Pikachu);
-        indexMethods.Add(1, Pelipper);
-        indexMethods.Add(2, Sinistcha);
-        indexMethods.Add(3, Conkeldurr);
-        indexMethods.Add(4, Arbok);
+        indexMethods.Add(Pikachu);
+        indexMethods.Add(Pelipper);
+        indexMethods.Add(Sinistcha);
+        indexMethods.Add(Conkeldurr);
+        indexMethods.Add(Arbok);
+        indexMethods.Add(Regigigas);
+        indexMethods.Add(Rotom);
+        indexMethods.Add(Ninetales);
+        indexMethods.Add(Indeedee);
     }
 }

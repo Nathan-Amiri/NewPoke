@@ -6,7 +6,7 @@ public class MoveIndex : MonoBehaviour
 {
     private delegate MoveData IndexMethod();
 
-    private readonly Dictionary<int, IndexMethod> indexMethods = new();
+    private readonly List<IndexMethod> indexMethods = new();
 
     private void Awake()
     {
@@ -15,7 +15,7 @@ public class MoveIndex : MonoBehaviour
 
     public MoveData LoadMoveFromIndex(int indexNumber)
     {
-        if (!indexMethods.ContainsKey(indexNumber))
+        if (indexMethods.Count < indexNumber + 1)
         {
             Debug.LogError("The following move index method was not found: " + indexNumber);
             return default;
@@ -125,7 +125,7 @@ public class MoveIndex : MonoBehaviour
         {
             pokeType = 9,
             name = "Tailwind",
-            description = "I summon a Tailwind for 4 turns. All allies gain 3 Speed until the Tailwind ends",
+            description = "All allies gain 3 Speed for 4 turns",
             priority = 0,
             isDamaging = true,
             isTargeted = true,
@@ -190,7 +190,7 @@ public class MoveIndex : MonoBehaviour
         {
             pokeType = 6,
             name = "Close Combat",
-            description = "I deal damage to a target equal to my Attack + 1. I lose 1 base Health",
+            description = "I deal damage to a target equal to my Attack + 1. I lose 1 base Health, but not below 1",
             priority = 0,
             isDamaging = true,
             isTargeted = true,
@@ -210,14 +210,14 @@ public class MoveIndex : MonoBehaviour
             targetsBench = false
         };
     }
-    private MoveData MachPunch() // 14
+    private MoveData DrainPunch() // 14
     {
         return new MoveData
         {
-            pokeType = 1,
+            pokeType = 6,
             name = "Fire Punch",
-            description = "I deal damage to a target equal to my Attack - 2, but not below 1",
-            priority = 1,
+            description = "I deal damage to a target equal to my Attack - 1, but not below 1. I heal 1",
+            priority = 0,
             isDamaging = true,
             isTargeted = true,
             targetsBench = false
@@ -236,12 +236,12 @@ public class MoveIndex : MonoBehaviour
             targetsBench = false
         };
     }
-    private MoveData PoisonJab() // 16
+    private MoveData PoisonFang() // 16
     {
         return new MoveData
         {
             pokeType = 7,
-            name = "Poison Jab",
+            name = "Poison Fang",
             description = "I deal damage to a target equal to my Attack",
             priority = 0,
             isDamaging = true,
@@ -275,27 +275,125 @@ public class MoveIndex : MonoBehaviour
             targetsBench = false
         };
     }
+    private MoveData DoubleEdge() // 19
+    {
+        return new MoveData
+        {
+            pokeType = 16,
+            name = "Double Edge",
+            description = "I deal damage to a target equal to my Attack + 1. I lose 1 base Health, but not below 1",
+            priority = 1,
+            isDamaging = true,
+            isTargeted = true,
+            targetsBench = false
+        };
+    }
+    private MoveData ThunderPunch() // 20
+    {
+        return new MoveData
+        {
+            pokeType = 4,
+            name = "Thunder Punch",
+            description = "I deal damage to a target equal to my Attack - 1, but not below 1",
+            priority = 0,
+            isDamaging = true,
+            isTargeted = true,
+            targetsBench = false
+        };
+    }
+    private MoveData Overheat() // 21
+    {
+        return new MoveData
+        {
+            pokeType = 1,
+            name = "Overheat",
+            description = "I deal damage to a target equal to my Attack + 2. I lose 2 Attack, but not below 1",
+            priority = 0,
+            isDamaging = true,
+            isTargeted = true,
+            targetsBench = false
+        };
+    }
+    private MoveData WilloWisp() // 22
+    {
+        return new MoveData
+        {
+            pokeType = 1,
+            name = "Will-o-Wisp",
+            description = "I Burn a target",
+            priority = 0,
+            isDamaging = false,
+            isTargeted = true,
+            targetsBench = false
+        };
+    }
+    private MoveData AuroraVeil() // 23
+    {
+        return new MoveData
+        {
+            pokeType = 5,
+            name = "Aurora Veil",
+            description = " All allies take -1 damage from moves for 5 turns, but not below 1",
+            priority = 0,
+            isDamaging = false,
+            isTargeted = true,
+            targetsBench = false
+        };
+    }
+    private MoveData Blizzard() // 24
+    {
+        return new MoveData
+        {
+            pokeType = 5,
+            name = "Blizzard",
+            description = "I deal damage to both enemies equal to my Attack - 1, but not below 1",
+            priority = 0,
+            isDamaging = true,
+            isTargeted = false,
+            targetsBench = false
+        };
+    }
+    private MoveData Moonblast() // 25
+    {
+        return new MoveData
+        {
+            pokeType = 17,
+            name = "Moonblast",
+            description = "I deal damage to a target equal to my Attack",
+            priority = 0,
+            isDamaging = true,
+            isTargeted = true,
+            targetsBench = false
+        };
+    }
 
     private void PopulateIndex()
     {
-        indexMethods.Add(0, Protect);
-        indexMethods.Add(1, FakeOut);
-        indexMethods.Add(2, Thunderbolt);
-        indexMethods.Add(3, VoltSwitch);
-        indexMethods.Add(4, ThunderWave);
-        indexMethods.Add(5, WeatherBall);
-        indexMethods.Add(6, Hurricane);
-        indexMethods.Add(7, Tailwind);
-        indexMethods.Add(8, MatchaGotcha);
-        indexMethods.Add(9, Hex);
-        indexMethods.Add(10, RagePowder);
-        indexMethods.Add(11, LifeDew);
-        indexMethods.Add(12, CloseCombat);
-        indexMethods.Add(13, FirePunch);
-        indexMethods.Add(14, MachPunch);
-        indexMethods.Add(15, Coil);
-        indexMethods.Add(16, PoisonJab);
-        indexMethods.Add(17, Toxic);
-        indexMethods.Add(18, SuckerPunch);
+        indexMethods.Add(Protect);
+        indexMethods.Add(FakeOut); 
+        indexMethods.Add(Thunderbolt);
+        indexMethods.Add(VoltSwitch);
+        indexMethods.Add(ThunderWave);
+        indexMethods.Add(WeatherBall);
+        indexMethods.Add(Hurricane);
+        indexMethods.Add(Tailwind);
+        indexMethods.Add(MatchaGotcha);
+        indexMethods.Add(Hex);
+        indexMethods.Add(RagePowder);
+        indexMethods.Add(LifeDew);
+        indexMethods.Add(CloseCombat);
+        indexMethods.Add(FirePunch);
+        indexMethods.Add(DrainPunch);
+        indexMethods.Add(Coil);
+        indexMethods.Add(PoisonFang);
+        indexMethods.Add(Toxic);
+        indexMethods.Add(SuckerPunch);
+        indexMethods.Add(DoubleEdge);
+        indexMethods.Add(ThunderPunch);
+        indexMethods.Add(Overheat);
+        indexMethods.Add(WilloWisp);
+        indexMethods.Add(AuroraVeil);
+        indexMethods.Add(Blizzard);
+        indexMethods.Add(Moonblast);
     }
 }

@@ -6,7 +6,7 @@ public class AbilityIndex : MonoBehaviour
 {
     private delegate AbilityData IndexMethod();
 
-    private readonly Dictionary<int, IndexMethod> indexMethods = new();
+    private readonly List<IndexMethod> indexMethods = new();
 
     private void Awake()
     {
@@ -15,7 +15,7 @@ public class AbilityIndex : MonoBehaviour
 
     public AbilityData LoadAbilityFromIndex(int indexNumber)
     {
-        if (!indexMethods.ContainsKey(indexNumber))
+        if (indexMethods.Count < indexNumber + 1)
         {
             Debug.LogError("The following ability index method was not found: " + indexNumber);
             return default;
@@ -66,15 +66,40 @@ public class AbilityIndex : MonoBehaviour
             description = "When I enter battle, enemies in battle lose 1 Attack, but not below 1"
         };
     }
-
-    //Intimidate: )
+    private AbilityData SlowStart() // 5
+    {
+        return new AbilityData
+        {
+            name = "Slow Start",
+            description = "My Attack is -2 until after I've moved twice"
+        };
+    }
+    private AbilityData Levitate() // 6
+    {
+        return new AbilityData
+        {
+            name = "Levitate",
+            description = "I'm immune to Ground type moves"
+        };
+    }
+    private AbilityData SnowWarning() // 7
+    {
+        return new AbilityData
+        {
+            name = "Snow Warning",
+            description = "When I enter battle, I summon Snow for 5 turns, increasing the damage of Ice moves +1"
+        };
+    }
 
     private void PopulateIndex()
     {
-        indexMethods.Add(0, LightningRod);
-        indexMethods.Add(1, Drizzle);
-        indexMethods.Add(2, Hospitality);
-        indexMethods.Add(3, Guts);
-        indexMethods.Add(4, Intimidate);
+        indexMethods.Add(LightningRod);
+        indexMethods.Add(Drizzle);
+        indexMethods.Add(Hospitality);
+        indexMethods.Add(Guts);
+        indexMethods.Add(Intimidate);
+        indexMethods.Add(SlowStart);
+        indexMethods.Add(Levitate);
+        indexMethods.Add(SnowWarning);
     }
 }

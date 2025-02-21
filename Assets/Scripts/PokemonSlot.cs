@@ -120,7 +120,7 @@ public class PokemonSlot : MonoBehaviour
     public void AttackChange(int amount)
     {
         data.currentAttack += amount;
-        data.currentAttack = Mathf.Clamp(data.currentAttack, 0, 99);
+        data.currentAttack = Mathf.Clamp(data.currentAttack, 1, 99);
     }
 
     public void SpeedChange(int amount)
@@ -132,7 +132,7 @@ public class PokemonSlot : MonoBehaviour
     public void BaseHealthChange(int amount)
     {
         data.baseHealth += amount;
-        data.baseHealth = Mathf.Clamp(data.baseHealth, 0, 99);
+        data.baseHealth = Mathf.Clamp(data.baseHealth, 1, 99);
 
         if (data.currentHealth > data.baseHealth)
             data.currentHealth = data.baseHealth;
