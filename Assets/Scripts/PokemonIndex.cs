@@ -183,7 +183,7 @@ public class PokemonIndex : MonoBehaviour
             baseHealth = 5,
             baseAttack = 3,
             baseSpeed = 5.2f,
-            ability = abilityIndex.LoadAbilityFromIndex(6),
+            ability = abilityIndex.LoadAbilityFromIndex(7),
             moves = new List<MoveData>() {
                 moveIndex.LoadMoveFromIndex(0),
                 moveIndex.LoadMoveFromIndex(23),
@@ -202,12 +202,31 @@ public class PokemonIndex : MonoBehaviour
             baseHealth = 7,
             baseAttack = 2,
             baseSpeed = 4.3f,
-            ability = abilityIndex.LoadAbilityFromIndex(6),
+            ability = abilityIndex.LoadAbilityFromIndex(8),
+            moves = new List<MoveData>() {
+                moveIndex.LoadMoveFromIndex(26),
+                moveIndex.LoadMoveFromIndex(27),
+                moveIndex.LoadMoveFromIndex(28),
+                moveIndex.LoadMoveFromIndex(29)
+                }
+        };
+    }
+    private PokemonData Tyranitar() // 9
+    {
+        return new PokemonData
+        {
+            pokemonName = "Tyranitar",
+            sprite = pokemonSprites[9],
+            pokeTypes = new() { 12, 15 },
+            baseHealth = 9,
+            baseAttack = 4,
+            baseSpeed = 2.6f,
+            ability = abilityIndex.LoadAbilityFromIndex(9),
             moves = new List<MoveData>() {
                 moveIndex.LoadMoveFromIndex(0),
-                moveIndex.LoadMoveFromIndex(23),
-                moveIndex.LoadMoveFromIndex(24),
-                moveIndex.LoadMoveFromIndex(25)
+                moveIndex.LoadMoveFromIndex(30),
+                moveIndex.LoadMoveFromIndex(31),
+                moveIndex.LoadMoveFromIndex(32)
                 }
         };
     }
@@ -223,5 +242,6 @@ public class PokemonIndex : MonoBehaviour
         indexMethods.Add(Rotom);
         indexMethods.Add(Ninetales);
         indexMethods.Add(Indeedee);
+        indexMethods.Add(Tyranitar);
     }
 }

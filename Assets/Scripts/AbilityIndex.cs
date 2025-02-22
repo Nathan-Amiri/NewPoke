@@ -39,7 +39,7 @@ public class AbilityIndex : MonoBehaviour
         return new AbilityData
         {
             name = "Drizzle",
-            description = "When I enter battle, I summon Rain for 5 turns, increasing the damage of Water moves +1 and decreasing the damage of Fire moves -1"
+            description = "When I enter battle, I summon Rain for 5 rounds, increasing the damage of Water moves +1 and decreasing the damage of Fire moves -1"
         };
     }
     private AbilityData Hospitality() // 2
@@ -87,7 +87,23 @@ public class AbilityIndex : MonoBehaviour
         return new AbilityData
         {
             name = "Snow Warning",
-            description = "When I enter battle, I summon Snow for 5 turns, increasing the damage of Ice moves +1"
+            description = "When I enter battle, I summon Snow for 5 rounds, increasing the damage of Ice moves +1"
+        };
+    }
+    private AbilityData PsychicSurge() // 8
+    {
+        return new AbilityData
+        {
+            name = "Psychic Surge",
+            description = "When I enter battle, I create Psychic Terrain for 5 rounds, increasing the damage of Psychic moves +1 and causing targeted moves with Priority > 0 to fail"
+        };
+    }
+    private AbilityData SandStream() // 8
+    {
+        return new AbilityData
+        {
+            name = "Sand Stream",
+            description = "When I enter battle, I summon a Sandstorm for 5 rounds, dealing 1 damage at the end of each round to Pokemon who aren't Rock, Ground, or Steel type"
         };
     }
 
@@ -101,5 +117,7 @@ public class AbilityIndex : MonoBehaviour
         indexMethods.Add(SlowStart);
         indexMethods.Add(Levitate);
         indexMethods.Add(SnowWarning);
+        indexMethods.Add(PsychicSurge);
+        indexMethods.Add(SandStream);
     }
 }

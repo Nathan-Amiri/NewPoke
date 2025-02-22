@@ -125,7 +125,7 @@ public class MoveIndex : MonoBehaviour
         {
             pokeType = 9,
             name = "Tailwind",
-            description = "All allies gain 3 Speed for 4 turns",
+            description = "All allies gain 3 Speed for 4 round",
             priority = 0,
             isDamaging = true,
             isTargeted = true,
@@ -165,7 +165,7 @@ public class MoveIndex : MonoBehaviour
             pokeType = 11,
             name = "Rage Powder",
             description = "If an enemy targeted my ally this round, and the enemy is not a Grass type, their move targets me instead",
-            priority = 2,
+            priority = 3,
             isDamaging = false,
             isTargeted = false,
             targetsBench = false
@@ -333,7 +333,7 @@ public class MoveIndex : MonoBehaviour
         {
             pokeType = 5,
             name = "Aurora Veil",
-            description = " All allies take -1 damage from moves for 5 turns, but not below 1",
+            description = " All allies take -1 damage from moves for 5 rounds, but not below 1",
             priority = 0,
             isDamaging = false,
             isTargeted = true,
@@ -366,6 +366,97 @@ public class MoveIndex : MonoBehaviour
             targetsBench = false
         };
     }
+    private MoveData Psychic() // 26
+    {
+        return new MoveData
+        {
+            pokeType = 10,
+            name = "Psychic",
+            description = "I deal damage to a target equal to my Attack",
+            priority = 0,
+            isDamaging = true,
+            isTargeted = true,
+            targetsBench = false
+        };
+    }
+    private MoveData TrickRoom() // 27
+    {
+        return new MoveData
+        {
+            pokeType = 10,
+            name = "Trick Room",
+            description = "For 5 rounds, Pokemon with lower Speed move before Pokemon with higher Speed. Move Priority is not affected",
+            priority = -7,
+            isDamaging = false,
+            isTargeted = false,
+            targetsBench = false
+        };
+    }
+    private MoveData FollowMe() // 28
+    {
+        return new MoveData
+        {
+            pokeType = 0,
+            name = "Follow Me",
+            description = "If an enemy targeted my ally this round, their move targets me instead",
+            priority = 3,
+            isDamaging = false,
+            isTargeted = false,
+            targetsBench = false
+        };
+    }
+    private MoveData HelpingHand() // 29
+    {
+        return new MoveData
+        {
+            pokeType = 0,
+            name = "Follow Me",
+            description = "My ally's move this round deals +2 damage",
+            priority = 5,
+            isDamaging = false,
+            isTargeted = false,
+            targetsBench = false
+        };
+    }
+    private MoveData RockSlide() // 30
+    {
+        return new MoveData
+        {
+            pokeType = 12,
+            name = "Rock Slide",
+            description = "I deal damage to both enemies equal to my Attack -1, but not below 1",
+            priority = 0,
+            isDamaging = true,
+            isTargeted = false,
+            targetsBench = false
+        };
+    }
+    private MoveData KnockOff() // 31
+    {
+        return new MoveData
+        {
+            pokeType = 15,
+            name = "Knock Off",
+            description = "I deal damage to a target equal to my Attack. If the enemy hasn't been hit with a Knock Off this game, this move deals +1 damage",
+            priority = 0,
+            isDamaging = true,
+            isTargeted = true,
+            targetsBench = false
+        };
+    }
+    private MoveData Earthquake() // 32
+    {
+        return new MoveData
+        {
+            pokeType = 18,
+            name = "Earthquake",
+            description = "I deal damage to my ally and both enemies equal to my Attack",
+            priority = 0,
+            isDamaging = true,
+            isTargeted = false,
+            targetsBench = false
+        };
+    }
 
     private void PopulateIndex()
     {
@@ -395,5 +486,12 @@ public class MoveIndex : MonoBehaviour
         indexMethods.Add(AuroraVeil);
         indexMethods.Add(Blizzard);
         indexMethods.Add(Moonblast);
+        indexMethods.Add(Psychic);
+        indexMethods.Add(TrickRoom);
+        indexMethods.Add(FollowMe);
+        indexMethods.Add(HelpingHand);
+        indexMethods.Add(RockSlide);
+        indexMethods.Add(KnockOff);
+        indexMethods.Add(Earthquake);
     }
 }

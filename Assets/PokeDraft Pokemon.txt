@@ -1,14 +1,3 @@
-Pikachu (Fake Out, Volt Switch, Lightning Rod, Nuzzle)
-Pelipper (Drizzle)
-Sinistcha (Matcha Gotcha, Hex, Hospitality)
-Indeedee [Female] (Psychic Surge)
-Conkeldurr (Guts)
-Tyranitar (Sandstorm, Earthquake, Rock Slide)
-Arbok (Intimidate, Toxic)
-Rotom-Heat (Levitate, Will-o-Wisp)
-Regigigas (Slow Start)
-Ninetales (Alola) (Hail, Aurora Veil)
-
 Substitute
 Icy Wind/Electroweb/Rest
 
@@ -34,7 +23,7 @@ Gyarados (Moxie, Dragon Dance)
 Heatran (Flash Fire, Magma Storm, Overheat)
 Hydreigon (coverage)
 Iron Hands
-Kingambit (Sucker Punch, Defiant)
+Kingambit (Defiant)
 Latios (coverage)
 Mamoswine (Thick Fat)
 Maushold (Friend Guard)
@@ -53,7 +42,6 @@ Skeledirge (Torch Song)
 Scrafty
 Serperior (Contrary)
 Smeargle (low stats, Fake Out Spore Follow Me Foul Play, Focus Sash)
-Sylveon (Throat Spray)
 Talonflame (Gale Wings)
 Tinkaton (Feint)
 Torkoal (Sun, Eruption)
