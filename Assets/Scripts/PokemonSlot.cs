@@ -20,7 +20,10 @@ public class PokemonSlot : MonoBehaviour
     [SerializeField] private PokemonIndex pokemonIndex;
     [SerializeField] private StatusIndex statusIndex;
     [SerializeField] private TypeChart typeChart;
-    [SerializeField] private List<PokemonSlot> benchedAllySlots = new();
+
+    public PokemonSlot ally;
+    public List<PokemonSlot> enemySlots = new();
+    public List<PokemonSlot> benchedAllySlots = new();
 
     public bool isBenchSlot;
     public int slotNumber;
@@ -62,7 +65,7 @@ public class PokemonSlot : MonoBehaviour
         if (!isBenchSlot)
         {
             healthBarActive.SetActive(true);
-            healthBarPivot.localScale = new Vector2(data.currentHealth / data.baseHealth, healthBarPivot.localScale.y);
+            healthBarPivot.localScale = new Vector2((float)data.currentHealth / data.baseHealth, healthBarPivot.localScale.y);
 
             if (data.status.name != null)
             {
@@ -98,39 +101,67 @@ public class PokemonSlot : MonoBehaviour
         return choicesInteractable;
     }
 
-    public void HealthChange(int amount, int moveType)
+    public void DealDamage(int amount, int moveType)
     {
-        float effectivenessMultiplier = typeChart.GetEffectivenessMultiplier(moveType, data.pokeTypes);
-        amount = Mathf.FloorToInt(amount * effectivenessMultiplier);
+        if (slotIsEmpty)
+            return;
 
-        gameManager.AddEffectivenessMessage(effectivenessMultiplier, data.pokemonName);
+        if (moveType != -1) // Damage that ignores effectiveness, such as recoil
+        {
+            float effectivenessMultiplier = typeChart.GetEffectivenessMultiplier(moveType, data.pokeTypes);
+            amount = Mathf.FloorToInt(amount * effectivenessMultiplier);
+            if (amount < 1)
+                amount = 1;
 
-        data.currentHealth += amount;
+            gameManager.AddEffectivenessMessage(effectivenessMultiplier, data.pokemonName);
+        }
+
+        data.currentHealth -= amount;
         if (data.currentHealth <= 0)
         {
             gameManager.AddMiscAfterEffectMessage(data.pokemonName + " has Fainted!");
             Faint();
         }
-        else if (data.currentHealth > data.baseHealth)
-            data.currentHealth = data.baseHealth;
         else
             ReloadPokemon();
     }
 
+    public void GainHealth(int amount)
+    {
+        if (slotIsEmpty)
+            return;
+
+        data.currentHealth += amount;
+
+        if (data.currentHealth > data.baseHealth)
+            data.currentHealth = data.baseHealth;
+
+        ReloadPokemon();
+    }
+
     public void AttackChange(int amount)
     {
+        if (slotIsEmpty)
+            return;
+
         data.currentAttack += amount;
         data.currentAttack = Mathf.Clamp(data.currentAttack, 1, 99);
     }
 
     public void SpeedChange(int amount)
     {
+        if (slotIsEmpty)
+            return;
+
         data.currentSpeed += amount;
         data.currentSpeed = Mathf.Clamp(data.currentSpeed, 0.0f, 99.9f);
     }
 
     public void BaseHealthChange(int amount)
     {
+        if (slotIsEmpty)
+            return;
+
         data.baseHealth += amount;
         data.baseHealth = Mathf.Clamp(data.baseHealth, 1, 99);
 
@@ -140,6 +171,9 @@ public class PokemonSlot : MonoBehaviour
 
     public void NewStatus(int newStatus)
     {
+        if (slotIsEmpty)
+            return;
+
         if (newStatus == 1 && data.pokeTypes.Contains(1)) // Fire types can't be Burned
             return;
         if (newStatus == 2 && data.pokeTypes.Contains(4)) // Electric types can't be Paralyzed

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,6 +26,8 @@ public struct PokemonData
     public bool hasChosen;
 
     public bool availableToSwitchIn;
+
+    public bool knockedOff;
 }
 public struct MoveData
 {

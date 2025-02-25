@@ -91,7 +91,7 @@ public class GameManager : MonoBehaviour
     private readonly List<string> afterEffectMessages = new();
 
     private readonly List<int> usedIndexNumbers = new();
-    private readonly List<PokemonData> shopOptions = new();
+    private readonly List<(int, PokemonData)> shopOptions = new(); // int = indexNumber of pokemon
 
     private readonly List<int> draftOrder = new() { 0, 2, 1, 3, 4, 6, 5, 7 };
 
@@ -108,6 +108,7 @@ public class GameManager : MonoBehaviour
     private bool repopulating; // Select Target
 
     private bool drafting = true;
+    private int selectedIndexNumber;
     private PokemonData selectedData; // Used for effectivenessScreen instead of selectedSlot because drafting doesn't set selectedSlot
     private bool player1Drafting = true;
 
@@ -121,8 +122,8 @@ public class GameManager : MonoBehaviour
         shopOptions.Clear();
 
         List<int> pokemonList = new();
-        int availablePokemon = pokemonIndex.GetNumberOfPokemon();
 
+        int availablePokemon = pokemonIndex.GetNumberOfPokemon();
         for (int i = 0; i < availablePokemon; i++)
             pokemonList.Add(i);
 
@@ -133,11 +134,13 @@ public class GameManager : MonoBehaviour
         {
             int randomIndex = UnityEngine.Random.Range(0, pokemonList.Count);
             int newPokemon = pokemonList[randomIndex];
+
             PokemonData newData = pokemonIndex.LoadPokemonFromIndex(newPokemon);
-            shopOptions.Add(newData);
-            //pokemonList.RemoveAt(randomIndex);
+            shopOptions.Add((newPokemon, newData));
 
             optionSprites[i].sprite = newData.sprite;
+
+            pokemonList.RemoveAt(randomIndex); // Ensures no present duplicates
         }
     }
 
@@ -148,7 +151,8 @@ public class GameManager : MonoBehaviour
         chooseButton.interactable = true;
         confirmUI.SetActive(true);
 
-        selectedData = shopOptions[option];
+        selectedIndexNumber = shopOptions[option].Item1;
+        selectedData = shopOptions[option].Item2;
         LoadMainInfo(selectedData);
     }
 
@@ -180,6 +184,7 @@ public class GameManager : MonoBehaviour
 
         shopUI.SetActive(true);
 
+        usedIndexNumbers.Add(selectedIndexNumber);
         NewShopOptions();
     }
 
@@ -228,7 +233,7 @@ public class GameManager : MonoBehaviour
         infoSprite.sprite = data.sprite;
         infoSprite.SetNativeSize();
         infoName.text = data.pokemonName;
-        infoHealthBar.localScale = new Vector2(data.currentHealth / data.baseHealth, infoHealthBar.localScale.y);
+        infoHealthBar.localScale = new Vector2((float)data.currentHealth / data.baseHealth, infoHealthBar.localScale.y);
 
         foreach (Image type in infoTypes)
             type.gameObject.SetActive(false);
@@ -342,7 +347,7 @@ public class GameManager : MonoBehaviour
                 }
                 pokemonSlots[selectedSlot].pokemonImage.color = Color.white;
 
-                List<int> targetSlots = GetMoveTargetSlots();
+                List<int> targetSlots = moveData.targetsBench ? GetSwitchTargetSlots() : GetMoveTargetSlots();
                 foreach (int targetSlot in targetSlots)
                     targetButtons[targetSlot].gameObject.SetActive(true);
             }
@@ -679,15 +684,24 @@ public class GameManager : MonoBehaviour
         choices.Remove(nextChoice);
 
         List<ChoiceInfo> choicesToRemove = new();
-        foreach (ChoiceInfo choiceInfo in choices)
+        for (int i = 0; i < choices.Count; i++)
         {
             // Remove any choices made by a caster that's no longer in the same slot they cast the choice from
-            if (choiceInfo.casterName != choiceInfo.casterSlot.data.pokemonName)
-                choicesToRemove.Add(choiceInfo);
+            if (choices[i].casterName != choices[i].casterSlot.data.pokemonName)
+                choicesToRemove.Add(choices[i]);
 
-            // Remove any choices targeting an empty slot
-            if (choiceInfo.targetSlot != null && choiceInfo.targetSlot.data.pokemonName == null)
-                choicesToRemove.Add(choiceInfo);
+            // Redirect/remove any choices targeting an empty slot
+            else if (choices[i].targetSlot != null && choices[i].targetSlot.slotIsEmpty)
+            {
+                if (choices[i].targetSlot.ally != choices[i].casterSlot && !choices[i].targetSlot.ally.slotIsEmpty)
+                {
+                    ChoiceInfo temp = choices[i];
+                    temp.targetSlot = temp.targetSlot.ally;
+                    choices[i] = temp;
+                }
+                else
+                    choicesToRemove.Add(choices[i]);
+            }
         }
         foreach (ChoiceInfo choiceInfo in choicesToRemove)
             choices.Remove(choiceInfo);
@@ -724,7 +738,7 @@ public class GameManager : MonoBehaviour
         else if (effectivenessMultiplier == 2)
             messageAddition = "It's super effective into " + targetName + "! (Damage x2)";
         else if (effectivenessMultiplier == 4)
-            messageAddition = "Its effectiveness into " + targetName + "exceeds mortal comprehension! (Damage x4)";
+            messageAddition = "Its effectiveness into " + targetName + " exceeds mortal comprehension! (Damage x4)";
         else
         {
             Debug.LogError(effectivenessMultiplier + " is not an acceptable effectivenessMultiplier. The target was " + targetName);
@@ -739,7 +753,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-    private void Switch(PokemonSlot slot1, PokemonSlot slot2)
+    public void Switch(PokemonSlot slot1, PokemonSlot slot2)
     {
         (slot1.data, slot2.data) = (slot2.data, slot1.data);
         slot1.ReloadPokemon();

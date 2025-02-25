@@ -215,7 +215,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 6,
-            name = "Fire Punch",
+            name = "Drain Punch",
             description = "I deal damage to a target equal to my Attack - 1, but not below 1. I heal 1",
             priority = 0,
             isDamaging = true,
@@ -281,7 +281,7 @@ public class MoveIndex : MonoBehaviour
         {
             pokeType = 16,
             name = "Double Edge",
-            description = "I deal damage to a target equal to my Attack + 1. I lose 1 base Health, but not below 1",
+            description = "I deal damage to a target equal to my Attack + 1. I lose 1 Health",
             priority = 1,
             isDamaging = true,
             isTargeted = true,
@@ -410,7 +410,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 0,
-            name = "Follow Me",
+            name = "Helping Hand",
             description = "My ally's move this round deals +2 damage",
             priority = 5,
             isDamaging = false,
@@ -448,7 +448,7 @@ public class MoveIndex : MonoBehaviour
     {
         return new MoveData
         {
-            pokeType = 18,
+            pokeType = 8,
             name = "Earthquake",
             description = "I deal damage to my ally and both enemies equal to my Attack",
             priority = 0,
@@ -461,7 +461,7 @@ public class MoveIndex : MonoBehaviour
     private void PopulateIndex()
     {
         indexMethods.Add(Protect);
-        indexMethods.Add(FakeOut); 
+        indexMethods.Add(FakeOut);
         indexMethods.Add(Thunderbolt);
         indexMethods.Add(VoltSwitch);
         indexMethods.Add(ThunderWave);
