@@ -28,12 +28,14 @@ public struct PokemonData
     public bool availableToSwitchIn;
 
     public bool knockedOff;
+    public bool isProtected;
+    public bool protectedLastRound;
 }
 public struct MoveData
 {
     public int pokeType;
 
-    public string name;
+    public string moveName;
     public string description;
 
     public int priority;
@@ -47,19 +49,20 @@ public struct MoveData
 }
 public struct AbilityData
 {
-    public string name;
+    public string abilityName;
     public string description;
 }
 public struct StatusData
 {
     public Sprite icon;
 
-    public string name;
+    public string statusName;
     public string description;
 }
 /// Index Guielines:
 /// 
-/// All Pokemon have ways of dealing damage, even if they have Attack lowered to 1
+/// Always say that Pokemon can't have Attack lowered below 1 when lowering Attack
+/// All Pokemon have ways of dealing damage, even if they have Attack lowered to 1. All damaging Moves say that they do at least 1 damage
 /// Always explain everything. (Rage Powder doesn't work on Grass types, Rain increases the damage of Water moves +1, etc)
 /// Stick to:
 ///     Weather
@@ -68,3 +71,4 @@ public struct StatusData
 ///     Tailwind
 ///     1 more, max of 5 (Light Screen? Safeguard?)
 /// If it's ever possible for a Pokemon to be unable to move, account for Pokemon that can't move or switch (make submit choices appear sooner in ChoiceComplete)
+/// The game does not currently support delayed effects that affect targets, since the delayed effect won't occur if the caster faints

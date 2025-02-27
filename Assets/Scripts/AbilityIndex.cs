@@ -30,7 +30,7 @@ public class AbilityIndex : MonoBehaviour
     {
         return new AbilityData
         {
-            name = "Lightning Rod",
+            abilityName = "Lightning Rod",
             description = "If an enemy targets my ally with an Electric move, the move targets me instead. When I'm targeted or damaged by an Electric move, it deals no damage and I gain 1 Attack"
         };
     }
@@ -38,7 +38,7 @@ public class AbilityIndex : MonoBehaviour
     {
         return new AbilityData
         {
-            name = "Drizzle",
+            abilityName = "Drizzle",
             description = "When I enter battle, I summon Rain for 5 rounds, increasing the damage of Water moves +1 and decreasing the damage of Fire moves -1"
         };
     }
@@ -46,7 +46,7 @@ public class AbilityIndex : MonoBehaviour
     {
         return new AbilityData
         {
-            name = "Hospitality",
+            abilityName = "Hospitality",
             description = "When I enter battle, my ally heals 2"
         };
     }
@@ -54,7 +54,7 @@ public class AbilityIndex : MonoBehaviour
     {
         return new AbilityData
         {
-            name = "Guts",
+            abilityName = "Guts",
             description = "At the end of each round, if I don't have a status condition, I becomed Burned. When I'm Burned, I gain 2 Attack instead of losing 2"
         };
     }
@@ -62,7 +62,7 @@ public class AbilityIndex : MonoBehaviour
     {
         return new AbilityData
         {
-            name = "Intimidate",
+            abilityName = "Intimidate",
             description = "When I enter battle, enemies in battle lose 1 Attack, but not below 1"
         };
     }
@@ -70,7 +70,7 @@ public class AbilityIndex : MonoBehaviour
     {
         return new AbilityData
         {
-            name = "Slow Start",
+            abilityName = "Slow Start",
             description = "My Attack is -2 until after I've moved twice"
         };
     }
@@ -78,7 +78,7 @@ public class AbilityIndex : MonoBehaviour
     {
         return new AbilityData
         {
-            name = "Levitate",
+            abilityName = "Levitate",
             description = "I'm immune to Ground type moves"
         };
     }
@@ -86,7 +86,7 @@ public class AbilityIndex : MonoBehaviour
     {
         return new AbilityData
         {
-            name = "Snow Warning",
+            abilityName = "Snow Warning",
             description = "When I enter battle, I summon Snow for 5 rounds, increasing the damage of Ice moves +1"
         };
     }
@@ -94,7 +94,7 @@ public class AbilityIndex : MonoBehaviour
     {
         return new AbilityData
         {
-            name = "Psychic Surge",
+            abilityName = "Psychic Surge",
             description = "When I enter battle, I create Psychic Terrain for 5 rounds, increasing the damage of Psychic moves +1 and causing targeted moves with Priority > 0 to fail"
         };
     }
@@ -102,7 +102,7 @@ public class AbilityIndex : MonoBehaviour
     {
         return new AbilityData
         {
-            name = "Sand Stream",
+            abilityName = "Sand Stream",
             description = "When I enter battle, I summon a Sandstorm for 5 rounds, dealing 1 damage at the end of each round to Pokemon who aren't Rock, Ground, or Steel type"
         };
     }

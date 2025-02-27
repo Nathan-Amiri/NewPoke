@@ -32,7 +32,7 @@ public class StatusIndex : MonoBehaviour
         return new StatusData
         {
             icon = statusIcons[0],
-            name = "Asleep",
+            statusName = "Asleep",
             description = "The next 2 times I move, the move fails. Then, I wake up"
         };
     }
@@ -41,7 +41,7 @@ public class StatusIndex : MonoBehaviour
         return new StatusData
         {
             icon = statusIcons[1],
-            name = "Burned",
+            statusName = "Burned",
             description = "My Attack is decreased by -2, but not less than 1. Fire types can't be Burned"
         };
     }
@@ -50,7 +50,7 @@ public class StatusIndex : MonoBehaviour
         return new StatusData
         {
             icon = statusIcons[2],
-            name = "Poisoned",
+            statusName = "Poisoned",
             description = "My Speed decreased by -3. Electric types can't be Paralyzed"
         };
     }
@@ -59,7 +59,7 @@ public class StatusIndex : MonoBehaviour
         return new StatusData
         {
             icon = statusIcons[3],
-            name = "Poisoned",
+            statusName = "Poisoned",
             description = "I lose 1 Health at the end of each round. Poison and Steel types can't be Poisoned"
         };
     }

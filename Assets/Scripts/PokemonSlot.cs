@@ -32,7 +32,6 @@ public class PokemonSlot : MonoBehaviour
     public PokemonData data;
 
     [NonSerialized] public bool slotIsEmpty = true;
-    [NonSerialized] public bool isProtected;
 
     public void FirstLoadPokemon(PokemonData newData)
     {
@@ -68,7 +67,7 @@ public class PokemonSlot : MonoBehaviour
             healthBarActive.SetActive(true);
             healthBarPivot.localScale = new Vector2((float)data.currentHealth / data.baseHealth, healthBarPivot.localScale.y);
 
-            if (data.status.name != null)
+            if (data.status.statusName != null)
             {
                 statusActive.SetActive(true);
                 statusIcon.sprite = data.status.icon;
@@ -104,8 +103,14 @@ public class PokemonSlot : MonoBehaviour
 
     public void DealDamage(int amount, int moveType)
     {
-        if (slotIsEmpty || isProtected)
+        if (slotIsEmpty)
             return;
+
+        if (data.isProtected)
+        {
+            gameManager.AddMiscAfterEffectMessage(data.pokemonName + " protected itself!");
+            return;
+        }
 
         if (moveType != -1) // Damage that ignores effectiveness, such as recoil
         {
@@ -128,7 +133,7 @@ public class PokemonSlot : MonoBehaviour
 
     public void GainHealth(int amount)
     {
-        if (slotIsEmpty || isProtected)
+        if (slotIsEmpty || data.isProtected)
             return;
 
         data.currentHealth += amount;
@@ -141,7 +146,7 @@ public class PokemonSlot : MonoBehaviour
 
     public void AttackChange(int amount)
     {
-        if (slotIsEmpty || isProtected)
+        if (slotIsEmpty || data.isProtected)
             return;
 
         data.currentAttack += amount;
@@ -150,7 +155,7 @@ public class PokemonSlot : MonoBehaviour
 
     public void SpeedChange(int amount)
     {
-        if (slotIsEmpty || isProtected)
+        if (slotIsEmpty || data.isProtected)
             return;
 
         data.currentSpeed += amount;
@@ -159,7 +164,7 @@ public class PokemonSlot : MonoBehaviour
 
     public void BaseHealthChange(int amount)
     {
-        if (slotIsEmpty || isProtected)
+        if (slotIsEmpty || data.isProtected)
             return;
 
         data.baseHealth += amount;
@@ -171,7 +176,7 @@ public class PokemonSlot : MonoBehaviour
 
     public void NewStatus(int newStatus)
     {
-        if (slotIsEmpty || isProtected)
+        if (slotIsEmpty || data.isProtected)
             return;
 
         if (newStatus == 1 && data.pokeTypes.Contains(1)) // Fire types can't be Burned

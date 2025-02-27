@@ -33,7 +33,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 0,
-            name = "Fake Out",
+            moveName = "Fake Out",
             description = "I deal 1 damage to a target. Their move this round fails. This move fails unless I entered battle this or last round",
             priority = 3,
             isDamaging = true,
@@ -46,7 +46,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 4,
-            name = "Thunderbolt",
+            moveName = "Thunderbolt",
             description = "I deal damage to a target equal to my Attack",
             priority = 0,
             isDamaging = true,
@@ -59,7 +59,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 4,
-            name = "Volt Switch",
+            moveName = "Volt Switch",
             description = "I deal damage to both enemies equal to my Attack - 2, but not below 1. I switch with a target",
             priority = 0,
             isDamaging = true,
@@ -72,7 +72,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 4,
-            name = "Thunder Wave",
+            moveName = "Thunder Wave",
             description = "I Paralyze a target",
             priority = 0,
             isDamaging = false,
@@ -85,8 +85,8 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 0,
-            name = "Protect",
-            description = "I'm unaffected by moves this round",
+            moveName = "Protect",
+            description = "I'm unaffected by moves this round. I can't use this move next round",
             priority = 4,
             isDamaging = false,
             isTargeted = false,
@@ -98,7 +98,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 0,
-            name = "Weather Ball",
+            moveName = "Weather Ball",
             description = "I deal damage to a target equal to my Attack. In weather, this move deals +1 damage and its type matches the weather",
             priority = 0,
             isDamaging = true,
@@ -111,7 +111,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 9,
-            name = "Hurricane",
+            moveName = "Hurricane",
             description = "I deal damage to a target equal to my Attack",
             priority = 0,
             isDamaging = true,
@@ -124,7 +124,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 9,
-            name = "Tailwind",
+            moveName = "Tailwind",
             description = "All allies gain 3 Speed for 4 round",
             priority = 0,
             isDamaging = true,
@@ -137,7 +137,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 3,
-            name = "Matcha Gotcha",
+            moveName = "Matcha Gotcha",
             description = "I deal damage to both enemies equal to my Attack. I heal 1",
             priority = 0,
             isDamaging = true,
@@ -150,7 +150,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 13,
-            name = "Hex",
+            moveName = "Hex",
             description = "I deal damage to a target equal to my Attack. If the target has a status condition, this move deals +1 damage",
             priority = 0,
             isDamaging = true,
@@ -163,7 +163,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 11,
-            name = "Rage Powder",
+            moveName = "Rage Powder",
             description = "If an enemy targeted my ally this round, and the enemy is not a Grass type, their move targets me instead",
             priority = 3,
             isDamaging = false,
@@ -176,7 +176,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 2,
-            name = "Life Dew",
+            moveName = "Life Dew",
             description = "I heal 1. My ally heals 2",
             priority = 0,
             isDamaging = false,
@@ -189,7 +189,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 6,
-            name = "Close Combat",
+            moveName = "Close Combat",
             description = "I deal damage to a target equal to my Attack + 1. I lose 1 base Health, but not below 1",
             priority = 0,
             isDamaging = true,
@@ -202,7 +202,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 1,
-            name = "Fire Punch",
+            moveName = "Fire Punch",
             description = "I deal damage to a target equal to my Attack - 1, but not below 1",
             priority = 0,
             isDamaging = true,
@@ -215,7 +215,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 6,
-            name = "Drain Punch",
+            moveName = "Drain Punch",
             description = "I deal damage to a target equal to my Attack - 1, but not below 1. I heal 1",
             priority = 0,
             isDamaging = true,
@@ -228,7 +228,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 7,
-            name = "Coil",
+            moveName = "Coil",
             description = "I gain 1 Attack and 1 base Health. Then, I gain 1 Health",
             priority = 0,
             isDamaging = false,
@@ -241,7 +241,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 7,
-            name = "Poison Fang",
+            moveName = "Poison Fang",
             description = "I deal damage to a target equal to my Attack",
             priority = 0,
             isDamaging = true,
@@ -254,7 +254,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 7,
-            name = "Toxic",
+            moveName = "Toxic",
             description = "I Poison a target",
             priority = 0,
             isDamaging = false,
@@ -267,7 +267,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 15,
-            name = "Sucker Punch",
+            moveName = "Sucker Punch",
             description = "I deal damage to a target equal to my Attack - 1, but not below 1. This move fails if the target didn't choose a damaging move this round",
             priority = 1,
             isDamaging = true,
@@ -280,7 +280,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 16,
-            name = "Double Edge",
+            moveName = "Double Edge",
             description = "I deal damage to a target equal to my Attack + 1. I lose 1 Health",
             priority = 1,
             isDamaging = true,
@@ -293,7 +293,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 4,
-            name = "Thunder Punch",
+            moveName = "Thunder Punch",
             description = "I deal damage to a target equal to my Attack - 1, but not below 1",
             priority = 0,
             isDamaging = true,
@@ -306,7 +306,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 1,
-            name = "Overheat",
+            moveName = "Overheat",
             description = "I deal damage to a target equal to my Attack + 2. I lose 2 Attack, but not below 1",
             priority = 0,
             isDamaging = true,
@@ -319,7 +319,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 1,
-            name = "Will-o-Wisp",
+            moveName = "Will-o-Wisp",
             description = "I Burn a target",
             priority = 0,
             isDamaging = false,
@@ -332,7 +332,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 5,
-            name = "Aurora Veil",
+            moveName = "Aurora Veil",
             description = " All allies take -1 damage from moves for 5 rounds, but not below 1",
             priority = 0,
             isDamaging = false,
@@ -345,7 +345,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 5,
-            name = "Blizzard",
+            moveName = "Blizzard",
             description = "I deal damage to both enemies equal to my Attack - 1, but not below 1",
             priority = 0,
             isDamaging = true,
@@ -358,7 +358,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 17,
-            name = "Moonblast",
+            moveName = "Moonblast",
             description = "I deal damage to a target equal to my Attack",
             priority = 0,
             isDamaging = true,
@@ -371,7 +371,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 10,
-            name = "Psychic",
+            moveName = "Psychic",
             description = "I deal damage to a target equal to my Attack",
             priority = 0,
             isDamaging = true,
@@ -384,7 +384,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 10,
-            name = "Trick Room",
+            moveName = "Trick Room",
             description = "For 5 rounds, Pokemon with lower Speed move before Pokemon with higher Speed. Move Priority is not affected",
             priority = -7,
             isDamaging = false,
@@ -397,7 +397,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 0,
-            name = "Follow Me",
+            moveName = "Follow Me",
             description = "If an enemy targeted my ally this round, their move targets me instead",
             priority = 3,
             isDamaging = false,
@@ -410,7 +410,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 0,
-            name = "Helping Hand",
+            moveName = "Helping Hand",
             description = "My ally's move this round deals +2 damage",
             priority = 5,
             isDamaging = false,
@@ -423,7 +423,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 12,
-            name = "Rock Slide",
+            moveName = "Rock Slide",
             description = "I deal damage to both enemies equal to my Attack -1, but not below 1",
             priority = 0,
             isDamaging = true,
@@ -436,7 +436,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 15,
-            name = "Knock Off",
+            moveName = "Knock Off",
             description = "I deal damage to a target equal to my Attack. If the enemy hasn't been hit with a Knock Off this game, this move deals +1 damage",
             priority = 0,
             isDamaging = true,
@@ -449,7 +449,7 @@ public class MoveIndex : MonoBehaviour
         return new MoveData
         {
             pokeType = 8,
-            name = "Earthquake",
+            moveName = "Earthquake",
             description = "I deal damage to my ally and both enemies equal to my Attack",
             priority = 0,
             isDamaging = true,

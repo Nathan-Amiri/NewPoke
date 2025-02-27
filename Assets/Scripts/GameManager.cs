@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
     private readonly List<ChoiceInfo> pastChoices = new(); // Replay
     private readonly List<PokemonData> pastPokemon = new(); // Replay
 
-    private readonly List<(ChoiceInfo, int)> delayedEffects = new();
+    private List<(ChoiceInfo, int)> delayedEffects = new();
 
     private readonly List<int> benchSlotsToRepopulate = new();
 
@@ -258,10 +258,10 @@ public class GameManager : MonoBehaviour
         infoCurrentSpeed.text = data.currentSpeed.ToString("0.0");
         infoBaseSpeed.text = data.currentSpeed == data.baseSpeed ? string.Empty : data.baseSpeed.ToString("0.0");
 
-        infoAbilityName.text = "Ability: " + data.ability.name;
+        infoAbilityName.text = "Ability: " + data.ability.abilityName;
         infoAbilityDescription.text = data.ability.description;
 
-        if (data.status.name == null)
+        if (data.status.statusName == null)
         {
             infoNoStatusImage.SetActive(true);
 
@@ -273,14 +273,14 @@ public class GameManager : MonoBehaviour
             infoNoStatusImage.SetActive(false);
 
             infoStatusIcon.sprite = data.status.icon;
-            infoStatusName.text = "Status: " + data.status.name;
+            infoStatusName.text = "Status: " + data.status.statusName;
             infoStatusDescription.text = data.status.description;
         }
 
         for (int i = 0; i < 4; i++)
         {
             infoMoveTypes[i].sprite = moveTypeSprites[data.moves[i].pokeType];
-            infoMoveNames[i].text = data.moves[i].name;
+            infoMoveNames[i].text = data.moves[i].moveName;
             infoMoveDescriptions[i].text = data.moves[i].description;
             infoMovePriority[i].text = data.moves[i].priority.ToString();
         }
@@ -313,7 +313,7 @@ public class GameManager : MonoBehaviour
         {
             casterSlot = pokemonSlots[selectedSlot],
             casterName = pokemonSlots[selectedSlot].data.pokemonName,
-            choice = choice
+            move = choice == 4 ? default : pokemonSlots[selectedSlot].data.moves[choice]
         };
 
         if (choice == 4) // Switch
@@ -357,7 +357,7 @@ public class GameManager : MonoBehaviour
 
         resetChoicesButton.interactable = true;
 
-        if (!(newChoice.choice == 4) && !newChoice.casterSlot.data.moves[choice].isTargeted)
+        if (!(newChoice.move.moveName == null) && !newChoice.casterSlot.data.moves[choice].isTargeted)
             ChoiceComplete();
     }
     private List<int> GetMoveTargetSlots()
@@ -407,7 +407,7 @@ public class GameManager : MonoBehaviour
 
         ResetInteractable();
 
-        if (choices[^1].choice == 4)
+        if (choices[^1].move.moveName == null)
             choices[^1].targetSlot.data.availableToSwitchIn = false;
 
         int choicesNeeded = 0;
@@ -517,7 +517,7 @@ public class GameManager : MonoBehaviour
             {
                 casterSlot = currentChoice.casterSlot,
                 casterName = currentChoice.casterName,
-                choice = currentChoice.choice,
+                move = currentChoice.move,
                 targetSlot = currentChoice.targetSlot
             };
             pastChoices.Add(pastChoice);
@@ -547,7 +547,7 @@ public class GameManager : MonoBehaviour
             {
                 casterSlot = pastChoice.casterSlot,
                 casterName = pastChoice.casterName,
-                choice = pastChoice.choice,
+                move = pastChoice.move,
                 targetSlot = pastChoice.targetSlot
             };
             choices.Add(currentChoice);
@@ -582,10 +582,10 @@ public class GameManager : MonoBehaviour
 
         GetNextChoice();
 
-        if (nextChoice.choice == 4)
+        if (nextChoice.move.moveName == null)
             message.text = nextChoice.casterName + " will switch into " + nextChoice.targetSlot.data.pokemonName;
         else
-            message.text = nextChoice.casterName + " will use " + nextChoice.casterSlot.data.moves[nextChoice.choice].name;
+            message.text = nextChoice.casterName + " will use " + nextChoice.move.moveName;
 
         messageButton.SetActive(true);
 
@@ -597,13 +597,13 @@ public class GameManager : MonoBehaviour
                 pokemonSlot.pokemonImage.color = Color.white;
             else
                 pokemonSlot.pokemonImage.color = pokemonDim;
-        }
 
-        ResetTargetButtons();
-        if (nextChoice.choice == 4 || nextChoice.casterSlot.data.moves[nextChoice.choice].isTargeted)
-        {
-            targetButtons[nextChoice.targetSlot.slotNumber].gameObject.SetActive(true);
-            targetButtons[nextChoice.targetSlot.slotNumber].interactable = false;
+            ResetTargetButtons();
+            if (nextChoice.move.moveName == null || nextChoice.move.isTargeted)
+            {
+                targetButtons[nextChoice.targetSlot.slotNumber].gameObject.SetActive(true);
+                targetButtons[nextChoice.targetSlot.slotNumber].interactable = false;
+            }
         }
     }
     private void GetNextChoice()
@@ -619,7 +619,7 @@ public class GameManager : MonoBehaviour
 
         foreach (ChoiceInfo choiceInfo in choices) // Check for switches
         {
-            if (choiceInfo.choice != 4)
+            if (choiceInfo.move.moveName != null)
                 continue;
 
             if (nextChoice.casterSlot == null)
@@ -649,8 +649,8 @@ public class GameManager : MonoBehaviour
                 continue;
             }
 
-            int priority = choiceInfo.casterSlot.data.moves[choiceInfo.choice].priority; //error
-            int nextPriority = nextChoice.casterSlot.data.moves[nextChoice.choice].priority;
+            int priority = choiceInfo.move.priority; //error
+            int nextPriority = nextChoice.move.priority;
 
             if (priority > nextPriority)
             {
@@ -687,6 +687,8 @@ public class GameManager : MonoBehaviour
             afterEffectMessages.Clear();
 
 
+            
+            // Fail conditions
             if (nextChoice.targetSlot != null && nextChoice.targetSlot.slotIsEmpty)
                 if (nextChoice.casterSlot != nextChoice.targetSlot.ally && !nextChoice.targetSlot.ally.slotIsEmpty)
                 {
@@ -700,7 +702,13 @@ public class GameManager : MonoBehaviour
                     readyForNextEffect = false;
                     return;
                 }
-            else if (nextChoice.targetSlot != null && nextChoice.targetSlot.isProtected)
+            else if (nextChoice.move.moveName != null && nextChoice.move.moveName == "Protect" && nextChoice.casterSlot.data.protectedLastRound)
+            {
+                message.text = nextChoice.casterSlot.data.pokemonName + " can't use Protect this round!";
+                readyForNextEffect = false;
+                return;
+            }
+            else if (nextChoice.targetSlot != null && nextChoice.targetSlot.data.isProtected)
             {
                 message.text = nextChoice.targetSlot.data.pokemonName + " protected itself!";
                 readyForNextEffect = false;
@@ -709,7 +717,7 @@ public class GameManager : MonoBehaviour
 
 
 
-            if (nextChoice.choice == 4)
+            if (nextChoice.move.moveName == null)
                 Switch(nextChoice.casterSlot, nextChoice.targetSlot);
             else
                 moveEffectIndex.MoveEffect(nextChoice, 0); // HealthChange adds afterEffectMessages
@@ -824,16 +832,44 @@ public class GameManager : MonoBehaviour
 
         replayButton.interactable = false;
 
-        List<(ChoiceInfo, int)> delayedEffectsToDelete = new();
+        // Find each Pokemon for delayedeffects (Pokemon might have moved)
+        List<(ChoiceInfo, int)> newDelayedEffects = new();
         foreach ((ChoiceInfo, int) delayedEffect in delayedEffects)
         {
-            moveEffectIndex.MoveEffect(delayedEffect.Item1, delayedEffect.Item2);
-            delayedEffectsToDelete.Add(delayedEffect);
+            string casterName = delayedEffect.Item1.casterName;
+            if (delayedEffect.Item1.casterSlot.data.pokemonName == casterName)
+            {
+                newDelayedEffects.Add(delayedEffect);
+                continue;
+            }
+
+            foreach (PokemonSlot slot in pokemonSlots)
+                if (slot.data.pokemonName == casterName)
+                {
+                    (ChoiceInfo, int) newDelayedEffect = delayedEffect;
+
+                    newDelayedEffect.Item1.casterSlot = slot;
+
+                    newDelayedEffects.Add(newDelayedEffect);
+                    break;
+                }
         }
-        foreach ((ChoiceInfo, int) delayedEffectToDelete in delayedEffectsToDelete)
-            delayedEffects.Remove(delayedEffectToDelete);
+        delayedEffects = newDelayedEffects;
+
+        // Clone list
+        List<(ChoiceInfo, int)> delayedEffectsToExecute = new();
+        foreach ((ChoiceInfo, int) delayedEffect in delayedEffects)
+            delayedEffectsToExecute.Add(delayedEffect);
+
+        // Execute delayedeffects
+        foreach ((ChoiceInfo, int) delayedEffectToExecute in delayedEffectsToExecute)
+        {
+            moveEffectIndex.MoveEffect(delayedEffectToExecute.Item1, delayedEffectToExecute.Item2);
+            delayedEffects.Remove(delayedEffectToExecute);
+        }
 
         //poison and sandstorm here
+
         if (CheckForGameEnd())
             return;
 
@@ -1091,6 +1127,6 @@ public struct ChoiceInfo
 {
     public PokemonSlot casterSlot; // For SelectMessageButton
     public string casterName;
-    public int choice;
+    public MoveData move;
     public PokemonSlot targetSlot;
 }

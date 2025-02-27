@@ -17,7 +17,7 @@ public class MoveEffectIndex : MonoBehaviour
 
     public void MoveEffect(ChoiceInfo choiceInfo, int occurance)
     {
-        int indexNumber = choiceInfo.casterSlot.data.moves[choiceInfo.choice].indexNumber;
+        int indexNumber = choiceInfo.move.indexNumber;
 
         if (indexMethods.Count < indexNumber + 1)
         {
@@ -25,7 +25,7 @@ public class MoveEffectIndex : MonoBehaviour
             return;
         }
 
-        int moveType = choiceInfo.casterSlot.data.moves[choiceInfo.choice].pokeType;
+        int moveType = choiceInfo.move.pokeType;
         indexMethods[indexNumber](choiceInfo, occurance);
     }
 
@@ -33,7 +33,19 @@ public class MoveEffectIndex : MonoBehaviour
 
     private void Protect(ChoiceInfo choiceInfo, int occurance) // 0
     {
-
+        if (occurance == 0)
+        {
+            choiceInfo.casterSlot.data.isProtected = true;
+            gameManager.AddDelayedEffect(choiceInfo, 1);
+        }
+        else if (occurance == 1)
+        {
+            choiceInfo.casterSlot.data.isProtected = false;
+            choiceInfo.casterSlot.data.protectedLastRound = true;
+            gameManager.AddDelayedEffect(choiceInfo, 2);
+        }
+        else if (occurance == 2)
+            choiceInfo.casterSlot.data.protectedLastRound = false;
     }
     private void FakeOut(ChoiceInfo choiceInfo, int occurance) // 1
     {
@@ -79,7 +91,7 @@ public class MoveEffectIndex : MonoBehaviour
     private void Hex(ChoiceInfo choiceInfo, int occurance) // 9
     {
         int amount = choiceInfo.casterSlot.data.currentAttack;
-        if (choiceInfo.targetSlot.data.status.name != null)
+        if (choiceInfo.targetSlot.data.status.statusName != null)
             amount += 1;
         choiceInfo.targetSlot.DealDamage(amount, 13);
     }
