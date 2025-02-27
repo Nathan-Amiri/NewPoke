@@ -112,12 +112,13 @@ public class PokemonSlot : MonoBehaviour
             return;
         }
 
-        if (moveType != -1) // Damage that ignores effectiveness, such as recoil
+        if (moveType != -1) // -1 = damage that ignores modification, such as recoil
         {
+            if (moveType == 2 && gameManager.fieldEffects.ContainsKey("Rain"))
+                amount += 1;
+
             float effectivenessMultiplier = typeChart.GetEffectivenessMultiplier(moveType, data.pokeTypes);
-
             amount = Mathf.CeilToInt(amount * effectivenessMultiplier);
-
             gameManager.AddEffectivenessMessage(effectivenessMultiplier, data.pokemonName);
         }
 

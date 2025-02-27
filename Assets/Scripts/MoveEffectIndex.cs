@@ -71,7 +71,7 @@ public class MoveEffectIndex : MonoBehaviour
     }
     private void WeatherBall(ChoiceInfo choiceInfo, int occurance) // 5
     {
-
+        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack, choiceInfo.move.pokeType);
     }
     private void Hurricane(ChoiceInfo choiceInfo, int occurance) // 6
     {

@@ -88,6 +88,7 @@ public class GameManager : MonoBehaviour
 
     private readonly List<int> benchSlotsToRepopulate = new();
 
+        // Rain, Tailwind,
     [NonSerialized] public readonly Dictionary<string, int> fieldEffects = new(); // int = duration
 
     private readonly List<string> afterEffectMessages = new();
@@ -129,7 +130,7 @@ public class GameManager : MonoBehaviour
             shopUI.SetActive(false);
             drafting = false;
 
-            PrepareForNextChoice();
+            PrepareForNextChoice(true);
             return;
         }
 
@@ -220,6 +221,11 @@ public class GameManager : MonoBehaviour
     private void PrepareForNextChoice(bool gameStart = false)
     {
         infoScreen.SetActive(false);
+
+        if (gameStart)
+            for (int i = 0; i < 4; i++)
+                EnterBattleEffects(pokemonSlots[i]);
+
         message.text = gameStart ? "The game has begun!\n\nSelect a Pokemon" : "Select a pokemon";
     }
 
@@ -736,6 +742,20 @@ public class GameManager : MonoBehaviour
 
 
 
+            // It's necessary to update Weather Ball's type here because nextChoice.move is a copy, so when the weather changes in the middle
+            // of a round, and ToggleFieldEffects changes the slot's moveData.pokeType, nextChoice.move isn't altered 
+            if (nextChoice.move.moveName == "Weather Ball")
+            {
+                if (fieldEffects.ContainsKey("Rain"))
+                    nextChoice.move.pokeType = 2;
+                else if (fieldEffects.ContainsKey("Snow"))
+                    nextChoice.move.pokeType = 5;
+                else
+                    nextChoice.move.pokeType = 0;
+            }
+
+
+
             if (nextChoice.move.moveName == null)
                 Switch(nextChoice.casterSlot, nextChoice.targetSlot);
             else
@@ -807,11 +827,21 @@ public class GameManager : MonoBehaviour
     }
 
 
-    public void Switch(PokemonSlot slot1, PokemonSlot slot2)
+    public void Switch(PokemonSlot battleSlot, PokemonSlot benchSlot)
     {
-        (slot1.data, slot2.data) = (slot2.data, slot1.data);
-        slot1.ReloadPokemon();
-        slot2.ReloadPokemon();
+        (battleSlot.data, benchSlot.data) = (benchSlot.data, battleSlot.data);
+        battleSlot.ReloadPokemon();
+        benchSlot.ReloadPokemon();
+
+        EnterBattleEffects(battleSlot);
+    }
+
+    private void EnterBattleEffects(PokemonSlot enterBattleSlot)
+    {
+        if (enterBattleSlot.data.ability.abilityName == "Drizzle")
+            ToggleFieldEffect("Rain", true, 5);
+        else if (enterBattleSlot.data.ability.abilityName == "Snow Warning")
+            ToggleFieldEffect("Snow", true, 5);
     }
 
     private bool CheckForGameEnd()
@@ -897,11 +927,15 @@ public class GameManager : MonoBehaviour
             cachedFieldEffects.Add(fieldEffect);
         foreach(KeyValuePair<string, int> cachedFieldEffect in cachedFieldEffects)
         {
-            fieldEffects.Remove(cachedFieldEffect.Key);
             if (cachedFieldEffect.Value > 1)
+            {
+                fieldEffects.Remove(cachedFieldEffect.Key);
                 fieldEffects.Add(cachedFieldEffect.Key, cachedFieldEffect.Value - 1);
+                UpdateFieldEffectsText();
+            }
+            else
+                ToggleFieldEffect(cachedFieldEffect.Key, false);
         }
-        UpdateFieldEffectsText();
 
 
 
@@ -999,16 +1033,16 @@ public class GameManager : MonoBehaviour
             if (benchSlot == 4 || benchSlot == 5)
             {
                 if (pokemonSlots[0].slotIsEmpty)
-                    Switch(pokemonSlots[benchSlot], pokemonSlots[0]);
+                    Switch(pokemonSlots[0], pokemonSlots[benchSlot]);
                 else
-                    Switch(pokemonSlots[benchSlot], pokemonSlots[1]);
+                    Switch(pokemonSlots[1], pokemonSlots[benchSlot]);
             }
             else
             {
                 if (pokemonSlots[2].slotIsEmpty)
-                    Switch(pokemonSlots[benchSlot], pokemonSlots[2]);
+                    Switch(pokemonSlots[2], pokemonSlots[benchSlot]);
                 else
-                    Switch(pokemonSlots[benchSlot], pokemonSlots[3]);
+                    Switch(pokemonSlots[3], pokemonSlots[benchSlot]);
             }
         }
 
@@ -1034,12 +1068,48 @@ public class GameManager : MonoBehaviour
 
     public void ToggleFieldEffect(string newFieldEffect, bool on, int duration = 0)
     {
+        if (on && newFieldEffect == "Rain")
+        {
+            if (fieldEffects.ContainsKey("Snow"))
+                ToggleFieldEffect("Snow", false);
+        }
+        if (on && newFieldEffect == "Snow")
+        {
+            if (fieldEffects.ContainsKey("Rain"))
+                ToggleFieldEffect("Rain", false);
+        }
+
         if (!on)
             fieldEffects.Remove(newFieldEffect);
         else if (!fieldEffects.ContainsKey(newFieldEffect))
             fieldEffects.Add(newFieldEffect, duration);
 
         UpdateFieldEffectsText();
+
+
+
+        int weatherBallType = -1;
+        if (newFieldEffect == "Rain")
+            weatherBallType = on ? 2 : 0;
+        else if (newFieldEffect == "Snow")
+            weatherBallType = on ? 5 : 0;
+
+        if (weatherBallType == -1)
+            return;
+
+        foreach (PokemonSlot slot in pokemonSlots)
+        {
+            if (slot.slotIsEmpty)
+                continue;
+
+            for (int i = 0; i < 4; i++)
+                if (slot.data.moves[i].moveName == "Weather Ball")
+                {
+                    MoveData weatherBall = slot.data.moves[i];
+                    weatherBall.pokeType = weatherBallType;
+                    slot.data.moves[i] = weatherBall;
+                }
+        }
     }
     private void UpdateFieldEffectsText()
     {
