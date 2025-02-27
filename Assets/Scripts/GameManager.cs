@@ -9,6 +9,8 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     // SCENE REFERENCE:
+    [SerializeField] private List<int> debugPokemon = new();
+
     [SerializeField] private List<PokemonSlot> pokemonSlots = new();
     [SerializeField] private PokemonIndex pokemonIndex;
     [SerializeField] private StatusIndex statusIndex;
@@ -114,6 +116,23 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        // Debug mode
+        if (debugPokemon.Count != 0)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                PokemonData data = pokemonIndex.LoadPokemonFromIndex(debugPokemon[i]);
+                pokemonSlots[i].FirstLoadPokemon(data);
+                pokemonSlots[i].button.interactable = true;
+            }
+
+            shopUI.SetActive(false);
+            drafting = false;
+
+            PrepareForNextChoice();
+            return;
+        }
+
         NewShopOptions();
     }
 
