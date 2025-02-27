@@ -32,6 +32,7 @@ public class PokemonSlot : MonoBehaviour
     public PokemonData data;
 
     [NonSerialized] public bool slotIsEmpty = true;
+    [NonSerialized] public bool isProtected;
 
     public void FirstLoadPokemon(PokemonData newData)
     {
@@ -103,15 +104,14 @@ public class PokemonSlot : MonoBehaviour
 
     public void DealDamage(int amount, int moveType)
     {
-        if (slotIsEmpty)
+        if (slotIsEmpty || isProtected)
             return;
 
         if (moveType != -1) // Damage that ignores effectiveness, such as recoil
         {
             float effectivenessMultiplier = typeChart.GetEffectivenessMultiplier(moveType, data.pokeTypes);
-            amount = Mathf.FloorToInt(amount * effectivenessMultiplier);
-            if (amount < 1)
-                amount = 1;
+
+            amount = Mathf.CeilToInt(amount * effectivenessMultiplier);
 
             gameManager.AddEffectivenessMessage(effectivenessMultiplier, data.pokemonName);
         }
@@ -128,7 +128,7 @@ public class PokemonSlot : MonoBehaviour
 
     public void GainHealth(int amount)
     {
-        if (slotIsEmpty)
+        if (slotIsEmpty || isProtected)
             return;
 
         data.currentHealth += amount;
@@ -141,7 +141,7 @@ public class PokemonSlot : MonoBehaviour
 
     public void AttackChange(int amount)
     {
-        if (slotIsEmpty)
+        if (slotIsEmpty || isProtected)
             return;
 
         data.currentAttack += amount;
@@ -150,7 +150,7 @@ public class PokemonSlot : MonoBehaviour
 
     public void SpeedChange(int amount)
     {
-        if (slotIsEmpty)
+        if (slotIsEmpty || isProtected)
             return;
 
         data.currentSpeed += amount;
@@ -159,7 +159,7 @@ public class PokemonSlot : MonoBehaviour
 
     public void BaseHealthChange(int amount)
     {
-        if (slotIsEmpty)
+        if (slotIsEmpty || isProtected)
             return;
 
         data.baseHealth += amount;
@@ -171,7 +171,7 @@ public class PokemonSlot : MonoBehaviour
 
     public void NewStatus(int newStatus)
     {
-        if (slotIsEmpty)
+        if (slotIsEmpty || isProtected)
             return;
 
         if (newStatus == 1 && data.pokeTypes.Contains(1)) // Fire types can't be Burned

@@ -566,6 +566,20 @@ public class GameManager : MonoBehaviour
 
     private void PrepareNextChoiceExecution()
     {
+        // Remove any choices made by a caster that's no longer in the same slot they cast the choice from. No message needed
+        List<ChoiceInfo> choicesToRemove = new();
+        foreach (ChoiceInfo choice in choices)
+            if (choice.casterName != choice.casterSlot.data.pokemonName)
+                choicesToRemove.Add(choice);
+        foreach (ChoiceInfo choiceToRemove in choicesToRemove)
+            choices.Remove(choiceToRemove);
+
+        if (choices.Count == 0)
+        {
+            PrepareForRoundEnd();
+            return;
+        }
+
         GetNextChoice();
 
         if (nextChoice.choice == 4)
@@ -597,6 +611,7 @@ public class GameManager : MonoBehaviour
         if (choices.Count == 1)
         {
             nextChoice = choices[0];
+            choices.Remove(nextChoice);
             return;
         }
 
@@ -619,7 +634,10 @@ public class GameManager : MonoBehaviour
         }
 
         if (nextChoice.casterSlot != null)
+        {
+            choices.Remove(nextChoice);
             return;
+        }
 
 
 
@@ -631,7 +649,7 @@ public class GameManager : MonoBehaviour
                 continue;
             }
 
-            int priority = choiceInfo.casterSlot.data.moves[choiceInfo.choice].priority;
+            int priority = choiceInfo.casterSlot.data.moves[choiceInfo.choice].priority; //error
             int nextPriority = nextChoice.casterSlot.data.moves[nextChoice.choice].priority;
 
             if (priority > nextPriority)
@@ -639,11 +657,21 @@ public class GameManager : MonoBehaviour
                 nextChoice = choiceInfo;
                 continue;
             }
+            else if (nextPriority > priority)
+                continue;
 
             if (choiceInfo.casterSlot.data.currentSpeed > nextChoice.casterSlot.data.currentSpeed ||
                 choiceInfo.casterSlot.data.currentSpeed == nextChoice.casterSlot.data.currentSpeed && random)
                 nextChoice = choiceInfo;
         }
+
+        if (nextChoice.casterSlot == null)
+        {
+            Debug.LogError("nextChoice not set");
+            return;
+        }
+
+        choices.Remove(nextChoice);
     }
 
     public void SelectMessageButton() // Executes choices
@@ -657,6 +685,27 @@ public class GameManager : MonoBehaviour
         if (readyForNextEffect)
         {
             afterEffectMessages.Clear();
+
+
+            if (nextChoice.targetSlot != null && nextChoice.targetSlot.slotIsEmpty)
+                if (nextChoice.casterSlot != nextChoice.targetSlot.ally && !nextChoice.targetSlot.ally.slotIsEmpty)
+                {
+                    ChoiceInfo temp = nextChoice;
+                    temp.targetSlot = temp.targetSlot.ally;
+                    nextChoice = temp;
+                }
+                else
+                {
+                    message.text = "The move failed! (no target available)";
+                    readyForNextEffect = false;
+                    return;
+                }
+            else if (nextChoice.targetSlot != null && nextChoice.targetSlot.isProtected)
+            {
+                message.text = nextChoice.targetSlot.data.pokemonName + " protected itself!";
+                readyForNextEffect = false;
+                return;
+            }
 
 
 
@@ -681,47 +730,25 @@ public class GameManager : MonoBehaviour
         }
         readyForNextEffect = true;
 
-        choices.Remove(nextChoice);
-
-        List<ChoiceInfo> choicesToRemove = new();
-        for (int i = 0; i < choices.Count; i++)
-        {
-            // Remove any choices made by a caster that's no longer in the same slot they cast the choice from
-            if (choices[i].casterName != choices[i].casterSlot.data.pokemonName)
-                choicesToRemove.Add(choices[i]);
-
-            // Redirect/remove any choices targeting an empty slot
-            else if (choices[i].targetSlot != null && choices[i].targetSlot.slotIsEmpty)
-            {
-                if (choices[i].targetSlot.ally != choices[i].casterSlot && !choices[i].targetSlot.ally.slotIsEmpty)
-                {
-                    ChoiceInfo temp = choices[i];
-                    temp.targetSlot = temp.targetSlot.ally;
-                    choices[i] = temp;
-                }
-                else
-                    choicesToRemove.Add(choices[i]);
-            }
-        }
-        foreach (ChoiceInfo choiceInfo in choicesToRemove)
-            choices.Remove(choiceInfo);
-
         if (CheckForGameEnd())
             return;
 
         if (choices.Count > 0)
             PrepareNextChoiceExecution();
         else
-        {
-            message.text = "Round will end";
+            PrepareForRoundEnd();
+    }
 
-            foreach (PokemonSlot pokemonSlot in pokemonSlots)
-                pokemonSlot.pokemonImage.color = Color.white;
+    private void PrepareForRoundEnd()
+    {
+        message.text = "Round will end";
 
-            ResetTargetButtons();
+        foreach (PokemonSlot pokemonSlot in pokemonSlots)
+            pokemonSlot.pokemonImage.color = Color.white;
 
-            roundEnding = true;
-        }
+        ResetTargetButtons();
+
+        roundEnding = true;
     }
 
     public void AddEffectivenessMessage(float effectivenessMultiplier, string targetName)
