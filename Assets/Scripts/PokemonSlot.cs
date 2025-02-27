@@ -180,12 +180,23 @@ public class PokemonSlot : MonoBehaviour
         if (slotIsEmpty || data.isProtected)
             return;
 
-        if (newStatus == 1 && data.pokeTypes.Contains(1)) // Fire types can't be Burned
-            return;
-        if (newStatus == 2 && data.pokeTypes.Contains(4)) // Electric types can't be Paralyzed
-            return;
-        if (newStatus == 3 && (data.pokeTypes.Contains(7) || data.pokeTypes.Contains(16))) // Poison and Steel types can't be Poisoned
-            return;
+        if (newStatus == 1)
+        {
+            if (data.pokeTypes.Contains(1)) // Fire types can't be Burned
+                return;
+
+            AttackChange(-2);
+        }
+        if (newStatus == 2)
+        {
+            if (data.pokeTypes.Contains(4)) // Electric types can't be Paralyzed
+                return;
+
+            SpeedChange(-3);
+        }
+        if (newStatus == 3)
+            if (data.pokeTypes.Contains(7) || data.pokeTypes.Contains(16)) // Poison and Steel types can't be Poisoned
+                return;
 
         data.status = statusIndex.LoadStatusFromIndex(newStatus);
     }
@@ -200,7 +211,10 @@ public class PokemonSlot : MonoBehaviour
 
         pokemonImage.enabled = false;
         if (!isBenchSlot)
+        {
             healthBarActive.SetActive(false);
+            statusActive.SetActive(false);
+        }
         data = default;
     }
 }

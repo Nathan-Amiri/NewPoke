@@ -917,7 +917,10 @@ public class GameManager : MonoBehaviour
             delayedEffects.Remove(delayedEffectToExecute);
         }
 
-        //poison and sandstorm here
+        //sandstorm here
+        for (int i = 0; i < 4; i++)
+            if (pokemonSlots[i].data.status.statusName == "Poisoned")
+                pokemonSlots[i].DealDamage(1, -1);
 
         if (CheckForGameEnd())
             return;

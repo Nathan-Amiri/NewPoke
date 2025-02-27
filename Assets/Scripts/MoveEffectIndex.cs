@@ -67,7 +67,7 @@ public class MoveEffectIndex : MonoBehaviour
     }
     private void ThunderWave(ChoiceInfo choiceInfo, int occurance) // 4
     {
-        //choiceInfo.targetSlot.NewStatus(2);
+        choiceInfo.targetSlot.NewStatus(2);
     }
     private void WeatherBall(ChoiceInfo choiceInfo, int occurance) // 5
     {
@@ -137,7 +137,7 @@ public class MoveEffectIndex : MonoBehaviour
     }
     private void Toxic(ChoiceInfo choiceInfo, int occurance) // 17
     {
-        //choiceInfo.targetSlot.NewStatus(3);
+        choiceInfo.targetSlot.NewStatus(3);
     }
     private void SuckerPunch(ChoiceInfo choiceInfo, int occurance) // 18
     {
@@ -162,7 +162,7 @@ public class MoveEffectIndex : MonoBehaviour
     }
     private void WilloWisp(ChoiceInfo choiceInfo, int occurance) // 22
     {
-        //choiceInfo.targetSlot.NewStatus(1);
+        choiceInfo.targetSlot.NewStatus(1);
     }
     private void AuroraVeil(ChoiceInfo choiceInfo, int occurance) // 23
     {
