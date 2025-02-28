@@ -125,6 +125,12 @@ public class PokemonSlot : MonoBehaviour
             else if (moveType == 5 && gameManager.fieldEffects.ContainsKey("Snow"))
                 amount += 1;
 
+            if (data.ability.abilityName == "Levitate" && moveType == 8)
+            {
+                gameManager.AddEffectivenessMessage(0, data.pokemonName);
+                return;
+            }
+
             float effectivenessMultiplier = typeChart.GetEffectivenessMultiplier(moveType, data.pokeTypes);
             amount = Mathf.CeilToInt(amount * effectivenessMultiplier);
             gameManager.AddEffectivenessMessage(effectivenessMultiplier, data.pokemonName);
@@ -168,11 +174,7 @@ public class PokemonSlot : MonoBehaviour
 
         data.currentAttack = Mathf.Clamp(data.currentAttack, 1, 99);
     }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-            ClearStatus();
-    }
+
     public void SpeedChange(int amount)
     {
         if (slotIsEmpty || data.isProtected)

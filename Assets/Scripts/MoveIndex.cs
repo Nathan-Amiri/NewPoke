@@ -164,7 +164,7 @@ public class MoveIndex : MonoBehaviour
         {
             pokeType = 11,
             moveName = "Rage Powder",
-            description = "If an enemy targeted my ally this round, and the enemy is not a Grass type, their move targets me instead",
+            description = "This round, when an enemy uses a targeted move, if the enemy isn't a Grass type, the move targets me instead of the intended target",
             priority = 3,
             isDamaging = false,
             isTargeted = false,
@@ -268,7 +268,7 @@ public class MoveIndex : MonoBehaviour
         {
             pokeType = 15,
             moveName = "Sucker Punch",
-            description = "I deal damage to a target equal to my Attack - 1, but not below 1. This move fails if the target didn't choose a damaging move this round",
+            description = "I deal damage to a target equal to my Attack - 1, but not below 1. This move fails unless the target is about to use a damaging move this round",
             priority = 1,
             isDamaging = true,
             isTargeted = true,
@@ -385,7 +385,7 @@ public class MoveIndex : MonoBehaviour
         {
             pokeType = 10,
             moveName = "Trick Room",
-            description = "For 5 rounds, Pokemon with lower Speed move before Pokemon with higher Speed. Move Priority is not affected",
+            description = "For 5 rounds, Pokemon with lower Speed move before Pokemon with higher Speed. Move Priority is not affected. If I'm already in Trick Room, Trick Room ends.",
             priority = -7,
             isDamaging = false,
             isTargeted = false,
@@ -398,7 +398,7 @@ public class MoveIndex : MonoBehaviour
         {
             pokeType = 0,
             moveName = "Follow Me",
-            description = "If an enemy targeted my ally this round, their move targets me instead",
+            description = "This round, when an enemy uses a targeted move, the move targets me instead of the intended target",
             priority = 3,
             isDamaging = false,
             isTargeted = false,

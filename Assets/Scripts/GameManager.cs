@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -78,7 +79,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject quitScreen;
 
     // CONSTANT:
-    private readonly List<ChoiceInfo> choices = new();
+    [NonSerialized] public readonly List<ChoiceInfo> choices = new(); // Changed by Follow Me
     private readonly List<ChoiceInfo> pastChoices = new(); // Replay
     private readonly List<PokemonData> pastPokemon = new(); // Replay
 
@@ -222,7 +223,7 @@ public class GameManager : MonoBehaviour
 
         if (gameStart)
             for (int i = 0; i < 4; i++)
-                EnterBattleEffects(pokemonSlots[i]);
+                EnterBattleEffects(pokemonSlots[i], true);
 
         message.text = gameStart ? "The game has begun!\n\nSelect a Pokemon" : "Select a pokemon";
     }
@@ -625,12 +626,35 @@ public class GameManager : MonoBehaviour
 
         GetNextChoice();
 
+        // Flinching occurs here so that the move isn't revealed
+        if (nextChoice.move.moveName != null && nextChoice.casterSlot.data.fakedOut)
+        {
+            message.text = nextChoice.casterName + " has been faked out and cannot move!";
+            messageButton.SetActive(true);
+
+            ResetTargetButtons();
+            foreach (PokemonSlot pokemonSlot in pokemonSlots)
+            {
+                pokemonSlot.button.interactable = false;
+                pokemonSlot.pokemonImage.color = pokemonDim;
+            }
+
+            return;
+        }
+
         if (nextChoice.move.moveName == null)
             message.text = nextChoice.casterName + " will switch into " + nextChoice.targetSlot.data.pokemonName;
         else
             message.text = nextChoice.casterName + " will use " + nextChoice.move.moveName;
 
         messageButton.SetActive(true);
+
+        ResetTargetButtons();
+        if (nextChoice.move.moveName == null || nextChoice.move.isTargeted)
+        {
+            targetButtons[nextChoice.targetSlot.slotNumber].gameObject.SetActive(true);
+            targetButtons[nextChoice.targetSlot.slotNumber].interactable = false;
+        }
 
         foreach (PokemonSlot pokemonSlot in pokemonSlots)
         {
@@ -640,13 +664,6 @@ public class GameManager : MonoBehaviour
                 pokemonSlot.pokemonImage.color = Color.white;
             else
                 pokemonSlot.pokemonImage.color = pokemonDim;
-
-            ResetTargetButtons();
-            if (nextChoice.move.moveName == null || nextChoice.move.isTargeted)
-            {
-                targetButtons[nextChoice.targetSlot.slotNumber].gameObject.SetActive(true);
-                targetButtons[nextChoice.targetSlot.slotNumber].interactable = false;
-            }
         }
     }
     private void GetNextChoice()
@@ -671,8 +688,9 @@ public class GameManager : MonoBehaviour
                 continue;
             }
 
-            if (choiceInfo.casterSlot.data.currentSpeed > nextChoice.casterSlot.data.currentSpeed || 
-                choiceInfo.casterSlot.data.currentSpeed == nextChoice.casterSlot.data.currentSpeed && random)
+            if ((!fieldEffects.ContainsKey("Trick Room") && choiceInfo.casterSlot.data.currentSpeed > nextChoice.casterSlot.data.currentSpeed) || // If no trick room and faster
+                (fieldEffects.ContainsKey("Trick Room") && choiceInfo.casterSlot.data.currentSpeed < nextChoice.casterSlot.data.currentSpeed) || // If trick room and slower
+                (choiceInfo.casterSlot.data.currentSpeed == nextChoice.casterSlot.data.currentSpeed && random)) // If random
                 nextChoice = choiceInfo;
         }
 
@@ -703,8 +721,9 @@ public class GameManager : MonoBehaviour
             else if (nextPriority > priority)
                 continue;
 
-            if (choiceInfo.casterSlot.data.currentSpeed > nextChoice.casterSlot.data.currentSpeed ||
-                choiceInfo.casterSlot.data.currentSpeed == nextChoice.casterSlot.data.currentSpeed && random)
+            if ((!fieldEffects.ContainsKey("Trick Room") && choiceInfo.casterSlot.data.currentSpeed > nextChoice.casterSlot.data.currentSpeed) || // If no trick room and faster
+                (fieldEffects.ContainsKey("Trick Room") && choiceInfo.casterSlot.data.currentSpeed < nextChoice.casterSlot.data.currentSpeed) || // If trick room and slower
+                (choiceInfo.casterSlot.data.currentSpeed == nextChoice.casterSlot.data.currentSpeed && random)) // If random
                 nextChoice = choiceInfo;
         }
 
@@ -725,13 +744,23 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        if (nextChoice.move.moveName != null && nextChoice.casterSlot.data.fakedOut)
+        {
+            if (choices.Count > 0)
+                PrepareNextChoiceExecution();
+            else
+                PrepareForRoundEnd();
+
+            return;
+        }
+
         if (readyForNextEffect)
         {
             afterEffectMessages.Clear();
 
+                // Fail conditions:
 
-            
-            // Fail conditions
+            // Missing target fail
             if (nextChoice.targetSlot != null && nextChoice.targetSlot.slotIsEmpty)
                 if (nextChoice.casterSlot != nextChoice.targetSlot.ally && !nextChoice.targetSlot.ally.slotIsEmpty)
                 {
@@ -745,19 +774,50 @@ public class GameManager : MonoBehaviour
                     readyForNextEffect = false;
                     return;
                 }
-            else if (nextChoice.move.moveName != null && (nextChoice.move.moveName == "Protect" || nextChoice.move.moveName == "Detect") &&
-                nextChoice.casterSlot.data.protectedLastRound)
-            {   
-                message.text = nextChoice.casterSlot.data.pokemonName + " can't use " + nextChoice.move.moveName + " this round!";
-                readyForNextEffect = false;
-                return;
-            }
-            else if (nextChoice.targetSlot != null && nextChoice.targetSlot.data.isProtected)
+            
+            // Misc move fails
+            if (nextChoice.move.moveName != null)
             {
-                message.text = nextChoice.targetSlot.data.pokemonName + " protected itself!";
-                readyForNextEffect = false;
-                return;
+                string move = nextChoice.move.moveName;
+
+                if ((move == "Protect" || move == "Detect") && nextChoice.casterSlot.data.protectedLastRound)
+                {
+                    message.text = nextChoice.casterName + " can't use " + nextChoice.move.moveName + " this round!";
+                    readyForNextEffect = false;
+                    return;
+                }
+                else if (move == "Sucker Punch")
+                {
+                    MoveData targetMove = default;
+                    foreach (ChoiceInfo choice in choices)
+                        if (nextChoice.targetSlot == choice.casterSlot)
+                        {
+                            targetMove = choice.move;
+                            break;
+                        }
+
+                    if (targetMove.moveName == null || !targetMove.isDamaging) // Movename is null if the pokemon isn't going to move later
+                    {
+                        message.text = nextChoice.targetSlot.data.pokemonName + " isn't readying a damaging move!";
+                        readyForNextEffect = false;
+                        return;
+                    }
+                }
+                else if (move == "Fake Out" && !nextChoice.casterSlot.data.fakeOutAvailable)
+                {
+                    message.text = nextChoice.casterName + " didn't enter battle this or last round!";
+                    readyForNextEffect = false;
+                    return;
+                }
             }
+
+            // Protected target fail (needs to come after misc fails)
+            if (nextChoice.targetSlot != null && nextChoice.targetSlot.data.isProtected)
+                {
+                    message.text = nextChoice.targetSlot.data.pokemonName + " protected itself!";
+                    readyForNextEffect = false;
+                    return;
+                }
 
 
 
@@ -859,12 +919,24 @@ public class GameManager : MonoBehaviour
         EnterBattleEffects(battleSlot);
     }
 
-    private void EnterBattleEffects(PokemonSlot enterBattleSlot)
+    private void EnterBattleEffects(PokemonSlot enterBattleSlot, bool gameStart = false)
     {
-        if (enterBattleSlot.data.ability.abilityName == "Drizzle")
+        string abilityName = enterBattleSlot.data.ability.abilityName;
+
+        if (abilityName == "Drizzle")
             ToggleFieldEffect("Rain", true, 5);
-        else if (enterBattleSlot.data.ability.abilityName == "Snow Warning")
+        else if (abilityName == "Snow Warning")
             ToggleFieldEffect("Snow", true, 5);
+        else if (abilityName == "Hospitality")
+            enterBattleSlot.ally.GainHealth(2);
+        else if (abilityName == "Intimidate")
+        {
+            enterBattleSlot.enemySlots[0].AttackChange(-1);
+            enterBattleSlot.enemySlots[1].AttackChange(-1);
+        }
+
+        if (!gameStart)
+            enterBattleSlot.data.fakeOutAvailableNextRound = true;
     }
 
     private bool CheckForGameEnd()
@@ -903,6 +975,13 @@ public class GameManager : MonoBehaviour
         messageButton.SetActive(false);
 
         replayButton.interactable = false;
+
+        foreach (PokemonSlot slot in pokemonSlots)
+        {
+            slot.data.fakedOut = false;
+            slot.data.fakeOutAvailable = slot.data.fakeOutAvailableNextRound;
+            slot.data.fakeOutAvailableNextRound = false;
+        }
 
         // Find each Pokemon for delayedeffects (Pokemon might have moved)
         List<(ChoiceInfo, int)> newDelayedEffects = new();

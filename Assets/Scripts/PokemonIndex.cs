@@ -36,6 +36,7 @@ public class PokemonIndex : MonoBehaviour
         data.currentAttack = data.baseAttack;
         data.currentSpeed = data.baseSpeed;
         data.originalBaseHealth = data.baseHealth;
+        data.fakeOutAvailable = true;
         return data;
     }
 

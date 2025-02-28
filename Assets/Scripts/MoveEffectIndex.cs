@@ -49,7 +49,14 @@ public class MoveEffectIndex : MonoBehaviour
     }
     private void FakeOut(ChoiceInfo choiceInfo, int occurance) // 1
     {
+        if (choiceInfo.targetSlot.data.pokeTypes.Contains(13))
+        {
+            gameManager.AddEffectivenessMessage(0, choiceInfo.targetSlot.data.pokemonName);
+            return;
+        }
 
+        choiceInfo.targetSlot.DealDamage(1, 0);
+        choiceInfo.targetSlot.data.fakedOut = true;
     }
     private void Thunderbolt(ChoiceInfo choiceInfo, int occurance) // 2
     {
@@ -67,6 +74,12 @@ public class MoveEffectIndex : MonoBehaviour
     }
     private void ThunderWave(ChoiceInfo choiceInfo, int occurance) // 4
     {
+        if (choiceInfo.targetSlot.data.pokeTypes.Contains(8))
+        {
+            gameManager.AddEffectivenessMessage(0, choiceInfo.targetSlot.data.pokemonName);
+            return;
+        }
+
         choiceInfo.targetSlot.NewStatus(2);
     }
     private void WeatherBall(ChoiceInfo choiceInfo, int occurance) // 5
@@ -97,7 +110,20 @@ public class MoveEffectIndex : MonoBehaviour
     }
     private void RagePowder(ChoiceInfo choiceInfo, int occurance) // 10
     {
+        List<ChoiceInfo> choicesToRedirect = new();
+        foreach (ChoiceInfo choice in gameManager.choices)
+            if (choice.casterSlot != choiceInfo.casterSlot.ally && choice.move.isTargeted && !choice.move.targetsBench &&
+                !choice.casterSlot.data.pokeTypes.Contains(3))
+                choicesToRedirect.Add(choice);
 
+        foreach (ChoiceInfo choiceToRedirect in choicesToRedirect)
+        {
+            gameManager.choices.Remove(choiceToRedirect);
+
+            ChoiceInfo redirectedChoice = choiceToRedirect;
+            redirectedChoice.targetSlot = choiceInfo.casterSlot;
+            gameManager.choices.Add(redirectedChoice);
+        }
     }
     private void LifeDew(ChoiceInfo choiceInfo, int occurance) // 11
     {
@@ -137,11 +163,20 @@ public class MoveEffectIndex : MonoBehaviour
     }
     private void Toxic(ChoiceInfo choiceInfo, int occurance) // 17
     {
+        if (choiceInfo.targetSlot.data.pokeTypes.Contains(16))
+        {
+            gameManager.AddEffectivenessMessage(0, choiceInfo.targetSlot.data.pokemonName);
+            return;
+        }
+
         choiceInfo.targetSlot.NewStatus(3);
     }
     private void SuckerPunch(ChoiceInfo choiceInfo, int occurance) // 18
     {
-
+        int amount = choiceInfo.casterSlot.data.currentAttack - 1;
+        if (amount < 1)
+            amount = 1;
+        choiceInfo.targetSlot.DealDamage(amount, 15);
     }
     private void DoubleEdge(ChoiceInfo choiceInfo, int occurance) // 19
     {
@@ -186,11 +221,26 @@ public class MoveEffectIndex : MonoBehaviour
     }
     private void TrickRoom(ChoiceInfo choiceInfo, int occurance) // 27
     {
-
+        if (!gameManager.fieldEffects.ContainsKey("Trick Room"))
+            gameManager.ToggleFieldEffect("Trick Room", true, 5);
+        else
+            gameManager.ToggleFieldEffect("Trick Room", false);
     }
     private void FollowMe(ChoiceInfo choiceInfo, int occurance) // 28
     {
+        List<ChoiceInfo> choicesToRedirect = new();
+        foreach (ChoiceInfo choice in gameManager.choices)
+            if (choice.casterSlot != choiceInfo.casterSlot.ally && choice.move.isTargeted && !choice.move.targetsBench)
+                choicesToRedirect.Add(choice);
 
+        foreach (ChoiceInfo choiceToRedirect in choicesToRedirect)
+        {
+            gameManager.choices.Remove(choiceToRedirect);
+
+            ChoiceInfo redirectedChoice = choiceToRedirect;
+            redirectedChoice.targetSlot = choiceInfo.casterSlot;
+            gameManager.choices.Add(redirectedChoice);
+        }
     }
     private void HelpingHand(ChoiceInfo choiceInfo, int occurance) // 29
     {
