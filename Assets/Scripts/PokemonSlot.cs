@@ -65,7 +65,7 @@ public class PokemonSlot : MonoBehaviour
         if (!isBenchSlot)
         {
             healthBarActive.SetActive(true);
-            healthBarPivot.localScale = new Vector2((float)data.currentHealth / data.baseHealth, healthBarPivot.localScale.y);
+            healthBarPivot.localScale = new Vector2((float)data.currentHealth / data.healthCap, healthBarPivot.localScale.y);
 
             if (data.status.statusName != null)
             {
@@ -116,6 +116,14 @@ public class PokemonSlot : MonoBehaviour
         {
             if (moveType == 2 && gameManager.fieldEffects.ContainsKey("Rain"))
                 amount += 1;
+            else if (moveType == 1 && gameManager.fieldEffects.ContainsKey("Rain"))
+            {
+                amount -= 1;
+                if (amount == 0)
+                    amount = 1;
+            }
+            else if (moveType == 5 && gameManager.fieldEffects.ContainsKey("Snow"))
+                amount += 1;
 
             float effectivenessMultiplier = typeChart.GetEffectivenessMultiplier(moveType, data.pokeTypes);
             amount = Mathf.CeilToInt(amount * effectivenessMultiplier);
@@ -139,8 +147,8 @@ public class PokemonSlot : MonoBehaviour
 
         data.currentHealth += amount;
 
-        if (data.currentHealth > data.baseHealth)
-            data.currentHealth = data.baseHealth;
+        if (data.currentHealth > data.healthCap)
+            data.currentHealth = data.healthCap;
 
         ReloadPokemon();
     }
@@ -163,16 +171,16 @@ public class PokemonSlot : MonoBehaviour
         data.currentSpeed = Mathf.Clamp(data.currentSpeed, 0.0f, 99.9f);
     }
 
-    public void BaseHealthChange(int amount)
+    public void HealthCapChange(int amount)
     {
         if (slotIsEmpty || data.isProtected)
             return;
 
-        data.baseHealth += amount;
-        data.baseHealth = Mathf.Clamp(data.baseHealth, 1, 99);
+        data.healthCap += amount;
+        data.healthCap = Mathf.Clamp(data.healthCap, 1, 99);
 
-        if (data.currentHealth > data.baseHealth)
-            data.currentHealth = data.baseHealth;
+        if (data.currentHealth > data.healthCap)
+            data.currentHealth = data.healthCap;
     }
 
     public void NewStatus(int newStatus)

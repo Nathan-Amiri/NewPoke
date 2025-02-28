@@ -32,6 +32,7 @@ public class PokemonIndex : MonoBehaviour
         }
 
         PokemonData data = indexMethods[indexNumber]();
+        data.healthCap = data.baseHealth;
         data.currentHealth = data.baseHealth;
         data.currentAttack = data.baseAttack;
         data.currentSpeed = data.baseSpeed;
@@ -109,7 +110,7 @@ public class PokemonIndex : MonoBehaviour
             baseSpeed = 1.7f,
             ability = abilityIndex.LoadAbilityFromIndex(3),
             moves = new List<MoveData>() {
-                moveIndex.LoadMoveFromIndex(0),
+                moveIndex.LoadMoveFromIndex(33),
                 moveIndex.LoadMoveFromIndex(12),
                 moveIndex.LoadMoveFromIndex(13),
                 moveIndex.LoadMoveFromIndex(14)

@@ -107,7 +107,7 @@ public class MoveEffectIndex : MonoBehaviour
     private void CloseCombat(ChoiceInfo choiceInfo, int occurance) // 12
     {
         choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack + 1, 6);
-        choiceInfo.casterSlot.BaseHealthChange(-1);
+        choiceInfo.casterSlot.HealthCapChange(-1);
     }
     private void FirePunch(ChoiceInfo choiceInfo, int occurance) // 13
     {
@@ -128,7 +128,7 @@ public class MoveEffectIndex : MonoBehaviour
     private void Coil(ChoiceInfo choiceInfo, int occurance) // 15
     {
         choiceInfo.casterSlot.AttackChange(1);
-        choiceInfo.casterSlot.BaseHealthChange(1);
+        choiceInfo.casterSlot.HealthCapChange(1);
         choiceInfo.casterSlot.GainHealth(1);
     }
     private void PoisonFang(ChoiceInfo choiceInfo, int occurance) // 16
@@ -222,6 +222,22 @@ public class MoveEffectIndex : MonoBehaviour
         choiceInfo.casterSlot.enemySlots[0].DealDamage(amount, 8);
         choiceInfo.casterSlot.enemySlots[1].DealDamage(amount, 8);
     }
+    private void Detect(ChoiceInfo choiceInfo, int occurance) // 33
+    {
+        if (occurance == 0)
+        {
+            choiceInfo.casterSlot.data.isProtected = true;
+            gameManager.AddDelayedEffect(choiceInfo, 1);
+        }
+        else if (occurance == 1)
+        {
+            choiceInfo.casterSlot.data.isProtected = false;
+            choiceInfo.casterSlot.data.protectedLastRound = true;
+            gameManager.AddDelayedEffect(choiceInfo, 2);
+        }
+        else if (occurance == 2)
+            choiceInfo.casterSlot.data.protectedLastRound = false;
+    }
 
     private void PopulateIndex()
     {
@@ -258,5 +274,6 @@ public class MoveEffectIndex : MonoBehaviour
         indexMethods.Add(RockSlide);
         indexMethods.Add(KnockOff);
         indexMethods.Add(Earthquake);
+        indexMethods.Add(Detect);
     }
 }

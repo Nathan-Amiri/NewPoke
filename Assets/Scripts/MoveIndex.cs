@@ -457,6 +457,19 @@ public class MoveIndex : MonoBehaviour
             targetsBench = false
         };
     }
+    private MoveData Detect() // 33
+    {
+        return new MoveData
+        {
+            pokeType = 6,
+            moveName = "Detect",
+            description = "I'm unaffected by moves this round. I can't use this move next round",
+            priority = 4,
+            isDamaging = false,
+            isTargeted = false,
+            targetsBench = false
+        };
+    }
 
     private void PopulateIndex()
     {
@@ -493,5 +506,6 @@ public class MoveIndex : MonoBehaviour
         indexMethods.Add(RockSlide);
         indexMethods.Add(KnockOff);
         indexMethods.Add(Earthquake);
+        indexMethods.Add(Detect);
     }
 }

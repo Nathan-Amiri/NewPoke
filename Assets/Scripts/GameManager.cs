@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Button resetChoicesButton;
     [SerializeField] private Button replayButton;
 
+    [SerializeField] private GameObject cancelTargettingButton;
     [SerializeField] private GameObject submitChoicesButton;
 
     [SerializeField] private GameObject infoScreen;
@@ -29,6 +30,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform infoHealthBar;
     [SerializeField] private List<Image> infoTypes = new();
     [SerializeField] private TMP_Text infoCurrentHealth;
+    [SerializeField] private TMP_Text infoHealthCap;
     [SerializeField] private TMP_Text infoBaseHealth;
     [SerializeField] private TMP_Text infoCurrentAttack;
     [SerializeField] private TMP_Text infoBaseAttack;
@@ -253,6 +255,8 @@ public class GameManager : MonoBehaviour
 
     private void LoadMainInfo(PokemonData data)
     {
+        infoScreen.SetActive(false); // Prevents buttons from flickering on
+        ResetInteractable();
         infoScreen.SetActive(true);
 
         infoSprite.sprite = data.sprite;
@@ -276,6 +280,7 @@ public class GameManager : MonoBehaviour
             infoTypes[2].gameObject.SetActive(true);
         }
 
+        infoHealthCap.text = data.healthCap == data.baseHealth ? string.Empty : "Cap: " + data.healthCap;
         infoCurrentHealth.text = data.currentHealth.ToString();
         infoBaseHealth.text = data.currentHealth == data.baseHealth ? string.Empty : data.baseHealth.ToString();
         infoCurrentAttack.text = data.currentAttack.ToString();
@@ -309,8 +314,6 @@ public class GameManager : MonoBehaviour
             infoMoveDescriptions[i].text = data.moves[i].description;
             infoMovePriority[i].text = data.moves[i].priority.ToString();
         }
-
-        ResetInteractable();
     }
 
     private void ResetInteractable()
@@ -356,6 +359,8 @@ public class GameManager : MonoBehaviour
             List<int> targetSlots = GetSwitchTargetSlots();
             foreach (int targetSlot in targetSlots)
                 targetButtons[targetSlot].gameObject.SetActive(true);
+
+            cancelTargettingButton.SetActive(true);
         }
         else // Move
         {
@@ -375,6 +380,8 @@ public class GameManager : MonoBehaviour
                 List<int> targetSlots = moveData.targetsBench ? GetSwitchTargetSlots() : GetMoveTargetSlots();
                 foreach (int targetSlot in targetSlots)
                     targetButtons[targetSlot].gameObject.SetActive(true);
+
+                cancelTargettingButton.SetActive(true);
             }
         }
 
@@ -454,6 +461,23 @@ public class GameManager : MonoBehaviour
             PrepareForNextChoice();
     }
 
+    public void SelectCancelTargetting()
+    {
+        cancelTargettingButton.SetActive(false);
+
+        foreach (PokemonSlot pokemonSlot in pokemonSlots)
+        {
+            pokemonSlot.button.interactable = true;
+            pokemonSlot.pokemonImage.color = Color.white;
+        }
+
+        ResetTargetButtons();
+
+        choices.RemoveAt(choices.Count - 1);
+
+        PrepareForNextChoice();
+    }
+
     public void SelectTarget(int targetSlot)
     {
         if (repopulating)
@@ -461,6 +485,8 @@ public class GameManager : MonoBehaviour
             SelectRepopulationTarget(targetSlot);
             return;
         }
+
+        cancelTargettingButton.SetActive(false);
 
         ChoiceInfo temp = choices[^1];
         temp.targetSlot = pokemonSlots[targetSlot];
@@ -727,9 +753,10 @@ public class GameManager : MonoBehaviour
                     readyForNextEffect = false;
                     return;
                 }
-            else if (nextChoice.move.moveName != null && nextChoice.move.moveName == "Protect" && nextChoice.casterSlot.data.protectedLastRound)
-            {
-                message.text = nextChoice.casterSlot.data.pokemonName + " can't use Protect this round!";
+            else if (nextChoice.move.moveName != null && (nextChoice.move.moveName == "Protect" || nextChoice.move.moveName == "Detect") &&
+                nextChoice.casterSlot.data.protectedLastRound)
+            {   
+                message.text = nextChoice.casterSlot.data.pokemonName + " can't use " + nextChoice.move.moveName + " this round!";
                 readyForNextEffect = false;
                 return;
             }
