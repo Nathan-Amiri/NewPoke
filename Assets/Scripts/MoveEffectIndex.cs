@@ -107,7 +107,7 @@ public class MoveEffectIndex : MonoBehaviour
     private void CloseCombat(ChoiceInfo choiceInfo, int occurance) // 12
     {
         choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack + 1, 6);
-        choiceInfo.casterSlot.HealthCapChange(-1);
+        choiceInfo.casterSlot.BaseHealthChange(-1);
     }
     private void FirePunch(ChoiceInfo choiceInfo, int occurance) // 13
     {
@@ -128,7 +128,7 @@ public class MoveEffectIndex : MonoBehaviour
     private void Coil(ChoiceInfo choiceInfo, int occurance) // 15
     {
         choiceInfo.casterSlot.AttackChange(1);
-        choiceInfo.casterSlot.HealthCapChange(1);
+        choiceInfo.casterSlot.BaseHealthChange(1);
         choiceInfo.casterSlot.GainHealth(1);
     }
     private void PoisonFang(ChoiceInfo choiceInfo, int occurance) // 16

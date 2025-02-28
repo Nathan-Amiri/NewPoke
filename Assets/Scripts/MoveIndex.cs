@@ -127,8 +127,8 @@ public class MoveIndex : MonoBehaviour
             moveName = "Tailwind",
             description = "All allies gain 3 Speed for 4 round",
             priority = 0,
-            isDamaging = true,
-            isTargeted = true,
+            isDamaging = false,
+            isTargeted = false,
             targetsBench = false
         };
     }

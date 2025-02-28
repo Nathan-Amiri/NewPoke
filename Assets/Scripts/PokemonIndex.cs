@@ -32,10 +32,10 @@ public class PokemonIndex : MonoBehaviour
         }
 
         PokemonData data = indexMethods[indexNumber]();
-        data.healthCap = data.baseHealth;
         data.currentHealth = data.baseHealth;
         data.currentAttack = data.baseAttack;
         data.currentSpeed = data.baseSpeed;
+        data.originalBaseHealth = data.baseHealth;
         return data;
     }
 

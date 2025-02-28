@@ -65,7 +65,7 @@ public class PokemonSlot : MonoBehaviour
         if (!isBenchSlot)
         {
             healthBarActive.SetActive(true);
-            healthBarPivot.localScale = new Vector2((float)data.currentHealth / data.healthCap, healthBarPivot.localScale.y);
+            healthBarPivot.localScale = new Vector2((float)data.currentHealth / data.baseHealth, healthBarPivot.localScale.y);
 
             if (data.status.statusName != null)
             {
@@ -147,8 +147,8 @@ public class PokemonSlot : MonoBehaviour
 
         data.currentHealth += amount;
 
-        if (data.currentHealth > data.healthCap)
-            data.currentHealth = data.healthCap;
+        if (data.currentHealth > data.baseHealth)
+            data.currentHealth = data.baseHealth;
 
         ReloadPokemon();
     }
@@ -171,16 +171,29 @@ public class PokemonSlot : MonoBehaviour
         data.currentSpeed = Mathf.Clamp(data.currentSpeed, 0.0f, 99.9f);
     }
 
-    public void HealthCapChange(int amount)
+    public void BaseHealthChange(int amount)
     {
         if (slotIsEmpty || data.isProtected)
             return;
 
-        data.healthCap += amount;
-        data.healthCap = Mathf.Clamp(data.healthCap, 1, 99);
+        data.baseHealth += amount;
+        data.baseHealth = Mathf.Clamp(data.baseHealth, 1, 99);
 
-        if (data.currentHealth > data.healthCap)
-            data.currentHealth = data.healthCap;
+        if (data.currentHealth > data.baseHealth)
+            data.currentHealth = data.baseHealth;
+    }
+
+    public void ResetStatChanges()
+    {
+        if (data.originalBaseHealth > data.baseHealth) // Heal when regaining lost base health
+            data.currentHealth += data.originalBaseHealth - data.baseHealth;
+
+        data.baseHealth = data.originalBaseHealth;
+        if (data.currentHealth > data.baseHealth)
+            data.currentHealth = data.baseHealth;
+
+            data.currentAttack = data.baseAttack;
+        data.currentSpeed = data.baseSpeed;
     }
 
     public void NewStatus(int newStatus)

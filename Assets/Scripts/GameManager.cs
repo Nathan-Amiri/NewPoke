@@ -30,12 +30,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Transform infoHealthBar;
     [SerializeField] private List<Image> infoTypes = new();
     [SerializeField] private TMP_Text infoCurrentHealth;
-    [SerializeField] private TMP_Text infoHealthCap;
-    [SerializeField] private TMP_Text infoBaseHealth;
     [SerializeField] private TMP_Text infoCurrentAttack;
-    [SerializeField] private TMP_Text infoBaseAttack;
     [SerializeField] private TMP_Text infoCurrentSpeed;
-    [SerializeField] private TMP_Text infoBaseSpeed;
     [SerializeField] private TMP_Text infoAbilityName;
     [SerializeField] private TMP_Text infoAbilityDescription;
     [SerializeField] private GameObject infoNoStatusImage;
@@ -280,13 +276,9 @@ public class GameManager : MonoBehaviour
             infoTypes[2].gameObject.SetActive(true);
         }
 
-        infoHealthCap.text = data.healthCap == data.baseHealth ? string.Empty : "Cap: " + data.healthCap;
         infoCurrentHealth.text = data.currentHealth.ToString();
-        infoBaseHealth.text = data.currentHealth == data.baseHealth ? string.Empty : data.baseHealth.ToString();
         infoCurrentAttack.text = data.currentAttack.ToString();
-        infoBaseAttack.text = data.currentAttack == data.baseAttack ? string.Empty : data.baseAttack.ToString();
         infoCurrentSpeed.text = data.currentSpeed.ToString("0.0");
-        infoBaseSpeed.text = data.currentSpeed == data.baseSpeed ? string.Empty : data.baseSpeed.ToString("0.0");
 
         infoAbilityName.text = "Ability: " + data.ability.abilityName;
         infoAbilityDescription.text = data.ability.description;
@@ -857,6 +849,10 @@ public class GameManager : MonoBehaviour
     public void Switch(PokemonSlot battleSlot, PokemonSlot benchSlot)
     {
         (battleSlot.data, benchSlot.data) = (benchSlot.data, battleSlot.data);
+
+        if (!benchSlot.slotIsEmpty)
+            benchSlot.ResetStatChanges();
+
         battleSlot.ReloadPokemon();
         benchSlot.ReloadPokemon();
 
