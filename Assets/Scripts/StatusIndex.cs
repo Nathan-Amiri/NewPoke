@@ -50,7 +50,7 @@ public class StatusIndex : MonoBehaviour
         return new StatusData
         {
             icon = statusIcons[2],
-            statusName = "Poisoned",
+            statusName = "Paralyzed",
             description = "My Speed decreased by -3. Electric types can't be Paralyzed"
         };
     }

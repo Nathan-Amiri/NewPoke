@@ -13820,7 +13820,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 276230066217a754c9b518cadde30ed1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugPokemon: 0400000001000000020000000300000000000000050000000600000007000000
+  debugPokemon: 0000000001000000060000000300000004000000050000000200000007000000
   pokemonSlots:
   - {fileID: 1411118368}
   - {fileID: 599377408}
@@ -17567,7 +17567,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -300}
+  m_AnchoredPosition: {x: 0, y: -375}
   m_SizeDelta: {x: 190, y: 90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1431021329
@@ -27410,7 +27410,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -300}
+  m_AnchoredPosition: {x: 0, y: -375}
   m_SizeDelta: {x: 190, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1804193809354936204

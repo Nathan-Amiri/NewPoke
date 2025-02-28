@@ -28,7 +28,20 @@ public class MoveIndex : MonoBehaviour
 
 
 
-    private MoveData FakeOut() // 0
+    private MoveData Protect() // 0
+    {
+        return new MoveData
+        {
+            pokeType = 0,
+            moveName = "Protect",
+            description = "I'm unaffected by moves this round. I can't use this move next round",
+            priority = 4,
+            isDamaging = false,
+            isTargeted = false,
+            targetsBench = false
+        };
+    }
+    private MoveData FakeOut() // 1
     {
         return new MoveData
         {
@@ -41,7 +54,7 @@ public class MoveIndex : MonoBehaviour
             targetsBench = false
         };
     }
-    private MoveData Thunderbolt() // 1
+    private MoveData Thunderbolt() // 2
     {
         return new MoveData
         {
@@ -54,7 +67,7 @@ public class MoveIndex : MonoBehaviour
             targetsBench = false
         };
     }
-    private MoveData VoltSwitch() // 2
+    private MoveData VoltSwitch() // 3
     {
         return new MoveData
         {
@@ -77,19 +90,6 @@ public class MoveIndex : MonoBehaviour
             priority = 0,
             isDamaging = false,
             isTargeted = true,
-            targetsBench = false
-        };
-    }
-    private MoveData Protect() // 4
-    {
-        return new MoveData
-        {
-            pokeType = 0,
-            moveName = "Protect",
-            description = "I'm unaffected by moves this round. I can't use this move next round",
-            priority = 4,
-            isDamaging = false,
-            isTargeted = false,
             targetsBench = false
         };
     }

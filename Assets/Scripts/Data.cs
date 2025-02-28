@@ -18,6 +18,10 @@ public struct PokemonData
     public float baseSpeed; // Never changes
     public float currentSpeed;
 
+    public int originalBaseHealth; // Never changes
+    public int preBurnAttack; // What current Attack would be if not burned
+    public float preParalyzeSpeed; //^
+
     public AbilityData ability;
     public List<MoveData> moves;
     public StatusData status;
@@ -25,8 +29,6 @@ public struct PokemonData
     public bool hasChosen;
 
     public bool availableToSwitchIn;
-
-    public int originalBaseHealth; // Never changes
 
 
 
@@ -76,3 +78,4 @@ public struct StatusData
 ///     1 more, max of 5 (Light Screen? Safeguard?)
 /// If it's ever possible for a Pokemon to be unable to move, account for Pokemon that can't move or switch (make submit choices appear sooner in ChoiceComplete)
 /// The game does not currently support delayed effects that affect targets, since the delayed effect won't occur if the caster faints
+/// Nontargeted moves don't need to manually check Protect when using public PokemonSlot methods, but they do otherwise. Targeted moves always fail into Protected pokemon

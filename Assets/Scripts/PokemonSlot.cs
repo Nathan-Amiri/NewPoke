@@ -158,16 +158,34 @@ public class PokemonSlot : MonoBehaviour
         if (slotIsEmpty || data.isProtected)
             return;
 
-        data.currentAttack += amount;
+        if (data.status.statusName == "Burned")
+        {
+            data.preBurnAttack += amount;
+            data.currentAttack = data.preBurnAttack - 2;
+        }
+        else
+            data.currentAttack += amount;
+
         data.currentAttack = Mathf.Clamp(data.currentAttack, 1, 99);
     }
-
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+            ClearStatus();
+    }
     public void SpeedChange(int amount)
     {
         if (slotIsEmpty || data.isProtected)
             return;
 
-        data.currentSpeed += amount;
+        if (data.status.statusName == "Paralyzed")
+        {
+            data.preParalyzeSpeed += amount;
+            data.currentSpeed = data.preParalyzeSpeed - 3;
+        }
+        else
+            data.currentSpeed += amount;
+
         data.currentSpeed = Mathf.Clamp(data.currentSpeed, 0.0f, 99.9f);
     }
 
@@ -192,13 +210,28 @@ public class PokemonSlot : MonoBehaviour
         if (data.currentHealth > data.baseHealth)
             data.currentHealth = data.baseHealth;
 
+        if (data.status.statusName == "Burned")
+        {
+            data.preBurnAttack = data.baseAttack;
+            data.currentAttack = data.preBurnAttack - 2;
+            data.currentAttack = Mathf.Clamp(data.currentAttack, 1, 99);
+        }
+        else
             data.currentAttack = data.baseAttack;
-        data.currentSpeed = data.baseSpeed;
+
+        if (data.status.statusName == "Paralyzed")
+        {
+            data.preParalyzeSpeed = data.baseSpeed;
+            data.currentSpeed = data.preParalyzeSpeed - 3;
+            data.currentSpeed = Mathf.Clamp(data.currentSpeed, 0.0f, 99.9f);
+        }
+        else
+            data.currentSpeed = data.baseAttack;
     }
 
     public void NewStatus(int newStatus)
     {
-        if (slotIsEmpty || data.isProtected)
+        if (slotIsEmpty || data.isProtected || data.status.statusName != null)
             return;
 
         if (newStatus == 1)
@@ -206,14 +239,18 @@ public class PokemonSlot : MonoBehaviour
             if (data.pokeTypes.Contains(1)) // Fire types can't be Burned
                 return;
 
-            AttackChange(-2);
+            data.preBurnAttack = data.currentAttack;
+            data.currentAttack = data.preBurnAttack - 2;
+            data.currentAttack = Mathf.Clamp(data.currentAttack, 1, 99);
         }
         if (newStatus == 2)
         {
             if (data.pokeTypes.Contains(4)) // Electric types can't be Paralyzed
                 return;
 
-            SpeedChange(-3);
+            data.preParalyzeSpeed = data.currentSpeed;
+            data.currentSpeed = data.preParalyzeSpeed - 3;
+            data.currentSpeed = Mathf.Clamp(data.currentSpeed, 0.0f, 99.9f);
         }
         if (newStatus == 3)
             if (data.pokeTypes.Contains(7) || data.pokeTypes.Contains(16)) // Poison and Steel types can't be Poisoned
@@ -223,7 +260,19 @@ public class PokemonSlot : MonoBehaviour
     }
     public void ClearStatus()
     {
+        if (data.status.statusName == "Burned")
+        {
+            data.currentAttack = data.preBurnAttack;
+            data.currentAttack = Mathf.Clamp(data.currentAttack, 1, 99);
+        }
+        else if (data.status.statusName == "Paralyzed")
+        {
+            data.currentSpeed = data.preParalyzeSpeed;
+            data.currentSpeed = Mathf.Clamp(data.currentSpeed, 0.0f, 99.9f);
+        }
+
         data.status = default;
+        ReloadPokemon();
     }
 
     private void Faint()
