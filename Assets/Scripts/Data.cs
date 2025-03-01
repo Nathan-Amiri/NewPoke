@@ -41,6 +41,8 @@ public struct PokemonData
     public bool fakeOutAvailable;
 
     public bool hasIntimidated;
+
+    public bool slowStartWearingOff;
 }
 public struct MoveData
 {
@@ -84,4 +86,4 @@ public struct StatusData
 /// If it's ever possible for a Pokemon to be unable to move, account for Pokemon that can't move or switch (make submit choices appear sooner in ChoiceComplete)
 /// The game does not currently support delayed effects that affect targets, since the delayed effect won't occur if the caster faints
 /// Nontargeted moves don't need to manually check Protect (or slotIsEmpty!) when using public PokemonSlot methods, but they do otherwise. Targeted moves always fail into Protected pokemon
-/// Moves with non-damage effects need to manually check whether the enemy is type immune (including other forms of immunity such as Levitate)
+/// Moves with non-damage effects need to manually check whether the enemy is type immune (including other forms of immunity such as Levitate

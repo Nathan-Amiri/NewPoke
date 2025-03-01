@@ -31,7 +31,7 @@ public class AbilityIndex : MonoBehaviour
         return new AbilityData
         {
             abilityName = "Lightning Rod",
-            description = "If an enemy targets my ally with an Electric move, the move targets me instead. When I'm targeted or damaged by an Electric move, it deals no damage and I gain 1 Attack"
+            description = "If another Pokemon uses a targeted Electric move, the move targets me instead and I gain 1 Attack. I'm immune to damage from Electric moves"
         };
     }
     private AbilityData Drizzle() // 1
@@ -71,7 +71,7 @@ public class AbilityIndex : MonoBehaviour
         return new AbilityData
         {
             abilityName = "Slow Start",
-            description = "After I've moved twice, I gain +2 Attack and +3 Speed for the rest of the game"
+            description = "The third time I'm in battle at the end of a round, I gain +2 Attack and +3 Speed for the rest of the game"
         };
     }
     private AbilityData Levitate() // 6
@@ -103,7 +103,7 @@ public class AbilityIndex : MonoBehaviour
         return new AbilityData
         {
             abilityName = "Sand Stream",
-            description = "When I enter battle, I summon a Sandstorm for 5 rounds, dealing 1 damage at the end of each round to Pokemon who aren't Rock, Ground, or Steel type"
+            description = "When I enter battle, I summon a Sandstorm for 5 rounds, dealing 1 damage at the end of each round to Pokemon who aren't Ground, Rock, or Steel type"
         };
     }
 

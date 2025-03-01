@@ -112,6 +112,12 @@ public class PokemonSlot : MonoBehaviour
             return;
         }
 
+        if (moveType == 4 && data.ability.abilityName == "Lightning Rod")
+        {
+            gameManager.AddMiscAfterEffectMessage(data.pokemonName + " is immune to damage from Electric moves!");
+            return;
+        }
+
         if (moveType != -1) // -1 = damage that ignores modification, such as recoil
         {
             if (moveType == 2 && gameManager.fieldEffects.ContainsKey("Rain"))
@@ -167,7 +173,7 @@ public class PokemonSlot : MonoBehaviour
         if (data.status.statusName == "Burned")
         {
             data.preBurnAttack += amount;
-            data.currentAttack = data.preBurnAttack - 1;
+            data.currentAttack = data.ability.abilityName == "Guts" ? data.preBurnAttack + 1 : data.preBurnAttack + data.preBurnAttack - 1;
         }
         else
             data.currentAttack += amount;
@@ -215,7 +221,7 @@ public class PokemonSlot : MonoBehaviour
         if (data.status.statusName == "Burned")
         {
             data.preBurnAttack = data.baseAttack;
-            data.currentAttack = data.preBurnAttack - 1;
+            data.currentAttack = data.ability.abilityName == "Guts" ? data.preBurnAttack + 1 : data.preBurnAttack + 1;
             data.currentAttack = Mathf.Clamp(data.currentAttack, 1, 99);
         }
         else
@@ -231,10 +237,18 @@ public class PokemonSlot : MonoBehaviour
             data.currentSpeed = data.baseAttack;
     }
 
-    public void NewStatus(int newStatus)
+    public void NewStatus(int newStatus, bool causedByMove)
     {
-        if (slotIsEmpty || data.isProtected || data.status.statusName != null)
+        if (slotIsEmpty || data.isProtected)
             return;
+
+        if (data.status.statusName != null)
+        {
+            if (causedByMove)
+                gameManager.AddMiscAfterEffectMessage(data.pokemonName + " is already " + data.status.statusName);
+
+            return;
+        }
 
         if (newStatus == 1)
         {
@@ -242,7 +256,7 @@ public class PokemonSlot : MonoBehaviour
                 return;
 
             data.preBurnAttack = data.currentAttack;
-            data.currentAttack = data.preBurnAttack - 1;
+            data.currentAttack = data.ability.abilityName == "Guts" ? data.preBurnAttack + 1 : data.preBurnAttack + data.preBurnAttack - 1;
             data.currentAttack = Mathf.Clamp(data.currentAttack, 1, 99);
         }
         if (newStatus == 2)

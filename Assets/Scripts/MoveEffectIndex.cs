@@ -80,7 +80,7 @@ public class MoveEffectIndex : MonoBehaviour
             return;
         }
 
-        choiceInfo.targetSlot.NewStatus(2);
+        choiceInfo.targetSlot.NewStatus(2, true);
     }
     private void WeatherBall(ChoiceInfo choiceInfo, int occurance) // 5
     {
@@ -169,7 +169,7 @@ public class MoveEffectIndex : MonoBehaviour
             return;
         }
 
-        choiceInfo.targetSlot.NewStatus(3);
+        choiceInfo.targetSlot.NewStatus(3, true);
     }
     private void SuckerPunch(ChoiceInfo choiceInfo, int occurance) // 18
     {
@@ -197,7 +197,7 @@ public class MoveEffectIndex : MonoBehaviour
     }
     private void WilloWisp(ChoiceInfo choiceInfo, int occurance) // 22
     {
-        choiceInfo.targetSlot.NewStatus(1);
+        choiceInfo.targetSlot.NewStatus(1, true);
     }
     private void AuroraVeil(ChoiceInfo choiceInfo, int occurance) // 23
     {

@@ -87,7 +87,7 @@ public class GameManager : MonoBehaviour
 
     private readonly List<int> benchSlotsToRepopulate = new();
 
-        // Rain, Tailwind,
+        // Rain, Tailwind, Psychic Terrain, Trick Room, Sandstorm, Snow
     [NonSerialized] public readonly Dictionary<string, int> fieldEffects = new(); // int = duration
 
     private readonly List<string> afterEffectMessages = new();
@@ -758,9 +758,32 @@ public class GameManager : MonoBehaviour
         {
             afterEffectMessages.Clear();
 
-                // Fail conditions:
 
-            // Missing target fail
+
+            // Fail/redirect conditions:
+
+            if (nextChoice.targetSlot != null && nextChoice.move.pokeType == 4)
+            {
+                PokemonSlot rod = null;
+
+                if (nextChoice.casterSlot.ally.data.ability.abilityName == "Lightning Rod")
+                    rod = nextChoice.casterSlot.ally;
+                else if (nextChoice.casterSlot.enemySlots[0].data.ability.abilityName == "Lightning Rod")
+                    rod = nextChoice.casterSlot.enemySlots[0];
+                else if (nextChoice.casterSlot.enemySlots[1].data.ability.abilityName == "Lightning Rod")
+                    rod = nextChoice.casterSlot.enemySlots[1];
+
+                if (rod != null)
+                {
+                    ChoiceInfo temp = nextChoice;
+                    temp.targetSlot = rod;
+                    nextChoice = temp;
+
+                    nextChoice.targetSlot.AttackChange(1);
+                }
+            }
+
+            // Missing target fail/redirect
             if (nextChoice.targetSlot != null && nextChoice.targetSlot.slotIsEmpty)
                 if (nextChoice.casterSlot != nextChoice.targetSlot.ally && !nextChoice.targetSlot.ally.slotIsEmpty)
                 {
@@ -809,17 +832,23 @@ public class GameManager : MonoBehaviour
                     readyForNextEffect = false;
                     return;
                 }
-            }
 
-            // Protected target fail (needs to come after misc fails)
-            if (nextChoice.targetSlot != null && nextChoice.targetSlot.data.isProtected)
+                else if (fieldEffects.ContainsKey("Psychic Terrain") && nextChoice.move.priority > 0 && 
+                    (nextChoice.targetSlot == nextChoice.casterSlot.enemySlots[0] || nextChoice.targetSlot == nextChoice.casterSlot.enemySlots[1]))
+                {
+                    message.text = nextChoice.targetSlot.data.pokemonName + " is protected by the Psychic Terrain!";
+                    readyForNextEffect = false;
+                    return;
+                }
+
+                // Protected target fail (needs to come after misc fails)
+                if (nextChoice.targetSlot != null && nextChoice.targetSlot.data.isProtected)
                 {
                     message.text = nextChoice.targetSlot.data.pokemonName + " protected itself!";
                     readyForNextEffect = false;
                     return;
                 }
-
-
+            }
 
             // It's necessary to update Weather Ball's type here because nextChoice.move is a copy, so when the weather changes in the middle
             // of a round, and ToggleFieldEffects changes the slot's moveData.pokeType, nextChoice.move isn't altered 
@@ -829,6 +858,8 @@ public class GameManager : MonoBehaviour
                     nextChoice.move.pokeType = 2;
                 else if (fieldEffects.ContainsKey("Snow"))
                     nextChoice.move.pokeType = 5;
+                else if (fieldEffects.ContainsKey("Sandstorm"))
+                    nextChoice.move.pokeType = 12;
                 else
                     nextChoice.move.pokeType = 0;
             }
@@ -927,6 +958,10 @@ public class GameManager : MonoBehaviour
             ToggleFieldEffect("Rain", true, 5);
         else if (abilityName == "Snow Warning")
             ToggleFieldEffect("Snow", true, 5);
+        else if (abilityName == "Sand Stream")
+            ToggleFieldEffect("Sandstorm", true, 5);
+        else if (abilityName == "Psychic Surge")
+            ToggleFieldEffect("Psychic Terrain", true, 5);
         else if (abilityName == "Hospitality")
             enterBattleSlot.ally.GainHealth(2);
         else if (abilityName == "Intimidate" && !enterBattleSlot.data.hasIntimidated)
@@ -1021,10 +1056,34 @@ public class GameManager : MonoBehaviour
             delayedEffects.Remove(delayedEffectToExecute);
         }
 
-        //sandstorm here
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++) // After field effects are removed
+        {
             if (pokemonSlots[i].data.status.statusName == "Poisoned")
                 pokemonSlots[i].DealDamage(1, -1);
+
+            if (fieldEffects.ContainsKey("Sandstorm"))
+                if (!pokemonSlots[i].data.pokeTypes.Contains(8) && !pokemonSlots[i].data.pokeTypes.Contains(12) && !pokemonSlots[i].data.pokeTypes.Contains(16))
+                    pokemonSlots[i].DealDamage(1, -1);
+
+            if (pokemonSlots[i].data.ability.abilityName == "Slow Start")
+            {
+                if (pokemonSlots[i].data.slowStartWearingOff)
+                {
+                    pokemonSlots[i].data.baseAttack += 2;
+                    pokemonSlots[i].data.baseSpeed += 3;
+                    pokemonSlots[i].AttackChange(2);
+                    pokemonSlots[i].SpeedChange(3);
+                }
+                else
+                    pokemonSlots[i].data.slowStartWearingOff = true;
+            }
+
+            if (pokemonSlots[i].data.ability.abilityName == "Guts" && pokemonSlots[i].data.status.statusName == null)
+            {
+                pokemonSlots[i].NewStatus(1, false);
+                pokemonSlots[i].ReloadPokemon(); // Display status on field
+            }
+        }
 
         if (CheckForGameEnd())
             return;
@@ -1179,11 +1238,22 @@ public class GameManager : MonoBehaviour
         {
             if (fieldEffects.ContainsKey("Snow"))
                 ToggleFieldEffect("Snow", false);
+            if (fieldEffects.ContainsKey("Sandstorm"))
+                ToggleFieldEffect("Sandstorm", false);
         }
         if (on && newFieldEffect == "Snow")
         {
             if (fieldEffects.ContainsKey("Rain"))
                 ToggleFieldEffect("Rain", false);
+            if (fieldEffects.ContainsKey("Sandstorm"))
+                ToggleFieldEffect("Sandstorm", false);
+        }
+        if (on && newFieldEffect == "Sandstorm")
+        {
+            if (fieldEffects.ContainsKey("Rain"))
+                ToggleFieldEffect("Rain", false);
+            if (fieldEffects.ContainsKey("Snow"))
+                ToggleFieldEffect("Snow", false);
         }
 
         if (!on)
@@ -1200,6 +1270,8 @@ public class GameManager : MonoBehaviour
             weatherBallType = on ? 2 : 0;
         else if (newFieldEffect == "Snow")
             weatherBallType = on ? 5 : 0;
+        else if (newFieldEffect == "Sandstorm")
+            weatherBallType = on ? 12 : 0;
 
         if (weatherBallType == -1)
             return;
