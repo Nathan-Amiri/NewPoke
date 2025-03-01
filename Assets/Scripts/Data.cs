@@ -39,6 +39,8 @@ public struct PokemonData
     public bool fakedOut;
     public bool fakeOutAvailableNextRound;
     public bool fakeOutAvailable;
+
+    public bool hasIntimidated;
 }
 public struct MoveData
 {

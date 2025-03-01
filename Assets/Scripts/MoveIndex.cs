@@ -279,10 +279,10 @@ public class MoveIndex : MonoBehaviour
     {
         return new MoveData
         {
-            pokeType = 16,
+            pokeType = 0,
             moveName = "Double Edge",
             description = "I deal damage to a target equal to my Attack + 1. I lose 1 Health",
-            priority = 1,
+            priority = 0,
             isDamaging = true,
             isTargeted = true,
             targetsBench = false

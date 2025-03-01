@@ -42,7 +42,7 @@ public class StatusIndex : MonoBehaviour
         {
             icon = statusIcons[1],
             statusName = "Burned",
-            description = "My Attack is decreased by -2, but not less than 1. Fire types can't be Burned"
+            description = "My Attack is decreased by -1, but not less than 1. Fire types can't be Burned"
         };
     }
     private StatusData Paralyzed() // 2

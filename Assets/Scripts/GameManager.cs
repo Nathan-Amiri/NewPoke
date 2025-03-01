@@ -929,10 +929,12 @@ public class GameManager : MonoBehaviour
             ToggleFieldEffect("Snow", true, 5);
         else if (abilityName == "Hospitality")
             enterBattleSlot.ally.GainHealth(2);
-        else if (abilityName == "Intimidate")
+        else if (abilityName == "Intimidate" && !enterBattleSlot.data.hasIntimidated)
         {
             enterBattleSlot.enemySlots[0].AttackChange(-1);
             enterBattleSlot.enemySlots[1].AttackChange(-1);
+
+            enterBattleSlot.data.hasIntimidated = true;
         }
 
         if (!gameStart)

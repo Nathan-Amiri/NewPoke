@@ -167,7 +167,7 @@ public class PokemonSlot : MonoBehaviour
         if (data.status.statusName == "Burned")
         {
             data.preBurnAttack += amount;
-            data.currentAttack = data.preBurnAttack - 2;
+            data.currentAttack = data.preBurnAttack - 1;
         }
         else
             data.currentAttack += amount;
@@ -215,7 +215,7 @@ public class PokemonSlot : MonoBehaviour
         if (data.status.statusName == "Burned")
         {
             data.preBurnAttack = data.baseAttack;
-            data.currentAttack = data.preBurnAttack - 2;
+            data.currentAttack = data.preBurnAttack - 1;
             data.currentAttack = Mathf.Clamp(data.currentAttack, 1, 99);
         }
         else
@@ -242,7 +242,7 @@ public class PokemonSlot : MonoBehaviour
                 return;
 
             data.preBurnAttack = data.currentAttack;
-            data.currentAttack = data.preBurnAttack - 2;
+            data.currentAttack = data.preBurnAttack - 1;
             data.currentAttack = Mathf.Clamp(data.currentAttack, 1, 99);
         }
         if (newStatus == 2)

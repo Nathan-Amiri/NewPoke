@@ -55,7 +55,7 @@ public class AbilityIndex : MonoBehaviour
         return new AbilityData
         {
             abilityName = "Guts",
-            description = "At the end of each round, if I don't have a status condition, I becomed Burned. When I'm Burned, I gain 2 Attack instead of losing 2"
+            description = "At the end of each round, if I don't have a status condition, I becomed Burned. When I'm Burned, I gain 1 Attack instead of losing 1"
         };
     }
     private AbilityData Intimidate() // 4
@@ -63,7 +63,7 @@ public class AbilityIndex : MonoBehaviour
         return new AbilityData
         {
             abilityName = "Intimidate",
-            description = "When I enter battle, enemies in battle lose 1 Attack, but not below 1"
+            description = "The first time I enter battle, enemies in battle lose 1 Attack, but not below 1"
         };
     }
     private AbilityData SlowStart() // 5
@@ -71,7 +71,7 @@ public class AbilityIndex : MonoBehaviour
         return new AbilityData
         {
             abilityName = "Slow Start",
-            description = "My Attack is -2 until after I've moved twice"
+            description = "After I've moved twice, I gain +2 Attack and +3 Speed for the rest of the game"
         };
     }
     private AbilityData Levitate() // 6
