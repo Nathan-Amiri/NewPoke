@@ -1058,6 +1058,9 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < 4; i++) // After field effects are removed
         {
+            if (pokemonSlots[i].slotIsEmpty)
+                continue;
+
             if (pokemonSlots[i].data.status.statusName == "Poisoned")
                 pokemonSlots[i].DealDamage(1, -1);
 
@@ -1310,6 +1313,10 @@ public class GameManager : MonoBehaviour
     public void SelectEffectivenessButton()
     {
         effectivenessScreen.SetActive(true);
+
+        effectivenessTypes[0].gameObject.SetActive(false);
+        effectivenessTypes[1].gameObject.SetActive(false);
+        effectivenessTypes[2].gameObject.SetActive(false);
 
         if (infoTypes[0].gameObject.activeSelf)
         {
