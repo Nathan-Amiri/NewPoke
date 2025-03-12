@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -17,7 +16,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private StatusIndex statusIndex;
     [SerializeField] private MoveEffectIndex moveEffectIndex;
     [SerializeField] private TypeChart typeChart;
-
+    
     [SerializeField] private Button resetChoicesButton;
     [SerializeField] private Button replayButton;
 
@@ -358,6 +357,14 @@ public class GameManager : MonoBehaviour
         else // Move
         {
             MoveData moveData = newChoice.casterSlot.data.moves[choice];
+
+            if (moveData.targetsBench && newChoice.casterSlot.benchedAllySlots[0].slotIsEmpty && newChoice.casterSlot.benchedAllySlots[1].slotIsEmpty)
+            {
+                moveData.isTargeted = false;
+                moveData.targetsBench = false;
+                newChoice.casterSlot.data.moves[choice] = moveData;
+            }
+
             if (moveData.isTargeted)
             {
                 message.text = "Select a target";
@@ -366,7 +373,7 @@ public class GameManager : MonoBehaviour
                 foreach (PokemonSlot pokemonSlot in pokemonSlots)
                 {
                     pokemonSlot.button.interactable = false;
-                    pokemonSlot.pokemonImage.color = pokemonDim;
+                    pokemonSlot.pokemonImage.color = pokemonSlot.slotIsEmpty ? Color.white : pokemonDim;
                 }
                 pokemonSlots[selectedSlot].pokemonImage.color = Color.white;
 
@@ -649,11 +656,43 @@ public class GameManager : MonoBehaviour
 
         messageButton.SetActive(true);
 
-        ResetTargetButtons();
-        if (nextChoice.move.moveName == null || nextChoice.move.isTargeted)
+        // Redirection:
+        if (nextChoice.targetSlot != null)
         {
-            targetButtons[nextChoice.targetSlot.slotNumber].gameObject.SetActive(true);
+            if (nextChoice.move.pokeType == 4) // Lightning Rod
+            {
+                PokemonSlot rod = null;
+
+                if (nextChoice.casterSlot.ally.data.ability.abilityName == "Lightning Rod")
+                    rod = nextChoice.casterSlot.ally;
+                else if (nextChoice.casterSlot.enemySlots[0].data.ability.abilityName == "Lightning Rod")
+                    rod = nextChoice.casterSlot.enemySlots[0];
+                else if (nextChoice.casterSlot.enemySlots[1].data.ability.abilityName == "Lightning Rod")
+                    rod = nextChoice.casterSlot.enemySlots[1];
+
+                if (rod != null)
+                {
+                    ChoiceInfo temp = nextChoice;
+                    temp.targetSlot = rod;
+                    nextChoice = temp;
+
+                    nextChoice.targetSlot.AttackChange(1);
+                }
+            }
+            else if (nextChoice.targetSlot.slotIsEmpty && nextChoice.casterSlot != nextChoice.targetSlot.ally && !nextChoice.targetSlot.ally.slotIsEmpty)
+            {
+                ChoiceInfo temp = nextChoice;
+                temp.targetSlot = temp.targetSlot.ally;
+                nextChoice = temp;
+            }
+        }
+
+        ResetTargetButtons();
+        if (nextChoice.move.moveName == null || nextChoice.move.isTargeted && nextChoice.targetSlot != null)
+            // TargetSlot is null if the move targets bench, but the bench is empty
+        {
             targetButtons[nextChoice.targetSlot.slotNumber].interactable = false;
+            targetButtons[nextChoice.targetSlot.slotNumber].gameObject.SetActive(true);
         }
 
         foreach (PokemonSlot pokemonSlot in pokemonSlots)
@@ -758,47 +797,14 @@ public class GameManager : MonoBehaviour
         {
             afterEffectMessages.Clear();
 
-
-
-            // Fail/redirect conditions:
-
-            if (nextChoice.targetSlot != null && nextChoice.move.pokeType == 4)
+            // Move failure
+            if (nextChoice.targetSlot != null && nextChoice.targetSlot.slotIsEmpty) // Redirection already occurred if applicable
             {
-                PokemonSlot rod = null;
-
-                if (nextChoice.casterSlot.ally.data.ability.abilityName == "Lightning Rod")
-                    rod = nextChoice.casterSlot.ally;
-                else if (nextChoice.casterSlot.enemySlots[0].data.ability.abilityName == "Lightning Rod")
-                    rod = nextChoice.casterSlot.enemySlots[0];
-                else if (nextChoice.casterSlot.enemySlots[1].data.ability.abilityName == "Lightning Rod")
-                    rod = nextChoice.casterSlot.enemySlots[1];
-
-                if (rod != null)
-                {
-                    ChoiceInfo temp = nextChoice;
-                    temp.targetSlot = rod;
-                    nextChoice = temp;
-
-                    nextChoice.targetSlot.AttackChange(1);
-                }
+                message.text = "The move failed! (no target available)";
+                readyForNextEffect = false;
+                return;
             }
 
-            // Missing target fail/redirect
-            if (nextChoice.targetSlot != null && nextChoice.targetSlot.slotIsEmpty)
-                if (nextChoice.casterSlot != nextChoice.targetSlot.ally && !nextChoice.targetSlot.ally.slotIsEmpty)
-                {
-                    ChoiceInfo temp = nextChoice;
-                    temp.targetSlot = temp.targetSlot.ally;
-                    nextChoice = temp;
-                }
-                else
-                {
-                    message.text = "The move failed! (no target available)";
-                    readyForNextEffect = false;
-                    return;
-                }
-            
-            // Misc move fails
             if (nextChoice.move.moveName != null)
             {
                 string move = nextChoice.move.moveName;
@@ -964,13 +970,6 @@ public class GameManager : MonoBehaviour
             ToggleFieldEffect("Psychic Terrain", true, 5);
         else if (abilityName == "Hospitality")
             enterBattleSlot.ally.GainHealth(2);
-        else if (abilityName == "Intimidate" && !enterBattleSlot.data.hasIntimidated)
-        {
-            enterBattleSlot.enemySlots[0].AttackChange(-1);
-            enterBattleSlot.enemySlots[1].AttackChange(-1);
-
-            enterBattleSlot.data.hasIntimidated = true;
-        }
 
         if (!gameStart)
             enterBattleSlot.data.fakeOutAvailableNextRound = true;
@@ -1062,11 +1061,11 @@ public class GameManager : MonoBehaviour
                 continue;
 
             if (pokemonSlots[i].data.status.statusName == "Poisoned")
-                pokemonSlots[i].DealDamage(1, -1);
+                pokemonSlots[i].DealDamage(1, -1, null);
 
             if (fieldEffects.ContainsKey("Sandstorm"))
                 if (!pokemonSlots[i].data.pokeTypes.Contains(8) && !pokemonSlots[i].data.pokeTypes.Contains(12) && !pokemonSlots[i].data.pokeTypes.Contains(16))
-                    pokemonSlots[i].DealDamage(1, -1);
+                    pokemonSlots[i].DealDamage(1, -1, null);
 
             if (pokemonSlots[i].data.ability.abilityName == "Slow Start")
             {

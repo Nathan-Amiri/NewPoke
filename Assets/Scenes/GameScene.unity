@@ -13820,7 +13820,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 276230066217a754c9b518cadde30ed1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugPokemon: 
+  debugPokemon: 0000000001000000040000000100000003000000010000000400000001000000
   pokemonSlots:
   - {fileID: 1411118368}
   - {fileID: 599377408}

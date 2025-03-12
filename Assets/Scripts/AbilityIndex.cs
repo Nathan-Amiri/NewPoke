@@ -63,7 +63,7 @@ public class AbilityIndex : MonoBehaviour
         return new AbilityData
         {
             abilityName = "Intimidate",
-            description = "The first time I enter battle, enemies in battle lose 1 Attack, but not below 1"
+            description = "The first time I damage a target, it loses 1 Attack"
         };
     }
     private AbilityData SlowStart() // 5
@@ -71,7 +71,7 @@ public class AbilityIndex : MonoBehaviour
         return new AbilityData
         {
             abilityName = "Slow Start",
-            description = "The third time I'm in battle at the end of a round, I gain +2 Attack and +3 Speed for the rest of the game"
+            description = "The third time I'm in battle at the end of a round, I gain 2 Attack and 3 Speed for the rest of the game"
         };
     }
     private AbilityData Levitate() // 6

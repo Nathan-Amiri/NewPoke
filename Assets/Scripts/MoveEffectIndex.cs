@@ -55,22 +55,23 @@ public class MoveEffectIndex : MonoBehaviour
             return;
         }
 
-        choiceInfo.targetSlot.DealDamage(1, 0);
+        choiceInfo.targetSlot.DealDamage(1, 0, choiceInfo.casterSlot);
         choiceInfo.targetSlot.data.fakedOut = true;
     }
     private void Thunderbolt(ChoiceInfo choiceInfo, int occurance) // 2
     {
-        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack, 4);
+        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack, 4, choiceInfo.casterSlot);
     }
     private void VoltSwitch(ChoiceInfo choiceInfo, int occurance) // 3
     {
         int amount = choiceInfo.casterSlot.data.currentAttack - 2;
         if (amount < 1)
             amount = 1;
-        choiceInfo.casterSlot.enemySlots[0].DealDamage(amount, 4);
-        choiceInfo.casterSlot.enemySlots[1].DealDamage(amount, 4);
+        choiceInfo.casterSlot.enemySlots[0].DealDamage(amount, 4, choiceInfo.casterSlot);
+        choiceInfo.casterSlot.enemySlots[1].DealDamage(amount, 4, choiceInfo.casterSlot);
 
-        gameManager.Switch(choiceInfo.casterSlot, choiceInfo.targetSlot);
+        if (choiceInfo.targetSlot != null)
+            gameManager.Switch(choiceInfo.casterSlot, choiceInfo.targetSlot);
     }
     private void ThunderWave(ChoiceInfo choiceInfo, int occurance) // 4
     {
@@ -84,11 +85,11 @@ public class MoveEffectIndex : MonoBehaviour
     }
     private void WeatherBall(ChoiceInfo choiceInfo, int occurance) // 5
     {
-        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack, choiceInfo.move.pokeType);
+        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack, choiceInfo.move.pokeType, choiceInfo.casterSlot);
     }
     private void Hurricane(ChoiceInfo choiceInfo, int occurance) // 6
     {
-        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack, 9);
+        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack, 9, choiceInfo.casterSlot);
     }
     private void Tailwind(ChoiceInfo choiceInfo, int occurance) // 7
     {
@@ -96,8 +97,8 @@ public class MoveEffectIndex : MonoBehaviour
     }
     private void MatchaGotcha(ChoiceInfo choiceInfo, int occurance) // 8
     {
-        choiceInfo.casterSlot.enemySlots[0].DealDamage(choiceInfo.casterSlot.data.currentAttack, 3);
-        choiceInfo.casterSlot.enemySlots[1].DealDamage(choiceInfo.casterSlot.data.currentAttack, 3);
+        choiceInfo.casterSlot.enemySlots[0].DealDamage(choiceInfo.casterSlot.data.currentAttack, 3, choiceInfo.casterSlot);
+        choiceInfo.casterSlot.enemySlots[1].DealDamage(choiceInfo.casterSlot.data.currentAttack, 3, choiceInfo.casterSlot);
 
         choiceInfo.casterSlot.GainHealth(1);
     }
@@ -106,7 +107,7 @@ public class MoveEffectIndex : MonoBehaviour
         int amount = choiceInfo.casterSlot.data.currentAttack;
         if (choiceInfo.targetSlot.data.status.statusName != null)
             amount += 1;
-        choiceInfo.targetSlot.DealDamage(amount, 13);
+        choiceInfo.targetSlot.DealDamage(amount, 13, choiceInfo.casterSlot);
     }
     private void RagePowder(ChoiceInfo choiceInfo, int occurance) // 10
     {
@@ -132,7 +133,7 @@ public class MoveEffectIndex : MonoBehaviour
     }
     private void CloseCombat(ChoiceInfo choiceInfo, int occurance) // 12
     {
-        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack + 1, 6);
+        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack + 1, 6, choiceInfo.casterSlot);
         choiceInfo.casterSlot.BaseHealthChange(-1);
     }
     private void FirePunch(ChoiceInfo choiceInfo, int occurance) // 13
@@ -140,14 +141,14 @@ public class MoveEffectIndex : MonoBehaviour
         int amount = choiceInfo.casterSlot.data.currentAttack - 1;
         if (amount < 1)
             amount = 1;
-        choiceInfo.targetSlot.DealDamage(amount, 1);
+        choiceInfo.targetSlot.DealDamage(amount, 1, choiceInfo.casterSlot);
     }
     private void DrainPunch(ChoiceInfo choiceInfo, int occurance) // 14
     {
         int amount = choiceInfo.casterSlot.data.currentAttack - 1;
         if (amount < 1)
             amount = 1;
-        choiceInfo.targetSlot.DealDamage(amount, 6);
+        choiceInfo.targetSlot.DealDamage(amount, 6, choiceInfo.casterSlot);
 
         choiceInfo.casterSlot.GainHealth(1);
     }
@@ -159,7 +160,7 @@ public class MoveEffectIndex : MonoBehaviour
     }
     private void PoisonFang(ChoiceInfo choiceInfo, int occurance) // 16
     {
-        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack, 7);
+        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack, 7, choiceInfo.casterSlot);
     }
     private void Toxic(ChoiceInfo choiceInfo, int occurance) // 17
     {
@@ -176,23 +177,23 @@ public class MoveEffectIndex : MonoBehaviour
         int amount = choiceInfo.casterSlot.data.currentAttack - 1;
         if (amount < 1)
             amount = 1;
-        choiceInfo.targetSlot.DealDamage(amount, 15);
+        choiceInfo.targetSlot.DealDamage(amount, 15, choiceInfo.casterSlot);
     }
     private void DoubleEdge(ChoiceInfo choiceInfo, int occurance) // 19
     {
-        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack + 1, 0);
-        choiceInfo.casterSlot.DealDamage(1, -1);
+        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack + 1, 0, choiceInfo.casterSlot);
+        choiceInfo.casterSlot.DealDamage(1, -1, null);
     }
     private void ThunderPunch(ChoiceInfo choiceInfo, int occurance) // 20
     {
         int amount = choiceInfo.casterSlot.data.currentAttack - 1;
         if (amount < 1)
             amount = 1;
-        choiceInfo.targetSlot.DealDamage(amount, 4);
+        choiceInfo.targetSlot.DealDamage(amount, 4, choiceInfo.casterSlot);
     }
     private void Overheat(ChoiceInfo choiceInfo, int occurance) // 21
     {
-        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack + 2, 1);
+        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack + 2, 1, choiceInfo.casterSlot);
         choiceInfo.casterSlot.AttackChange(-2);
     }
     private void WilloWisp(ChoiceInfo choiceInfo, int occurance) // 22
@@ -208,16 +209,16 @@ public class MoveEffectIndex : MonoBehaviour
         int amount = choiceInfo.casterSlot.data.currentAttack - 1;
         if (amount < 1)
             amount = 1;
-        choiceInfo.casterSlot.enemySlots[0].DealDamage(amount, 5);
-        choiceInfo.casterSlot.enemySlots[1].DealDamage(amount, 5);
+        choiceInfo.casterSlot.enemySlots[0].DealDamage(amount, 5, choiceInfo.casterSlot);
+        choiceInfo.casterSlot.enemySlots[1].DealDamage(amount, 5, choiceInfo.casterSlot);
     }
     private void Moonblast(ChoiceInfo choiceInfo, int occurance) // 25
     {
-        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack, 17);
+        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack, 17, choiceInfo.casterSlot);
     }
     private void Psychic(ChoiceInfo choiceInfo, int occurance) // 26
     {
-        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack, 10);
+        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack, 10, choiceInfo.casterSlot);
     }
     private void TrickRoom(ChoiceInfo choiceInfo, int occurance) // 27
     {
@@ -251,8 +252,8 @@ public class MoveEffectIndex : MonoBehaviour
         int amount = choiceInfo.casterSlot.data.currentAttack - 1;
         if (amount < 1)
             amount = 1;
-        choiceInfo.casterSlot.enemySlots[0].DealDamage(amount, 12);
-        choiceInfo.casterSlot.enemySlots[1].DealDamage(amount, 12);
+        choiceInfo.casterSlot.enemySlots[0].DealDamage(amount, 12, choiceInfo.casterSlot);
+        choiceInfo.casterSlot.enemySlots[1].DealDamage(amount, 12, choiceInfo.casterSlot);
     }
     private void KnockOff(ChoiceInfo choiceInfo, int occurance) // 31
     {
@@ -262,15 +263,15 @@ public class MoveEffectIndex : MonoBehaviour
             amount += 1;
             choiceInfo.targetSlot.data.knockedOff = true;
         }
-        choiceInfo.targetSlot.DealDamage(amount, 15);
+        choiceInfo.targetSlot.DealDamage(amount, 15, choiceInfo.casterSlot);
     }
     private void Earthquake(ChoiceInfo choiceInfo, int occurance) // 32
     {
         int amount = choiceInfo.casterSlot.data.currentAttack;
 
-        choiceInfo.casterSlot.ally.DealDamage(amount, 8);
-        choiceInfo.casterSlot.enemySlots[0].DealDamage(amount, 8);
-        choiceInfo.casterSlot.enemySlots[1].DealDamage(amount, 8);
+        choiceInfo.casterSlot.ally.DealDamage(amount, 8, choiceInfo.casterSlot);
+        choiceInfo.casterSlot.enemySlots[0].DealDamage(amount, 8, choiceInfo.casterSlot);
+        choiceInfo.casterSlot.enemySlots[1].DealDamage(amount, 8, choiceInfo.casterSlot);
     }
     private void Detect(ChoiceInfo choiceInfo, int occurance) // 33
     {

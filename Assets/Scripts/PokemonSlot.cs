@@ -101,7 +101,7 @@ public class PokemonSlot : MonoBehaviour
         return choicesInteractable;
     }
 
-    public void DealDamage(int amount, int moveType)
+    public void DealDamage(int amount, int moveType, PokemonSlot caster)
     {
         if (slotIsEmpty)
             return;
@@ -140,6 +140,12 @@ public class PokemonSlot : MonoBehaviour
             float effectivenessMultiplier = typeChart.GetEffectivenessMultiplier(moveType, data.pokeTypes);
             amount = Mathf.CeilToInt(amount * effectivenessMultiplier);
             gameManager.AddEffectivenessMessage(effectivenessMultiplier, data.pokemonName);
+        }
+
+        if (amount > 0 && caster != null && caster.data.ability.abilityName == "Intimidate" && !caster.data.hasIntimidated)
+        {
+            caster.data.hasIntimidated = true;
+            AttackChange(-1);
         }
 
         data.currentHealth -= amount;
@@ -234,7 +240,7 @@ public class PokemonSlot : MonoBehaviour
             data.currentSpeed = Mathf.Clamp(data.currentSpeed, 0.0f, 99.9f);
         }
         else
-            data.currentSpeed = data.baseAttack;
+            data.currentSpeed = data.baseSpeed;
     }
 
     public void NewStatus(int newStatus, bool causedByMove)

@@ -87,3 +87,5 @@ public struct StatusData
 /// The game does not currently support delayed effects that affect targets, since the delayed effect won't occur if the caster faints
 /// Nontargeted moves don't need to manually check Protect (or slotIsEmpty!) when using public PokemonSlot methods, but they do otherwise. Targeted moves always fail into Protected pokemon
 /// Moves with non-damage effects need to manually check whether the enemy is type immune (including other forms of immunity such as Levitate
+/// Any move that targets bench needs to prepare for when the target is null
+/// Intimidate Pokemon can't have any moves that damage multiple Pokemon at once
