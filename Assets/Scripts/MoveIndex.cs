@@ -336,7 +336,7 @@ public class MoveIndex : MonoBehaviour
             description = " All allies take -1 damage from moves for 5 rounds, but not below 1",
             priority = 0,
             isDamaging = false,
-            isTargeted = true,
+            isTargeted = false,
             targetsBench = false
         };
     }

@@ -86,7 +86,7 @@ public class GameManager : MonoBehaviour
 
     private readonly List<int> benchSlotsToRepopulate = new();
 
-        // Rain, Tailwind, Psychic Terrain, Trick Room, Sandstorm, Snow
+        // Rain, Tailwind, Psychic Terrain, Trick Room, Sandstorm, Snow, Aurora Veil
     [NonSerialized] public readonly Dictionary<string, int> fieldEffects = new(); // int = duration
 
     private readonly List<string> afterEffectMessages = new();
@@ -973,6 +973,11 @@ public class GameManager : MonoBehaviour
 
         if (!gameStart)
             enterBattleSlot.data.fakeOutAvailableNextRound = true;
+
+        if (enterBattleSlot.slotNumber < 2 && fieldEffects.ContainsKey("Tailwind (Player 1)"))
+            enterBattleSlot.SpeedChange(3);
+        else if (enterBattleSlot.slotNumber > 1 && fieldEffects.ContainsKey("Tailwind (Player 2)"))
+            enterBattleSlot.SpeedChange(3);
     }
 
     private bool CheckForGameEnd()
@@ -1237,26 +1242,53 @@ public class GameManager : MonoBehaviour
 
     public void ToggleFieldEffect(string newFieldEffect, bool on, int duration = 0)
     {
-        if (on && newFieldEffect == "Rain")
+        if (on)
         {
-            if (fieldEffects.ContainsKey("Snow"))
-                ToggleFieldEffect("Snow", false);
-            if (fieldEffects.ContainsKey("Sandstorm"))
-                ToggleFieldEffect("Sandstorm", false);
+            if (newFieldEffect == "Rain")
+            {
+                if (fieldEffects.ContainsKey("Snow"))
+                    ToggleFieldEffect("Snow", false);
+                if (fieldEffects.ContainsKey("Sandstorm"))
+                    ToggleFieldEffect("Sandstorm", false);
+            }
+            else if (newFieldEffect == "Snow")
+            {
+                if (fieldEffects.ContainsKey("Rain"))
+                    ToggleFieldEffect("Rain", false);
+                if (fieldEffects.ContainsKey("Sandstorm"))
+                    ToggleFieldEffect("Sandstorm", false);
+            }
+            else if (newFieldEffect == "Sandstorm")
+            {
+                if (fieldEffects.ContainsKey("Rain"))
+                    ToggleFieldEffect("Rain", false);
+                if (fieldEffects.ContainsKey("Snow"))
+                    ToggleFieldEffect("Snow", false);
+            }
+
+            else if (newFieldEffect == "Tailwind (Player 1)")
+            {
+                pokemonSlots[0].SpeedChange(3);
+                pokemonSlots[1].SpeedChange(3);
+            }
+            else if (newFieldEffect == "Tailwind (Player 2)")
+            {
+                pokemonSlots[2].SpeedChange(3);
+                pokemonSlots[3].SpeedChange(3);
+            }
         }
-        if (on && newFieldEffect == "Snow")
+        else // Off
         {
-            if (fieldEffects.ContainsKey("Rain"))
-                ToggleFieldEffect("Rain", false);
-            if (fieldEffects.ContainsKey("Sandstorm"))
-                ToggleFieldEffect("Sandstorm", false);
-        }
-        if (on && newFieldEffect == "Sandstorm")
-        {
-            if (fieldEffects.ContainsKey("Rain"))
-                ToggleFieldEffect("Rain", false);
-            if (fieldEffects.ContainsKey("Snow"))
-                ToggleFieldEffect("Snow", false);
+            if (newFieldEffect == "Tailwind (Player 1)")
+            {
+                pokemonSlots[0].SpeedChange(-3);
+                pokemonSlots[1].SpeedChange(-3);
+            }
+            if (newFieldEffect == "Tailwind (Player 2)")
+            {
+                pokemonSlots[2].SpeedChange(-3);
+                pokemonSlots[3].SpeedChange(-3);
+            }
         }
 
         if (!on)

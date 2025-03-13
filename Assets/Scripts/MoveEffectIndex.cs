@@ -93,7 +93,8 @@ public class MoveEffectIndex : MonoBehaviour
     }
     private void Tailwind(ChoiceInfo choiceInfo, int occurance) // 7
     {
-
+        string playerNumber = choiceInfo.casterSlot.slotNumber < 2 ? "(Player 1)" : "(Player 2)";
+        gameManager.ToggleFieldEffect("Tailwind " + playerNumber, true, 4);
     }
     private void MatchaGotcha(ChoiceInfo choiceInfo, int occurance) // 8
     {
@@ -202,7 +203,8 @@ public class MoveEffectIndex : MonoBehaviour
     }
     private void AuroraVeil(ChoiceInfo choiceInfo, int occurance) // 23
     {
-
+        string playerNumber = choiceInfo.casterSlot.slotNumber < 2 ? "(Player 1)" : "(Player 2)";
+        gameManager.ToggleFieldEffect("Aurora Veil " + playerNumber, true, 4);
     }
     private void Blizzard(ChoiceInfo choiceInfo, int occurance) // 24
     {

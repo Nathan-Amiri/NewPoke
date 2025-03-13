@@ -118,9 +118,15 @@ public class PokemonSlot : MonoBehaviour
             return;
         }
 
-        if (caster.data.helpingHanded)
+        if (caster != null && caster.data.helpingHanded)
             amount += 2;
 
+        if (slotNumber < 2 && gameManager.fieldEffects.ContainsKey("Aurora Veil (Player 1)"))
+            amount -= 1;
+        else if (slotNumber > 1 && gameManager.fieldEffects.ContainsKey("Aurora Veil (Player 2)"))
+            amount -= 1;
+
+        // Effectiveness needs to occur after all other amount modifications!
         if (moveType != -1) // -1 = damage that ignores modification, such as recoil
         {
             if (moveType == 2 && gameManager.fieldEffects.ContainsKey("Rain"))
@@ -213,8 +219,6 @@ public class PokemonSlot : MonoBehaviour
         if (data.currentHealth > data.baseHealth)
             data.currentHealth = data.baseHealth;
 
-
-
         data.attackModifier = 0;
         data.speedModifier = 0;
 
@@ -223,7 +227,10 @@ public class PokemonSlot : MonoBehaviour
         else if (data.status.statusName == "Paralyzed")
             data.speedModifier -= 3;
 
-        // Tailwind
+        if (slotNumber < 2 && gameManager.fieldEffects.ContainsKey("Tailwind (Player 1)"))
+            data.speedModifier += 3;
+        else if (slotNumber > 1 && gameManager.fieldEffects.ContainsKey("Tailwind (Player 2)"))
+            data.speedModifier += 3;
 
         RemodifyAttack();
         RemodifySpeed();
@@ -276,15 +283,9 @@ public class PokemonSlot : MonoBehaviour
     public void ClearStatus()
     {
         if (data.status.statusName == "Burned")
-        {
-            data.attackModifier -= 2;
-            RemodifyAttack();
-        }
+            AttackChange(2);
         else if (data.status.statusName == "Paralyzed")
-        {
-            data.speedModifier -= 2;
-            RemodifyAttack();
-        }
+            SpeedChange(3);
 
         data.status = default;
         ReloadPokemon();
