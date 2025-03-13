@@ -248,7 +248,7 @@ public class MoveEffectIndex : MonoBehaviour
     private void HelpingHand(ChoiceInfo choiceInfo, int occurance) // 29
     {
         if (!choiceInfo.casterSlot.ally.slotIsEmpty)
-            choiceInfo.casterSlot.ally.data.helpingHanded = true;
+            choiceInfo.casterSlot.ally.data.helpingHandReady = true;
     }
     private void RockSlide(ChoiceInfo choiceInfo, int occurance) // 30
     {
@@ -292,6 +292,68 @@ public class MoveEffectIndex : MonoBehaviour
         else if (occurance == 2)
             choiceInfo.casterSlot.data.protectedLastRound = false;
     }
+    private void FlareBlitz(ChoiceInfo choiceInfo, int occurance) // 34
+    {
+        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack + 1, 1, choiceInfo.casterSlot);
+        choiceInfo.casterSlot.DealDamage(1, -1, null);
+    }
+    private void SwordsDance(ChoiceInfo choiceInfo, int occurance) // 35
+    {
+        choiceInfo.casterSlot.AttackChange(2);
+    }
+    private void GrassyGlide(ChoiceInfo choiceInfo, int occurance) // 36
+    {
+        int amount = choiceInfo.casterSlot.data.currentAttack - 1;
+        if (amount < 1)
+            amount = 1;
+        choiceInfo.targetSlot.DealDamage(amount, 3, choiceInfo.casterSlot);
+    }
+    private void WoodHammer(ChoiceInfo choiceInfo, int occurance) // 37
+    {
+        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack + 1, 3, choiceInfo.casterSlot);
+        choiceInfo.casterSlot.DealDamage(1, -1, null);
+    }
+    private void UTurn(ChoiceInfo choiceInfo, int occurance) // 38
+    {
+        int amount = choiceInfo.casterSlot.data.currentAttack - 2;
+        if (amount < 1)
+            amount = 1;
+        choiceInfo.casterSlot.enemySlots[0].DealDamage(amount, 11, choiceInfo.casterSlot);
+        choiceInfo.casterSlot.enemySlots[1].DealDamage(amount, 11, choiceInfo.casterSlot);
+
+        if (choiceInfo.targetSlot != null)
+            gameManager.Switch(choiceInfo.casterSlot, choiceInfo.targetSlot);
+    }
+    private void JetPunch(ChoiceInfo choiceInfo, int occurance) // 39
+    {
+        int amount = choiceInfo.casterSlot.data.currentAttack - 1;
+        if (amount < 1)
+            amount = 1;
+        choiceInfo.targetSlot.DealDamage(amount, 2, choiceInfo.casterSlot);
+    }
+    private void FlipTurn(ChoiceInfo choiceInfo, int occurance) // 40
+    {
+        int amount = choiceInfo.casterSlot.data.currentAttack - 2;
+        if (amount < 1)
+            amount = 1;
+        choiceInfo.casterSlot.enemySlots[0].DealDamage(amount, 2, choiceInfo.casterSlot);
+        choiceInfo.casterSlot.enemySlots[1].DealDamage(amount, 2, choiceInfo.casterSlot);
+
+        if (choiceInfo.targetSlot != null)
+            gameManager.Switch(choiceInfo.casterSlot, choiceInfo.targetSlot);
+    }
+    private void WaveCrash(ChoiceInfo choiceInfo, int occurance) // 41
+    {
+        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack + 1, 2, choiceInfo.casterSlot);
+        choiceInfo.casterSlot.DealDamage(1, -1, null);
+    }
+    private void IcePunch(ChoiceInfo choiceInfo, int occurance) // 42
+    {
+        int amount = choiceInfo.casterSlot.data.currentAttack - 1;
+        if (amount < 1)
+            amount = 1;
+        choiceInfo.targetSlot.DealDamage(amount, 5, choiceInfo.casterSlot);
+    }
 
     private void PopulateIndex()
     {
@@ -329,5 +391,14 @@ public class MoveEffectIndex : MonoBehaviour
         indexMethods.Add(KnockOff);
         indexMethods.Add(Earthquake);
         indexMethods.Add(Detect);
+        indexMethods.Add(FlareBlitz);
+        indexMethods.Add(SwordsDance);
+        indexMethods.Add(GrassyGlide);
+        indexMethods.Add(WoodHammer);
+        indexMethods.Add(UTurn);
+        indexMethods.Add(JetPunch);
+        indexMethods.Add(FlipTurn);
+        indexMethods.Add(WaveCrash);
+        indexMethods.Add(IcePunch);
     }
 }

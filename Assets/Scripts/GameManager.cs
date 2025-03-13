@@ -77,6 +77,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject quitScreen;
 
+    [SerializeField] private Sprite palafinHeroSprite;
+
     // CONSTANT:
     [NonSerialized] public readonly List<ChoiceInfo> choices = new(); // Changed by Follow Me
     private readonly List<ChoiceInfo> pastChoices = new(); // Replay
@@ -870,6 +872,9 @@ public class GameManager : MonoBehaviour
                     nextChoice.move.pokeType = 0;
             }
 
+            if (nextChoice.casterSlot.data.helpingHandReady && nextChoice.move.isTargeted && !nextChoice.move.targetsBench)
+                nextChoice.casterSlot.data.helpingHandBoosted = true;
+
 
 
             if (nextChoice.move.moveName == null)
@@ -948,7 +953,17 @@ public class GameManager : MonoBehaviour
         (battleSlot.data, benchSlot.data) = (benchSlot.data, battleSlot.data);
 
         if (!benchSlot.slotIsEmpty)
+        {
+            if (benchSlot.data.pokemonName == "Palafin" && !benchSlot.data.zeroToHeroTransformed)
+            {
+                benchSlot.data.zeroToHeroTransformed = true;
+
+                benchSlot.BaseAttackChange(3);
+                benchSlot.data.sprite = palafinHeroSprite;
+            }
+
             benchSlot.ResetStatChanges();
+        }
 
         battleSlot.ReloadPokemon();
         benchSlot.ReloadPokemon();
@@ -968,6 +983,8 @@ public class GameManager : MonoBehaviour
             ToggleFieldEffect("Sandstorm", true, 5);
         else if (abilityName == "Psychic Surge")
             ToggleFieldEffect("Psychic Terrain", true, 5);
+        else if (abilityName == "Grassy Surge")
+            ToggleFieldEffect("Grassy Terrain", true, 5);
         else if (abilityName == "Hospitality")
             enterBattleSlot.ally.GainHealth(2);
 
@@ -1022,7 +1039,8 @@ public class GameManager : MonoBehaviour
             slot.data.fakedOut = false;
             slot.data.fakeOutAvailable = slot.data.fakeOutAvailableNextRound;
             slot.data.fakeOutAvailableNextRound = false;
-            slot.data.helpingHanded = false;
+            slot.data.helpingHandReady = false;
+            slot.data.helpingHandBoosted = false;
         }
 
         // Find each Pokemon for delayedeffects (Pokemon might have moved)
@@ -1063,34 +1081,40 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < 4; i++) // After field effects are removed
         {
-            if (pokemonSlots[i].slotIsEmpty)
+            PokemonSlot slot = pokemonSlots[i];
+
+            if (slot.slotIsEmpty)
                 continue;
 
-            if (pokemonSlots[i].data.status.statusName == "Poisoned")
-                pokemonSlots[i].DealDamage(1, -1, null);
+            if (slot.data.status.statusName == "Poisoned")
+                slot.DealDamage(1, -1, null);
 
             if (fieldEffects.ContainsKey("Sandstorm"))
-                if (!pokemonSlots[i].data.pokeTypes.Contains(8) && !pokemonSlots[i].data.pokeTypes.Contains(12) && !pokemonSlots[i].data.pokeTypes.Contains(16))
-                    pokemonSlots[i].DealDamage(1, -1, null);
+                if (!slot.data.pokeTypes.Contains(8) && !slot.data.pokeTypes.Contains(12) && !slot.data.pokeTypes.Contains(16))
+                    slot.DealDamage(1, -1, null);
 
-            if (pokemonSlots[i].data.ability.abilityName == "Slow Start")
+            if (slot.data.ability.abilityName == "Slow Start" && slot.data.slowStartTimer < 3)
             {
-                if (pokemonSlots[i].data.slowStartWearingOff)
+                slot.data.slowStartTimer += 1;
+
+                if (slot.data.slowStartTimer == 3)
                 {
-                    pokemonSlots[i].data.baseAttack += 2;
-                    pokemonSlots[i].data.baseSpeed += 3;
-                    pokemonSlots[i].AttackChange(2);
-                    pokemonSlots[i].SpeedChange(3);
+                    slot.BaseAttackChange(2);
+                    slot.BaseSpeedChange(3);
+                    slot.AttackChange(2);
+                    slot.SpeedChange(3);
                 }
-                else
-                    pokemonSlots[i].data.slowStartWearingOff = true;
             }
 
-            if (pokemonSlots[i].data.ability.abilityName == "Guts" && pokemonSlots[i].data.status.statusName == null)
-            {
-                pokemonSlots[i].NewStatus(1, false);
-                pokemonSlots[i].ReloadPokemon(); // Display status on field
-            }
+            if (slot.data.ability.abilityName == "Guts" && slot.data.status.statusName == null)
+                slot.NewStatus(1, false);
+
+            if (slot.data.ability.abilityName == "Speed Boost")
+                slot.SpeedChange(1);
+
+            // Heal after damage
+            if (fieldEffects.ContainsKey("Grassy Terrain") && !slot.data.pokeTypes.Contains(9))
+                slot.GainHealth(1);
         }
 
         if (CheckForGameEnd())
@@ -1246,25 +1270,24 @@ public class GameManager : MonoBehaviour
         {
             if (newFieldEffect == "Rain")
             {
-                if (fieldEffects.ContainsKey("Snow"))
-                    ToggleFieldEffect("Snow", false);
-                if (fieldEffects.ContainsKey("Sandstorm"))
-                    ToggleFieldEffect("Sandstorm", false);
+                ToggleFieldEffect("Snow", false);
+                ToggleFieldEffect("Sandstorm", false);
             }
             else if (newFieldEffect == "Snow")
             {
-                if (fieldEffects.ContainsKey("Rain"))
-                    ToggleFieldEffect("Rain", false);
-                if (fieldEffects.ContainsKey("Sandstorm"))
-                    ToggleFieldEffect("Sandstorm", false);
+                ToggleFieldEffect("Rain", false);
+                ToggleFieldEffect("Sandstorm", false);
             }
             else if (newFieldEffect == "Sandstorm")
             {
-                if (fieldEffects.ContainsKey("Rain"))
-                    ToggleFieldEffect("Rain", false);
-                if (fieldEffects.ContainsKey("Snow"))
-                    ToggleFieldEffect("Snow", false);
+                ToggleFieldEffect("Rain", false);
+                ToggleFieldEffect("Snow", false);
             }
+
+            else if (newFieldEffect == "Psychic Terrain")
+                ToggleFieldEffect("Grassy Terrain", false);
+            else if (newFieldEffect == "Grassy Terrain")
+                ToggleFieldEffect("Psychic Terrain", false);
 
             else if (newFieldEffect == "Tailwind (Player 1)")
             {
@@ -1299,30 +1322,10 @@ public class GameManager : MonoBehaviour
         UpdateFieldEffectsText();
 
 
-        int weatherBallType = -1;
-        if (newFieldEffect == "Rain")
-            weatherBallType = on ? 2 : 0;
-        else if (newFieldEffect == "Snow")
-            weatherBallType = on ? 5 : 0;
-        else if (newFieldEffect == "Sandstorm")
-            weatherBallType = on ? 12 : 0;
 
-        if (weatherBallType == -1)
-            return;
-
+        // Apply Field Effect changes for individual Pokemon/moves
         foreach (PokemonSlot slot in pokemonSlots)
-        {
-            if (slot.slotIsEmpty)
-                continue;
-
-            for (int i = 0; i < 4; i++)
-                if (slot.data.moves[i].moveName == "Weather Ball")
-                {
-                    MoveData weatherBall = slot.data.moves[i];
-                    weatherBall.pokeType = weatherBallType;
-                    slot.data.moves[i] = weatherBall;
-                }
-        }
+            slot.ReloadPokemon();
     }
     private void UpdateFieldEffectsText()
     {

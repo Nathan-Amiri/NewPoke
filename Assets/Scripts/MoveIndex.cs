@@ -411,7 +411,7 @@ public class MoveIndex : MonoBehaviour
         {
             pokeType = 0,
             moveName = "Helping Hand",
-            description = "My ally's move this round deals +2 damage",
+            description = "My ally's move this round deals +2 damage if it targets a Pokemon in battle",
             priority = 5,
             isDamaging = false,
             isTargeted = false,
@@ -470,6 +470,123 @@ public class MoveIndex : MonoBehaviour
             targetsBench = false
         };
     }
+    private MoveData FlareBlitz() // 34
+    {
+        return new MoveData
+        {
+            pokeType = 1,
+            moveName = "Flare Blitz",
+            description = "I deal damage to a target equal to my Attack + 1. I lose 1 Health",
+            priority = 0,
+            isDamaging = true,
+            isTargeted = true,
+            targetsBench = false
+        };
+    }
+    private MoveData SwordsDance() // 35
+    {
+        return new MoveData
+        {
+            pokeType = 0,
+            moveName = "Swords Dance",
+            description = "I gain 2 attack",
+            priority = 0,
+            isDamaging = false,
+            isTargeted = false,
+            targetsBench = false
+        };
+    }
+    private MoveData GrassyGlide() // 36
+    {
+        return new MoveData
+        {
+            pokeType = 3,
+            moveName = "Grassy Glide",
+            description = "I deal damage to a target equal to my Attack - 1, but not below 1. If Grassy Terrain is active, this move has 1 Priority",
+            priority = 0,
+            isDamaging = true,
+            isTargeted = true,
+            targetsBench = false
+        };
+    }
+    private MoveData WoodHammer() // 37
+    {
+        return new MoveData
+        {
+            pokeType = 3,
+            moveName = "Wood Hammer",
+            description = "I deal damage to a target equal to my Attack + 1. I lose 1 Health",
+            priority = 0,
+            isDamaging = true,
+            isTargeted = true,
+            targetsBench = false
+        };
+    }
+    private MoveData UTurn() // 38
+    {
+        return new MoveData
+        {
+            pokeType = 11,
+            moveName = "U-Turn",
+            description = "I deal damage to both enemies equal to my Attack - 2, but not below 1. I switch with a target",
+            priority = 0,
+            isDamaging = true,
+            isTargeted = true,
+            targetsBench = true
+        };
+    }
+    private MoveData JetPunch() // 39
+    {
+        return new MoveData
+        {
+            pokeType = 2,
+            moveName = "Jet Punch",
+            description = "I deal damage to a target equal to my Attack - 1, but not below 1",
+            priority = 1,
+            isDamaging = true,
+            isTargeted = true,
+            targetsBench = false
+        };
+    }
+    private MoveData FlipTurn() // 40
+    {
+        return new MoveData
+        {
+            pokeType = 2,
+            moveName = "Flip Turn",
+            description = "I deal damage to both enemies equal to my Attack - 2, but not below 1. I switch with a target",
+            priority = 0,
+            isDamaging = true,
+            isTargeted = true,
+            targetsBench = true
+        };
+    }
+    private MoveData WaveCrash() // 41
+    {
+        return new MoveData
+        {
+            pokeType = 2,
+            moveName = "Wave Crash",
+            description = "I deal damage to a target equal to my Attack + 1. I lose 1 Health",
+            priority = 0,
+            isDamaging = true,
+            isTargeted = true,
+            targetsBench = false
+        };
+    }
+    private MoveData IcePunch() // 42
+    {
+        return new MoveData
+        {
+            pokeType = 5,
+            moveName = "Ice Punch",
+            description = "I deal damage to a target equal to my Attack - 1, but not below 1",
+            priority = 0,
+            isDamaging = true,
+            isTargeted = true,
+            targetsBench = false
+        };
+    }
 
     private void PopulateIndex()
     {
@@ -507,5 +624,14 @@ public class MoveIndex : MonoBehaviour
         indexMethods.Add(KnockOff);
         indexMethods.Add(Earthquake);
         indexMethods.Add(Detect);
+        indexMethods.Add(FlareBlitz);
+        indexMethods.Add(SwordsDance);
+        indexMethods.Add(GrassyGlide);
+        indexMethods.Add(WoodHammer);
+        indexMethods.Add(UTurn);
+        indexMethods.Add(JetPunch);
+        indexMethods.Add(FlipTurn);
+        indexMethods.Add(WaveCrash);
+        indexMethods.Add(IcePunch);
     }
 }

@@ -13820,7 +13820,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 276230066217a754c9b518cadde30ed1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugPokemon: 0700000001000000090000000800000006000000020000000400000005000000
+  debugPokemon: 0500000001000000010000000100000001000000010000000100000001000000
   pokemonSlots:
   - {fileID: 1411118368}
   - {fileID: 599377408}
@@ -14061,6 +14061,7 @@ MonoBehaviour:
   shopText: {fileID: 1765402423}
   pokemonDim: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
   quitScreen: {fileID: 1442155226}
+  palafinHeroSprite: {fileID: 21300000, guid: f3cd3bec891f4c44caa7fa034711715a, type: 3}
 --- !u!114 &1092461926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14109,6 +14110,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 164dd4656cc3b2541be0b735dab7aebf, type: 3}
   - {fileID: 21300000, guid: 615249cc9f9e56f458f4f83d31f6f814, type: 3}
   - {fileID: 21300000, guid: ef30114e0f4d2f64fbc625bee90b459f, type: 3}
+  - {fileID: 21300000, guid: 49de8accd98714b4dbc0e395d440c8b3, type: 3}
+  - {fileID: 21300000, guid: 8289c1119e2202b4d81247d84e47715c, type: 3}
+  - {fileID: 21300000, guid: f11c95a8eaf513f49ae5cc5acda435f9, type: 3}
   abilityIndex: {fileID: 1092461929}
   moveIndex: {fileID: 1092461927}
 --- !u!114 &1092461929

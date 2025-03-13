@@ -71,7 +71,7 @@ public class AbilityIndex : MonoBehaviour
         return new AbilityData
         {
             abilityName = "Slow Start",
-            description = "The third time I'm in battle at the end of a round, I gain 2 Attack and 3 Speed for the rest of the game"
+            description = "The third time I'm in battle at the end of a round, I permanently gain 2 Attack and 3 Speed"
         };
     }
     private AbilityData Levitate() // 6
@@ -95,15 +95,39 @@ public class AbilityIndex : MonoBehaviour
         return new AbilityData
         {
             abilityName = "Psychic Surge",
-            description = "When I enter battle, I create Psychic Terrain for 5 rounds, increasing the damage of Psychic moves +1 and causing targeted moves with Priority > 0 to fail"
+            description = "When I enter battle, I create Psychic Terrain for 5 rounds, causing targeted moves with Priority > 0 to fail"
         };
     }
-    private AbilityData SandStream() // 8
+    private AbilityData SandStream() // 9
     {
         return new AbilityData
         {
             abilityName = "Sand Stream",
             description = "When I enter battle, I summon a Sandstorm for 5 rounds, dealing 1 damage at the end of each round to Pokemon who aren't Ground, Rock, or Steel type"
+        };
+    }
+    private AbilityData SpeedBoost() // 10
+    {
+        return new AbilityData
+        {
+            abilityName = "Speed Boost",
+            description = "At the end of each round if I'm in battle, I gain 1 Speed"
+        };
+    }
+    private AbilityData GrassySurge() // 11
+    {
+        return new AbilityData
+        {
+            abilityName = "Grassy Surge",
+            description = "When I enter battle, I create Grassy Terrain for 5 rounds, causing all non-Flying type Pokemon in battle to heal 1 at the end of each round"
+        };
+    }
+    private AbilityData ZeroToHero() // 12
+    {
+        return new AbilityData
+        {
+            abilityName = "Zero to Hero",
+            description = "The first time I switch out, I permanently gain 3 attack"
         };
     }
 
@@ -119,5 +143,8 @@ public class AbilityIndex : MonoBehaviour
         indexMethods.Add(SnowWarning);
         indexMethods.Add(PsychicSurge);
         indexMethods.Add(SandStream);
+        indexMethods.Add(SpeedBoost);
+        indexMethods.Add(GrassySurge);
+        indexMethods.Add(ZeroToHero);
     }
 }

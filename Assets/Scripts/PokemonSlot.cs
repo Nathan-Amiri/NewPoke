@@ -75,6 +75,28 @@ public class PokemonSlot : MonoBehaviour
             else
                 statusActive.SetActive(false);
         }
+
+        // Field Effect changes
+        for (int i = 0; i < 4; i++)
+        {
+            MoveData move = data.moves[i];
+
+            if (move.moveName == "Weather Ball")
+            {
+                if (gameManager.fieldEffects.ContainsKey("Rain"))
+                    move.pokeType = 2;
+                else if (gameManager.fieldEffects.ContainsKey("Snow"))
+                    move.pokeType = 5;
+                else if (gameManager.fieldEffects.ContainsKey("Sandstorm"))
+                    move.pokeType = 12;
+                else
+                    move.pokeType = 0;
+            }
+            else if (move.moveName == "Grassy Surge")
+                move.priority = gameManager.fieldEffects.ContainsKey("Grassy Terrain") ? 1 : 0;
+
+            data.moves[i] = move;
+        }
     }
 
     public List<bool> ChoicesInteractable()
@@ -118,7 +140,7 @@ public class PokemonSlot : MonoBehaviour
             return;
         }
 
-        if (caster != null && caster.data.helpingHanded)
+        if (caster != null && caster.data.helpingHandBoosted)
             amount += 2;
 
         if (slotNumber < 2 && gameManager.fieldEffects.ContainsKey("Aurora Veil (Player 1)"))
@@ -163,8 +185,8 @@ public class PokemonSlot : MonoBehaviour
             gameManager.AddMiscAfterEffectMessage(data.pokemonName + " has Fainted!");
             Faint();
         }
-        else
-            ReloadPokemon();
+
+        ReloadPokemon();
     }
 
     public void GainHealth(int amount)
@@ -187,6 +209,8 @@ public class PokemonSlot : MonoBehaviour
 
         data.attackModifier += amount;
         RemodifyAttack();
+
+        ReloadPokemon();
     }
 
     public void SpeedChange(int amount)
@@ -196,6 +220,8 @@ public class PokemonSlot : MonoBehaviour
 
         data.speedModifier += amount;
         RemodifySpeed();
+
+        ReloadPokemon();
     }
 
     public void BaseHealthChange(int amount)
@@ -208,6 +234,36 @@ public class PokemonSlot : MonoBehaviour
 
         if (data.currentHealth > data.baseHealth)
             data.currentHealth = data.baseHealth;
+
+        ReloadPokemon();
+    }
+    public void BaseAttackChange(int amount)
+    {
+        if (slotIsEmpty || data.isProtected)
+            return;
+
+        data.baseAttack += amount;
+        data.baseAttack = Mathf.Clamp(data.baseAttack, 1, 99);
+
+        // Modifiers are the difference between the base and the current. Current is calculated using the modifier. Adding X to the base means that X needs to
+        // be subtracted from the modifier, which allows current to remain the same
+        data.attackModifier -= amount;
+
+        ReloadPokemon();
+    }
+    public void BaseSpeedChange(int amount)
+    {
+        if (slotIsEmpty || data.isProtected)
+            return;
+
+        data.baseSpeed += amount;
+        data.baseSpeed = Mathf.Clamp(data.baseSpeed, 0.0f, 99.9f);
+
+        // Modifiers are the difference between the base and the current. Current is calculated using the modifier. Adding X to the base means that X needs to
+        // be subtracted from the modifier, which allows current to remain the same
+        data.speedModifier -= amount;
+
+        ReloadPokemon();
     }
 
     public void ResetStatChanges()
@@ -234,6 +290,8 @@ public class PokemonSlot : MonoBehaviour
 
         RemodifyAttack();
         RemodifySpeed();
+
+        ReloadPokemon();
     }
 
     private void RemodifyAttack()
@@ -279,6 +337,8 @@ public class PokemonSlot : MonoBehaviour
                 return;
 
         data.status = statusIndex.LoadStatusFromIndex(newStatus);
+
+        ReloadPokemon();
     }
     public void ClearStatus()
     {
@@ -288,6 +348,7 @@ public class PokemonSlot : MonoBehaviour
             SpeedChange(3);
 
         data.status = default;
+
         ReloadPokemon();
     }
 
@@ -302,5 +363,7 @@ public class PokemonSlot : MonoBehaviour
             statusActive.SetActive(false);
         }
         data = default;
+
+        ReloadPokemon();
     }
 }

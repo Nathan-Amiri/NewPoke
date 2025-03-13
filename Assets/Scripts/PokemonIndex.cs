@@ -202,7 +202,7 @@ public class PokemonIndex : MonoBehaviour
             sprite = pokemonSprites[8],
             pokeTypes = new() { 10, 0 },
             baseHealth = 7,
-            baseAttack = 2,
+            baseAttack = 3,
             baseSpeed = 4.3f,
             ability = abilityIndex.LoadAbilityFromIndex(8),
             moves = new List<MoveData>() {
@@ -232,6 +232,63 @@ public class PokemonIndex : MonoBehaviour
                 }
         };
     }
+    private PokemonData Blaziken() // 10
+    {
+        return new PokemonData
+        {
+            pokemonName = "Blaziken",
+            sprite = pokemonSprites[10],
+            pokeTypes = new() { 1, 6 },
+            baseHealth = 5,
+            baseAttack = 2,
+            baseSpeed = 4.2f,
+            ability = abilityIndex.LoadAbilityFromIndex(10),
+            moves = new List<MoveData>() {
+                moveIndex.LoadMoveFromIndex(0),
+                moveIndex.LoadMoveFromIndex(34),
+                moveIndex.LoadMoveFromIndex(12),
+                moveIndex.LoadMoveFromIndex(35)
+                }
+        };
+    }
+    private PokemonData Rillaboom() // 11
+    {
+        return new PokemonData
+        {
+            pokemonName = "Rillaboom",
+            sprite = pokemonSprites[11],
+            pokeTypes = new() { 3 },
+            baseHealth = 7,
+            baseAttack = 3,
+            baseSpeed = 3.8f,
+            ability = abilityIndex.LoadAbilityFromIndex(11),
+            moves = new List<MoveData>() {
+                moveIndex.LoadMoveFromIndex(1),
+                moveIndex.LoadMoveFromIndex(36),
+                moveIndex.LoadMoveFromIndex(37),
+                moveIndex.LoadMoveFromIndex(38)
+                }
+        };
+    }
+    private PokemonData Palafin() // 12
+    {
+        return new PokemonData
+        {
+            pokemonName = "Palafin",
+            sprite = pokemonSprites[12],
+            pokeTypes = new() { 2 },
+            baseHealth = 7,
+            baseAttack = 2,
+            baseSpeed = 5.0f,
+            ability = abilityIndex.LoadAbilityFromIndex(12),
+            moves = new List<MoveData>() {
+                moveIndex.LoadMoveFromIndex(39),
+                moveIndex.LoadMoveFromIndex(40),
+                moveIndex.LoadMoveFromIndex(41),
+                moveIndex.LoadMoveFromIndex(42)
+                }
+        };
+    }
 
     private void PopulateIndex()
     {
@@ -245,5 +302,8 @@ public class PokemonIndex : MonoBehaviour
         indexMethods.Add(Ninetales);
         indexMethods.Add(Indeedee);
         indexMethods.Add(Tyranitar);
+        indexMethods.Add(Blaziken);
+        indexMethods.Add(Rillaboom);
+        indexMethods.Add(Palafin);
     }
 }

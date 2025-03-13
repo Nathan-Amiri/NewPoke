@@ -11,14 +11,14 @@ public struct PokemonData
     public List<int> pokeTypes;
     // 0=Normal, 1=Fire, 2=Water, 3=Grass, 4=Electric, 5=Ice, 6=Fighting, 7=Poison, 8=Ground, 9=Flying, 10=Psychic, 11=Bug, 12=Rock, 13=Ghost, 14=Dragon, 15=Dark, 16=Steel, 17=Fairy
 
-    public int baseHealth; // Changes sometimes
+    public int baseHealth;
     public int currentHealth;
-    public int baseAttack; // Never changes
+    public int baseAttack;
     public int currentAttack;
-    public float baseSpeed; // Never changes
+    public float baseSpeed;
     public float currentSpeed;
 
-    public int originalBaseHealth; // Never changes
+    public int originalBaseHealth;
 
     public int attackModifier;
     public int speedModifier;
@@ -43,9 +43,12 @@ public struct PokemonData
 
     public bool hasIntimidated;
 
-    public bool slowStartWearingOff;
+    public int slowStartTimer;
 
-    public bool helpingHanded;
+    public bool helpingHandReady;
+    public bool helpingHandBoosted;
+
+    public bool zeroToHeroTransformed;
 }
 public struct MoveData
 {
@@ -92,3 +95,4 @@ public struct StatusData
 /// Moves with non-damage effects need to manually check whether the enemy is type immune (including other forms of immunity such as Levitate
 /// Any move that targets bench needs to prepare for when the target is null
 /// Intimidate Pokemon can't have any moves that damage multiple Pokemon at once
+/// Damaging targeted moves that don't target bench can be Helping Handed!
