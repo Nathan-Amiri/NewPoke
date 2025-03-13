@@ -245,7 +245,8 @@ public class MoveEffectIndex : MonoBehaviour
     }
     private void HelpingHand(ChoiceInfo choiceInfo, int occurance) // 29
     {
-
+        if (!choiceInfo.casterSlot.ally.slotIsEmpty)
+            choiceInfo.casterSlot.ally.data.helpingHanded = true;
     }
     private void RockSlide(ChoiceInfo choiceInfo, int occurance) // 30
     {

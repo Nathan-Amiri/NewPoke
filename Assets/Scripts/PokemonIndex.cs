@@ -70,7 +70,7 @@ public class PokemonIndex : MonoBehaviour
             pokeTypes = new() { 2, 9 },
             baseHealth = 6,
             baseAttack = 3,
-            baseSpeed = 3.8f,
+            baseSpeed = 4.8f,
             ability = abilityIndex.LoadAbilityFromIndex(1),
             moves = new List<MoveData>() {
                 moveIndex.LoadMoveFromIndex(0),

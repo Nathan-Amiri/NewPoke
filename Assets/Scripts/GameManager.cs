@@ -1017,6 +1017,7 @@ public class GameManager : MonoBehaviour
             slot.data.fakedOut = false;
             slot.data.fakeOutAvailable = slot.data.fakeOutAvailableNextRound;
             slot.data.fakeOutAvailableNextRound = false;
+            slot.data.helpingHanded = false;
         }
 
         // Find each Pokemon for delayedeffects (Pokemon might have moved)
@@ -1264,7 +1265,6 @@ public class GameManager : MonoBehaviour
             fieldEffects.Add(newFieldEffect, duration);
 
         UpdateFieldEffectsText();
-
 
 
         int weatherBallType = -1;

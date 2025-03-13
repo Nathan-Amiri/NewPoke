@@ -118,6 +118,9 @@ public class PokemonSlot : MonoBehaviour
             return;
         }
 
+        if (caster.data.helpingHanded)
+            amount += 2;
+
         if (moveType != -1) // -1 = damage that ignores modification, such as recoil
         {
             if (moveType == 2 && gameManager.fieldEffects.ContainsKey("Rain"))
@@ -176,15 +179,8 @@ public class PokemonSlot : MonoBehaviour
         if (slotIsEmpty || data.isProtected)
             return;
 
-        if (data.status.statusName == "Burned")
-        {
-            data.preBurnAttack += amount;
-            data.currentAttack = data.ability.abilityName == "Guts" ? data.preBurnAttack + 1 : data.preBurnAttack + data.preBurnAttack - 1;
-        }
-        else
-            data.currentAttack += amount;
-
-        data.currentAttack = Mathf.Clamp(data.currentAttack, 1, 99);
+        data.attackModifier += amount;
+        RemodifyAttack();
     }
 
     public void SpeedChange(int amount)
@@ -192,15 +188,8 @@ public class PokemonSlot : MonoBehaviour
         if (slotIsEmpty || data.isProtected)
             return;
 
-        if (data.status.statusName == "Paralyzed")
-        {
-            data.preParalyzeSpeed += amount;
-            data.currentSpeed = data.preParalyzeSpeed - 3;
-        }
-        else
-            data.currentSpeed += amount;
-
-        data.currentSpeed = Mathf.Clamp(data.currentSpeed, 0.0f, 99.9f);
+        data.speedModifier += amount;
+        RemodifySpeed();
     }
 
     public void BaseHealthChange(int amount)
@@ -224,23 +213,31 @@ public class PokemonSlot : MonoBehaviour
         if (data.currentHealth > data.baseHealth)
             data.currentHealth = data.baseHealth;
 
-        if (data.status.statusName == "Burned")
-        {
-            data.preBurnAttack = data.baseAttack;
-            data.currentAttack = data.ability.abilityName == "Guts" ? data.preBurnAttack + 1 : data.preBurnAttack + 1;
-            data.currentAttack = Mathf.Clamp(data.currentAttack, 1, 99);
-        }
-        else
-            data.currentAttack = data.baseAttack;
 
-        if (data.status.statusName == "Paralyzed")
-        {
-            data.preParalyzeSpeed = data.baseSpeed;
-            data.currentSpeed = data.preParalyzeSpeed - 3;
-            data.currentSpeed = Mathf.Clamp(data.currentSpeed, 0.0f, 99.9f);
-        }
-        else
-            data.currentSpeed = data.baseSpeed;
+
+        data.attackModifier = 0;
+        data.speedModifier = 0;
+
+        if (data.status.statusName == "Burned")
+            data.attackModifier += data.ability.abilityName == "Guts" ? 2 : -2;
+        else if (data.status.statusName == "Paralyzed")
+            data.speedModifier -= 3;
+
+        // Tailwind
+
+        RemodifyAttack();
+        RemodifySpeed();
+    }
+
+    private void RemodifyAttack()
+    {
+        data.currentAttack = data.baseAttack + data.attackModifier;
+        data.currentAttack = Mathf.Clamp(data.currentAttack, 1, 99);
+    }
+    private void RemodifySpeed()
+    {
+        data.currentSpeed = data.baseSpeed + data.speedModifier;
+        data.currentSpeed = Mathf.Clamp(data.currentSpeed, 0.0f, 99.9f);
     }
 
     public void NewStatus(int newStatus, bool causedByMove)
@@ -261,18 +258,14 @@ public class PokemonSlot : MonoBehaviour
             if (data.pokeTypes.Contains(1)) // Fire types can't be Burned
                 return;
 
-            data.preBurnAttack = data.currentAttack;
-            data.currentAttack = data.ability.abilityName == "Guts" ? data.preBurnAttack + 1 : data.preBurnAttack + data.preBurnAttack - 1;
-            data.currentAttack = Mathf.Clamp(data.currentAttack, 1, 99);
+            AttackChange(data.ability.abilityName == "Guts" ? 2 : -2);
         }
         if (newStatus == 2)
         {
             if (data.pokeTypes.Contains(4)) // Electric types can't be Paralyzed
                 return;
 
-            data.preParalyzeSpeed = data.currentSpeed;
-            data.currentSpeed = data.preParalyzeSpeed - 3;
-            data.currentSpeed = Mathf.Clamp(data.currentSpeed, 0.0f, 99.9f);
+            SpeedChange(-3);
         }
         if (newStatus == 3)
             if (data.pokeTypes.Contains(7) || data.pokeTypes.Contains(16)) // Poison and Steel types can't be Poisoned
@@ -284,13 +277,13 @@ public class PokemonSlot : MonoBehaviour
     {
         if (data.status.statusName == "Burned")
         {
-            data.currentAttack = data.preBurnAttack;
-            data.currentAttack = Mathf.Clamp(data.currentAttack, 1, 99);
+            data.attackModifier -= 2;
+            RemodifyAttack();
         }
         else if (data.status.statusName == "Paralyzed")
         {
-            data.currentSpeed = data.preParalyzeSpeed;
-            data.currentSpeed = Mathf.Clamp(data.currentSpeed, 0.0f, 99.9f);
+            data.speedModifier -= 2;
+            RemodifyAttack();
         }
 
         data.status = default;

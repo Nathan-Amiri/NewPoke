@@ -19,8 +19,9 @@ public struct PokemonData
     public float currentSpeed;
 
     public int originalBaseHealth; // Never changes
-    public int preBurnAttack; // What current Attack would be if not burned
-    public float preParalyzeSpeed; //^
+
+    public int attackModifier;
+    public int speedModifier;
 
     public AbilityData ability;
     public List<MoveData> moves;
@@ -43,6 +44,8 @@ public struct PokemonData
     public bool hasIntimidated;
 
     public bool slowStartWearingOff;
+
+    public bool helpingHanded;
 }
 public struct MoveData
 {
