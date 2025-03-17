@@ -911,7 +911,7 @@ public class GameManager : MonoBehaviour
 
     private void PrepareForRoundEnd()
     {
-        message.text = "Round will end";
+        message.text = "Round will end\n\nIf the other Player hasn't watched the round yet,\nSelect 'Replay Round' and hand them the device!\n\nOtherwise, select 'Next'";
 
         foreach (PokemonSlot pokemonSlot in pokemonSlots)
             pokemonSlot.pokemonImage.color = Color.white;
