@@ -1633,6 +1633,7 @@ RectTransform:
   m_Children:
   - {fileID: 1644492330}
   - {fileID: 913285280}
+  - {fileID: 278511157}
   m_Father: {fileID: 2139965854}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -3486,6 +3487,57 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 271925320}
   m_CullTransparentMesh: 1
+--- !u!1 &278511156
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 278511157}
+  - component: {fileID: 278511158}
+  m_Layer: 5
+  m_Name: Dividers
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &278511157
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 278511156}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1650515455}
+  m_Father: {fileID: 141957384}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 65}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &278511158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 278511156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7655d85fd6e0cb741ac9e130d15edcaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthDivider: {fileID: 1650515454}
+  healthAmount: {fileID: 2126390302}
 --- !u!1 &280286864
 GameObject:
   m_ObjectHideFlags: 0
@@ -6698,6 +6750,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: healthDividers
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: healthBarActive
       value: 
       objectReference: {fileID: 0}
@@ -7348,6 +7404,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: healthBarPivot
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: healthDividers
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
@@ -13842,6 +13902,7 @@ MonoBehaviour:
   infoSprite: {fileID: 1598133246}
   infoName: {fileID: 751274264}
   infoHealthBar: {fileID: 913285280}
+  infoHealthDividers: {fileID: 278511158}
   infoTypes:
   - {fileID: 157772026}
   - {fileID: 1409674188}
@@ -18505,6 +18566,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: healthDividers
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: healthBarActive
       value: 
       objectReference: {fileID: 0}
@@ -21810,6 +21875,81 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1649261520}
+  m_CullTransparentMesh: 1
+--- !u!1 &1650515454
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1650515455}
+  - component: {fileID: 1650515457}
+  - component: {fileID: 1650515456}
+  m_Layer: 5
+  m_Name: HealthDivider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1650515455
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1650515454}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 278511157}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1.25, y: 10}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1650515456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1650515454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1650515457
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1650515454}
   m_CullTransparentMesh: 1
 --- !u!1 &1665735066
 GameObject:
@@ -25146,6 +25286,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
       propertyPath: healthBarPivot
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}
+      propertyPath: healthDividers
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 2852197224363783800, guid: e96272c2a5b12f14c8f3db6786a39ac5, type: 3}

@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Image infoSprite;
     [SerializeField] private TMP_Text infoName;
     [SerializeField] private Transform infoHealthBar;
+    [SerializeField] private HealthDividers infoHealthDividers;
     [SerializeField] private List<Image> infoTypes = new();
     [SerializeField] private TMP_Text infoCurrentHealth;
     [SerializeField] private TMP_Text infoCurrentAttack;
@@ -261,6 +262,7 @@ public class GameManager : MonoBehaviour
         infoSprite.SetNativeSize();
         infoName.text = data.pokemonName;
         infoHealthBar.localScale = new Vector2((float)data.currentHealth / data.baseHealth, infoHealthBar.localScale.y);
+        infoHealthDividers.NewBaseHealth(data.baseHealth);
 
         foreach (Image type in infoTypes)
             type.gameObject.SetActive(false);

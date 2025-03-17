@@ -9,6 +9,7 @@ public class PokemonSlot : MonoBehaviour
     // PREFAB REFERENCE:
     [SerializeField] private Transform healthBarPivot;
     [SerializeField] private GameObject healthBarActive;
+    [SerializeField] private HealthDividers healthDividers;
     [SerializeField] private GameObject statusActive;
     [SerializeField] private Image statusIcon;
 
@@ -66,6 +67,8 @@ public class PokemonSlot : MonoBehaviour
         {
             healthBarActive.SetActive(true);
             healthBarPivot.localScale = new Vector2((float)data.currentHealth / data.baseHealth, healthBarPivot.localScale.y);
+
+            healthDividers.NewBaseHealth(data.baseHealth);
 
             if (data.status.statusName != null)
             {
