@@ -107,7 +107,7 @@ public class PokemonIndex : MonoBehaviour
             sprite = pokemonSprites[3],
             pokeTypes = new() { 6 },
             baseHealth = 9,
-            baseAttack = 5,//3,
+            baseAttack = 3,
             baseSpeed = 1.7f,
             ability = abilityIndex.LoadAbilityFromIndex(3),
             moves = new List<MoveData>() {

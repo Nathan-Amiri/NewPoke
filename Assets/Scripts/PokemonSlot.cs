@@ -282,7 +282,7 @@ public class PokemonSlot : MonoBehaviour
         data.speedModifier = 0;
 
         if (data.status.statusName == "Burned")
-            data.attackModifier += data.ability.abilityName == "Guts" ? 2 : -2;
+            data.attackModifier += data.ability.abilityName == "Guts" ? 1 : -1;
         else if (data.status.statusName == "Paralyzed")
             data.speedModifier -= 3;
 
@@ -326,7 +326,7 @@ public class PokemonSlot : MonoBehaviour
             if (data.pokeTypes.Contains(1)) // Fire types can't be Burned
                 return;
 
-            AttackChange(data.ability.abilityName == "Guts" ? 2 : -2);
+            AttackChange(data.ability.abilityName == "Guts" ? 1 : -1);
         }
         if (newStatus == 2)
         {
@@ -346,7 +346,7 @@ public class PokemonSlot : MonoBehaviour
     public void ClearStatus()
     {
         if (data.status.statusName == "Burned")
-            AttackChange(2);
+            AttackChange(data.ability.abilityName == "Guts" ? -1 : 1);
         else if (data.status.statusName == "Paralyzed")
             SpeedChange(3);
 
