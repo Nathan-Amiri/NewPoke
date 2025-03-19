@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -16,9 +15,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private StatusIndex statusIndex;
     [SerializeField] private MoveEffectIndex moveEffectIndex;
     [SerializeField] private TypeChart typeChart;
-    
-    [SerializeField] private Button resetChoicesButton;
-    [SerializeField] private Button replayButton;
+
+    [SerializeField] private GameObject resetChoicesButton;
+
+    [SerializeField] private GameObject replayRoundButton;
+    [SerializeField] private GameObject endRoundButton;
 
     [SerializeField] private GameObject cancelTargettingButton;
     [SerializeField] private GameObject submitChoicesButton;
@@ -57,7 +58,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private TMP_Text fieldEffectsText;
 
-    [SerializeField] private GameObject rulesScreen;
+    //[SerializeField] private GameObject rulesScreen;
 
     [SerializeField] private GameObject effectivenessScreen;
     [SerializeField] private List<Image> effectivenessTypes = new();
@@ -76,7 +77,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Color pokemonDim;
 
-    [SerializeField] private GameObject quitScreen;
+    //[SerializeField] private GameObject quitScreen;
 
     [SerializeField] private Sprite palafinHeroSprite;
 
@@ -107,7 +108,6 @@ public class GameManager : MonoBehaviour
     private ChoiceInfo nextChoice;
 
     private bool readyForNextEffect = true; // Message Button
-    private bool roundEnding; // Message Button
 
     private bool repopulating; // Select Target
 
@@ -128,12 +128,13 @@ public class GameManager : MonoBehaviour
                 pokemonSlots[i].button.interactable = true;
             }
 
-            shopUI.SetActive(false);
             drafting = false;
 
             PrepareForNextChoice(true);
             return;
         }
+
+        shopUI.SetActive(true);
 
         NewShopOptions();
     }
@@ -258,6 +259,8 @@ public class GameManager : MonoBehaviour
         ResetInteractable();
         infoScreen.SetActive(true);
 
+        resetChoicesButton.SetActive(false);
+
         infoSprite.sprite = data.sprite;
         infoSprite.SetNativeSize();
         infoName.text = data.pokemonName;
@@ -308,7 +311,9 @@ public class GameManager : MonoBehaviour
             infoMoveTypes[i].sprite = moveTypeSprites[data.moves[i].pokeType];
             infoMoveNames[i].text = data.moves[i].moveName;
             infoMoveDescriptions[i].text = data.moves[i].description;
-            infoMovePriority[i].text = data.moves[i].priority.ToString();
+
+            int priority = data.moves[i].priority;
+            infoMovePriority[i].text = priority == 0 ? string.Empty : "Priority " + priority;
         }
     }
 
@@ -325,7 +330,10 @@ public class GameManager : MonoBehaviour
 
         List<bool> choicesInteractable = pokemonSlots[selectedSlot].ChoicesInteractable();
         for (int i = 0; i < 4; i++)
+        {
             infoMoveButtons[i].interactable = choicesInteractable[i];
+            infoMoveTypes[i].color = choicesInteractable[i] ? Color.white : new Color32(200, 200, 200, 128);
+        }
         switchButton.interactable = choicesInteractable[4];
     }
 
@@ -391,8 +399,6 @@ public class GameManager : MonoBehaviour
 
         choices.Add(newChoice);
 
-        resetChoicesButton.interactable = true;
-
         if (!(newChoice.move.moveName == null) && !newChoice.casterSlot.data.moves[choice].isTargeted)
             ChoiceComplete();
     }
@@ -442,6 +448,8 @@ public class GameManager : MonoBehaviour
         choices[^1].casterSlot.data.hasChosen = true;
 
         ResetInteractable();
+
+        resetChoicesButton.SetActive(true);
 
         if (choices[^1].move.moveName == null)
             choices[^1].targetSlot.data.availableToSwitchIn = false;
@@ -529,7 +537,7 @@ public class GameManager : MonoBehaviour
         infoScreen.SetActive(true);
 
         submitChoicesButton.SetActive(false);
-        resetChoicesButton.interactable = false;
+        resetChoicesButton.SetActive(false);
 
         foreach (ChoiceInfo choice in choices)
             choice.casterSlot.data.hasChosen = false;
@@ -562,7 +570,7 @@ public class GameManager : MonoBehaviour
         }
 
         infoScreen.SetActive(false);
-        resetChoicesButton.interactable = false;
+        resetChoicesButton.SetActive(false);
         submitChoicesButton.SetActive(false);
 
         pastChoices.Clear();
@@ -582,8 +590,6 @@ public class GameManager : MonoBehaviour
         foreach (PokemonSlot pokemonSlot in pokemonSlots)
             pastPokemon.Add(pokemonSlot.data);
 
-        replayButton.interactable = true;
-
         random = UnityEngine.Random.Range(0, 2) == 0;
 
         PrepareNextChoiceExecution();
@@ -591,9 +597,8 @@ public class GameManager : MonoBehaviour
 
     public void SelectReplay()
     {
-        infoScreen.SetActive(false);
-        resetChoicesButton.interactable = false;
-        submitChoicesButton.SetActive(false);
+        replayRoundButton.SetActive(false);
+        endRoundButton.SetActive(false);
 
         choices.Clear();
         foreach (ChoiceInfo pastChoice in pastChoices)
@@ -613,8 +618,6 @@ public class GameManager : MonoBehaviour
             pokemonSlots[i].data = pastPokemon[i];
             pokemonSlots[i].ReloadPokemon();
         }
-
-        roundEnding = false;
 
         PrepareNextChoiceExecution();
     }
@@ -781,12 +784,6 @@ public class GameManager : MonoBehaviour
 
     public void SelectMessageButton() // Executes choices
     {
-        if (roundEnding)
-        {
-            RoundEnd();
-            return;
-        }
-
         if (nextChoice.move.moveName != null && nextChoice.casterSlot.data.fakedOut)
         {
             if (choices.Count > 0)
@@ -819,7 +816,22 @@ public class GameManager : MonoBehaviour
                     readyForNextEffect = false;
                     return;
                 }
-                else if (move == "Sucker Punch")
+                else if (move == "Fake Out" && !nextChoice.casterSlot.data.fakeOutAvailable)
+                {
+                    message.text = nextChoice.casterName + " didn't enter battle this or last round!";
+                    readyForNextEffect = false;
+                    return;
+                }
+
+                else if (fieldEffects.ContainsKey("Psychic Terrain") && nextChoice.move.priority > 0 && 
+                    (nextChoice.targetSlot == nextChoice.casterSlot.enemySlots[0] || nextChoice.targetSlot == nextChoice.casterSlot.enemySlots[1]))
+                {
+                    message.text = nextChoice.targetSlot.data.pokemonName + " is protected by the Psychic Terrain!";
+                    readyForNextEffect = false;
+                    return;
+                }
+
+                else if (move == "Sucker Punch") // If this check occurred before Psychic Terrain, Sucker Punch wouldn't be blocked
                 {
                     MoveData targetMove = default;
                     foreach (ChoiceInfo choice in choices)
@@ -835,20 +847,6 @@ public class GameManager : MonoBehaviour
                         readyForNextEffect = false;
                         return;
                     }
-                }
-                else if (move == "Fake Out" && !nextChoice.casterSlot.data.fakeOutAvailable)
-                {
-                    message.text = nextChoice.casterName + " didn't enter battle this or last round!";
-                    readyForNextEffect = false;
-                    return;
-                }
-
-                else if (fieldEffects.ContainsKey("Psychic Terrain") && nextChoice.move.priority > 0 && 
-                    (nextChoice.targetSlot == nextChoice.casterSlot.enemySlots[0] || nextChoice.targetSlot == nextChoice.casterSlot.enemySlots[1]))
-                {
-                    message.text = nextChoice.targetSlot.data.pokemonName + " is protected by the Psychic Terrain!";
-                    readyForNextEffect = false;
-                    return;
                 }
 
                 // Protected target fail (needs to come after misc fails)
@@ -911,14 +909,15 @@ public class GameManager : MonoBehaviour
 
     private void PrepareForRoundEnd()
     {
-        message.text = "Round will end\n\nIf the other Player hasn't watched the round yet,\nSelect 'Replay Round' and hand them the device!\n\nOtherwise, select 'Next'";
+        message.text = string.Empty;
 
         foreach (PokemonSlot pokemonSlot in pokemonSlots)
             pokemonSlot.pokemonImage.color = Color.white;
 
         ResetTargetButtons();
 
-        roundEnding = true;
+        replayRoundButton.SetActive(true);
+        endRoundButton.SetActive(true);
     }
 
     public void AddEffectivenessMessage(float effectivenessMultiplier, string targetName)
@@ -1022,19 +1021,20 @@ public class GameManager : MonoBehaviour
 
         messageButton.SetActive(false);
         ResetTargetButtons();
-        replayButton.interactable = false;
+        replayRoundButton.SetActive(false);
 
         return true;
     }
 
-    private void RoundEnd()
+    public void SelectEndRound()
     {
-        roundEnding = false;
+        replayRoundButton.SetActive(false);
+        endRoundButton.SetActive(false);
 
         message.text = string.Empty;
         messageButton.SetActive(false);
 
-        replayButton.interactable = false;
+        replayRoundButton.SetActive(false);
 
         foreach (PokemonSlot slot in pokemonSlots)
         {
@@ -1193,7 +1193,7 @@ public class GameManager : MonoBehaviour
         TurnOffRepopulationTargets(targetSlot, new() { 0, 1, 4, 5 });
         TurnOffRepopulationTargets(targetSlot, new() { 2, 3, 6, 7 });
 
-        resetChoicesButton.interactable = true;
+        resetChoicesButton.SetActive(true);
 
         foreach (Button targetButton in targetButtons)
             if (targetButton.gameObject.activeSelf)
@@ -1216,7 +1216,7 @@ public class GameManager : MonoBehaviour
 
     private void SelectResetRepopulationChoices()
     {
-        resetChoicesButton.interactable = false;
+        resetChoicesButton.SetActive(false);
         submitChoicesButton.SetActive(false);
 
         CheckForRepopulation();
@@ -1225,7 +1225,7 @@ public class GameManager : MonoBehaviour
     private void SelectSubmitRepopulationChoices()
     {
         repopulating = false;
-        resetChoicesButton.interactable = false;
+        resetChoicesButton.SetActive(false);
         submitChoicesButton.SetActive(false);
 
         foreach (int benchSlot in benchSlotsToRepopulate)
@@ -1337,14 +1337,14 @@ public class GameManager : MonoBehaviour
         fieldEffectsText.text = newFieldEffectsText;
     }
 
-    public void SelectHowToPlay()
-    {
-        rulesScreen.SetActive(true);
-    }
-    public void SelectCloseRulesScreen()
-    {
-        rulesScreen.SetActive(false);
-    }
+    //public void SelectHowToPlay()
+    //{
+    //    rulesScreen.SetActive(true);
+    //}
+    //public void SelectCloseRulesScreen()
+    //{
+    //    rulesScreen.SetActive(false);
+    //}
 
     public void SelectEffectivenessButton()
     {
@@ -1421,18 +1421,18 @@ public class GameManager : MonoBehaviour
             icon.gameObject.SetActive(false);
     }
 
-    public void SelectQuitGame()
-    {
-        quitScreen.SetActive(true);
-    }
-    public void SelectQuitYes()
-    {
-        SceneManager.LoadScene(0);
-    }
-    public void SelectQuitNo()
-    {
-        quitScreen.SetActive(false);
-    }
+    //public void SelectQuitGame()
+    //{
+    //    quitScreen.SetActive(true);
+    //}
+    //public void SelectQuitYes()
+    //{
+    //    SceneManager.LoadScene(0);
+    //}
+    //public void SelectQuitNo()
+    //{
+    //    quitScreen.SetActive(false);
+    //}
 }
 public struct ChoiceInfo
 {
