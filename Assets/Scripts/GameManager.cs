@@ -7,14 +7,18 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    // STATIC:
+    public static bool cpuMode = true;
+
     // SCENE REFERENCE:
     [SerializeField] private List<int> debugPokemon = new();
 
-    [SerializeField] private List<PokemonSlot> pokemonSlots = new();
+    public List<PokemonSlot> pokemonSlots = new();
     [SerializeField] private PokemonIndex pokemonIndex;
     [SerializeField] private StatusIndex statusIndex;
     [SerializeField] private MoveEffectIndex moveEffectIndex;
     [SerializeField] private TypeChart typeChart;
+    [SerializeField] private CPU cpu;
 
     [SerializeField] private GameObject resetChoicesButton;
 
@@ -455,7 +459,8 @@ public class GameManager : MonoBehaviour
             choices[^1].targetSlot.data.availableToSwitchIn = false;
 
         int choicesNeeded = 0;
-        for (int i = 0; i < 4; i++)
+        int iterations = cpuMode ? 2 : 4;
+        for (int i = 0; i < iterations; i++)
             if (!pokemonSlots[i].slotIsEmpty)
                 choicesNeeded++;
 
@@ -568,6 +573,9 @@ public class GameManager : MonoBehaviour
             SelectSubmitRepopulationChoices();
             return;
         }
+
+        foreach (ChoiceInfo cpuChoice in cpu.GetCPUChoices())
+            choices.Add(cpuChoice);
 
         infoScreen.SetActive(false);
         resetChoicesButton.SetActive(false);
@@ -1010,14 +1018,28 @@ public class GameManager : MonoBehaviour
         if (pokemonSlots[2].slotIsEmpty && pokemonSlots[3].slotIsEmpty && pokemonSlots[6].slotIsEmpty && pokemonSlots[7].slotIsEmpty)
             player2Loss = true;
 
-        if (player1Loss && player2Loss)
-            message.text = "All Pokemon have fainted. The game ends in a tie!";
-        else if (player1Loss)
-            message.text = "All of Player 1's Pokemon have fainted. Player 2 wins!";
-        else if (player2Loss)
-            message.text = "All of Player 2's Pokemon have fainted. Player 1 wins!";
+        if (cpuMode)
+        {
+            if (player1Loss && player2Loss)
+                message.text = "All Pokemon have fainted. The game ends in a tie!";
+            else if (player1Loss)
+                message.text = "All of your Pokemon have fainted. You lose";
+            else if (player2Loss)
+                message.text = "All of the enemy's Pokemon have fainted. You win!";
+            else
+                return false;
+        }
         else
-            return false;
+        {
+            if (player1Loss && player2Loss)
+                message.text = "All Pokemon have fainted. The game ends in a tie!";
+            else if (player1Loss)
+                message.text = "All of Player 1's Pokemon have fainted. Player 2 wins!";
+            else if (player2Loss)
+                message.text = "All of Player 2's Pokemon have fainted. Player 1 wins!";
+            else
+                return false;
+        }
 
         messageButton.SetActive(false);
         ResetTargetButtons();

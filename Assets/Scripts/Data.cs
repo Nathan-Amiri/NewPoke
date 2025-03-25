@@ -65,6 +65,9 @@ public struct MoveData
     public bool targetsBench;
 
     public int indexNumber; // MoveEffect
+
+    public int advantageSeeds; // CPU, normal damaging moves = -1
+    public int disadvantageSeeds; //^
 }
 public struct AbilityData
 {
@@ -88,7 +91,8 @@ public struct StatusData
 ///     Terrain
 ///     Trick Room
 ///     Tailwind
-///     1 more, max of 5 (Light Screen? Safeguard?)
+///     Aurora Veil
+///     (no more room for more!)
 /// If it's ever possible for a Pokemon to be unable to move, account for Pokemon that can't move or switch (make submit choices appear sooner in ChoiceComplete)
 /// The game does not currently support delayed effects that affect targets, since the delayed effect won't occur if the caster faints
 /// Nontargeted moves don't need to manually check Protect (or slotIsEmpty!) when using public PokemonSlot methods, but they do otherwise. Targeted moves always fail into Protected pokemon
@@ -96,3 +100,4 @@ public struct StatusData
 /// Any move that targets bench needs to prepare for when the target is null
 /// Intimidate Pokemon can't have any moves that damage multiple Pokemon at once
 /// Damaging targeted moves that don't target bench can be Helping Handed!
+/// All pokemon need at least one move that doesn't have advantage seeds! (a typical damaging move)

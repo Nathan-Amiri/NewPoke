@@ -110,6 +110,9 @@ public class PokemonSlot : MonoBehaviour
         {
             choicesInteractable.Add(false);
 
+            if (GameManager.cpuMode && (slotNumber == 2 || slotNumber == 3))
+                continue;
+
             if (isBenchSlot)
                 continue;
 

@@ -14135,6 +14135,7 @@ GameObject:
   - component: {fileID: 1092461926}
   - component: {fileID: 1092461930}
   - component: {fileID: 1092461931}
+  - component: {fileID: 1092461932}
   m_Layer: 0
   m_Name: MiscScripts
   m_TagString: Untagged
@@ -14183,6 +14184,7 @@ MonoBehaviour:
   statusIndex: {fileID: 1092461930}
   moveEffectIndex: {fileID: 1092461926}
   typeChart: {fileID: 1092461931}
+  cpu: {fileID: 1092461932}
   resetChoicesButton: {fileID: 2011102764}
   replayRoundButton: {fileID: 1744855638}
   endRoundButton: {fileID: 981482030}
@@ -14505,6 +14507,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02eecdbb54de9364cbc08fef0fa0dc3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1092461932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1092461922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6609821c1b63964380dfd1d4a4c8d4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManager: {fileID: 1092461925}
 --- !u!1 &1103366603
 GameObject:
   m_ObjectHideFlags: 0
