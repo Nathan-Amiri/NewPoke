@@ -14520,6 +14520,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 1092461925}
+  typeChart: {fileID: 1092461931}
 --- !u!1 &1103366603
 GameObject:
   m_ObjectHideFlags: 0
