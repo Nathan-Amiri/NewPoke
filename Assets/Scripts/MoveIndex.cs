@@ -51,7 +51,7 @@ public class MoveIndex : MonoBehaviour
             priority = 3,
             isDamaging = true,
             isTargeted = true,
-            targetsBench = false
+            targetsBench = false,
         };
     }
     private MoveData Thunderbolt() // 2
@@ -64,7 +64,9 @@ public class MoveIndex : MonoBehaviour
             priority = 0,
             isDamaging = true,
             isTargeted = true,
-            targetsBench = false
+            targetsBench = false,
+
+            advantageSeeds = -1
         };
     }
     private MoveData VoltSwitch() // 3
@@ -77,7 +79,7 @@ public class MoveIndex : MonoBehaviour
             priority = 0,
             isDamaging = true,
             isTargeted = true,
-            targetsBench = true
+            targetsBench = true,
         };
     }
     private MoveData ThunderWave() // 3
@@ -90,7 +92,7 @@ public class MoveIndex : MonoBehaviour
             priority = 0,
             isDamaging = false,
             isTargeted = true,
-            targetsBench = false
+            targetsBench = false,
         };
     }
     private MoveData WeatherBall() // 5
@@ -103,7 +105,9 @@ public class MoveIndex : MonoBehaviour
             priority = 0,
             isDamaging = true,
             isTargeted = true,
-            targetsBench = false
+            targetsBench = false,
+
+            advantageSeeds = -1
         };
     }
     private MoveData Hurricane() // 6
@@ -116,7 +120,9 @@ public class MoveIndex : MonoBehaviour
             priority = 0,
             isDamaging = true,
             isTargeted = true,
-            targetsBench = false
+            targetsBench = false,
+
+            advantageSeeds = -1
         };
     }
     private MoveData Tailwind() // 7
@@ -142,7 +148,9 @@ public class MoveIndex : MonoBehaviour
             priority = 0,
             isDamaging = true,
             isTargeted = false,
-            targetsBench = false
+            targetsBench = false,
+
+            advantageSeeds = -1
         };
     }
     private MoveData Hex() // 9
@@ -155,7 +163,9 @@ public class MoveIndex : MonoBehaviour
             priority = 0,
             isDamaging = true,
             isTargeted = true,
-            targetsBench = false
+            targetsBench = false,
+
+            advantageSeeds = -1
         };
     }
     private MoveData RagePowder() // 10
@@ -194,7 +204,9 @@ public class MoveIndex : MonoBehaviour
             priority = 0,
             isDamaging = true,
             isTargeted = true,
-            targetsBench = false
+            targetsBench = false,
+
+            advantageSeeds = -1
         };
     }
     private MoveData FirePunch() // 13
@@ -207,7 +219,9 @@ public class MoveIndex : MonoBehaviour
             priority = 0,
             isDamaging = true,
             isTargeted = true,
-            targetsBench = false
+            targetsBench = false,
+
+            advantageSeeds = -1
         };
     }
     private MoveData DrainPunch() // 14
@@ -220,7 +234,9 @@ public class MoveIndex : MonoBehaviour
             priority = 0,
             isDamaging = true,
             isTargeted = true,
-            targetsBench = false
+            targetsBench = false,
+
+            advantageSeeds = -1
         };
     }
     private MoveData Coil() // 15
@@ -246,7 +262,9 @@ public class MoveIndex : MonoBehaviour
             priority = 0,
             isDamaging = true,
             isTargeted = true,
-            targetsBench = false
+            targetsBench = false,
+
+            advantageSeeds = -1
         };
     }
     private MoveData Toxic() // 17
@@ -272,7 +290,7 @@ public class MoveIndex : MonoBehaviour
             priority = 1,
             isDamaging = true,
             isTargeted = true,
-            targetsBench = false
+            targetsBench = false,
         };
     }
     private MoveData DoubleEdge() // 19
@@ -285,7 +303,9 @@ public class MoveIndex : MonoBehaviour
             priority = 0,
             isDamaging = true,
             isTargeted = true,
-            targetsBench = false
+            targetsBench = false,
+
+            advantageSeeds = -1
         };
     }
     private MoveData ThunderPunch() // 20
@@ -298,7 +318,9 @@ public class MoveIndex : MonoBehaviour
             priority = 0,
             isDamaging = true,
             isTargeted = true,
-            targetsBench = false
+            targetsBench = false,
+
+            advantageSeeds = -1
         };
     }
     private MoveData Overheat() // 21
@@ -311,7 +333,9 @@ public class MoveIndex : MonoBehaviour
             priority = 0,
             isDamaging = true,
             isTargeted = true,
-            targetsBench = false
+            targetsBench = false,
+
+            advantageSeeds = -1
         };
     }
     private MoveData WilloWisp() // 22
@@ -350,7 +374,9 @@ public class MoveIndex : MonoBehaviour
             priority = 0,
             isDamaging = true,
             isTargeted = false,
-            targetsBench = false
+            targetsBench = false,
+
+            advantageSeeds = -1
         };
     }
     private MoveData Moonblast() // 25
@@ -363,7 +389,9 @@ public class MoveIndex : MonoBehaviour
             priority = 0,
             isDamaging = true,
             isTargeted = true,
-            targetsBench = false
+            targetsBench = false,
+
+            advantageSeeds = -1
         };
     }
     private MoveData Psychic() // 26
@@ -376,7 +404,9 @@ public class MoveIndex : MonoBehaviour
             priority = 0,
             isDamaging = true,
             isTargeted = true,
-            targetsBench = false
+            targetsBench = false,
+
+            advantageSeeds = -1
         };
     }
     private MoveData TrickRoom() // 27
@@ -428,7 +458,9 @@ public class MoveIndex : MonoBehaviour
             priority = 0,
             isDamaging = true,
             isTargeted = false,
-            targetsBench = false
+            targetsBench = false,
+
+            advantageSeeds = -1
         };
     }
     private MoveData KnockOff() // 31
@@ -441,7 +473,9 @@ public class MoveIndex : MonoBehaviour
             priority = 0,
             isDamaging = true,
             isTargeted = true,
-            targetsBench = false
+            targetsBench = false,
+
+            advantageSeeds = -1
         };
     }
     private MoveData Earthquake() // 32
@@ -454,7 +488,9 @@ public class MoveIndex : MonoBehaviour
             priority = 0,
             isDamaging = true,
             isTargeted = false,
-            targetsBench = false
+            targetsBench = false,
+
+            advantageSeeds = -1
         };
     }
     private MoveData Detect() // 33
@@ -480,7 +516,9 @@ public class MoveIndex : MonoBehaviour
             priority = 0,
             isDamaging = true,
             isTargeted = true,
-            targetsBench = false
+            targetsBench = false,
+
+            advantageSeeds = -1
         };
     }
     private MoveData SwordsDance() // 35
@@ -519,7 +557,9 @@ public class MoveIndex : MonoBehaviour
             priority = 0,
             isDamaging = true,
             isTargeted = true,
-            targetsBench = false
+            targetsBench = false,
+
+            advantageSeeds = -1
         };
     }
     private MoveData UTurn() // 38
@@ -532,7 +572,7 @@ public class MoveIndex : MonoBehaviour
             priority = 0,
             isDamaging = true,
             isTargeted = true,
-            targetsBench = true
+            targetsBench = true,
         };
     }
     private MoveData JetPunch() // 39
@@ -571,7 +611,9 @@ public class MoveIndex : MonoBehaviour
             priority = 0,
             isDamaging = true,
             isTargeted = true,
-            targetsBench = false
+            targetsBench = false,
+
+            advantageSeeds = -1
         };
     }
     private MoveData IcePunch() // 42
@@ -584,7 +626,9 @@ public class MoveIndex : MonoBehaviour
             priority = 0,
             isDamaging = true,
             isTargeted = true,
-            targetsBench = false
+            targetsBench = false,
+
+            advantageSeeds = -1
         };
     }
 
