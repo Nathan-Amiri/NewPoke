@@ -10,29 +10,48 @@ public class CPU : MonoBehaviour
     private readonly List<ChoiceInfo> slot2Hat = new();
     private readonly List<ChoiceInfo> slot3Hat = new();
 
+    private readonly List<int> allyMoveAdvantages = new();
+
     public List<ChoiceInfo> GetCPUChoices()
     {
+        // Reset all CPU variables
+        slot2Hat.Clear();
+        slot3Hat.Clear();
+        allyMoveAdvantages.Clear();
+
+
+
+        // Add basic damage moves to hat
         AddMostEffectiveMoveSeeds(gameManager.pokemonSlots[2], gameManager.pokemonSlots[0], true);
         AddMostEffectiveMoveSeeds(gameManager.pokemonSlots[2], gameManager.pokemonSlots[1], true);
         AddMostEffectiveMoveSeeds(gameManager.pokemonSlots[3], gameManager.pokemonSlots[0], false);
         AddMostEffectiveMoveSeeds(gameManager.pokemonSlots[3], gameManager.pokemonSlots[1], false);
 
-        // Randomly choose the ideal switch for one cpuSlot before the other--first pick matters since availableToSwitchIn needs to get updated after the first one
-        PokemonSlot LeastVulnerableSlot2SwitchTarget = null;
-        PokemonSlot LeastVulnerableSlot3SwitchTarget = null;
-        if (Random.Range(0, 2) == 0)
+
+
+        // Get average advantages for switch code
+        int slot2AverageAdvantage = (allyMoveAdvantages[0] + allyMoveAdvantages[1]) / 2;
+        int slot3AverageAdvantage = (allyMoveAdvantages[0] + allyMoveAdvantages[1]) / 2;
+
+        // Let the least advantageous slot choose a switch target first, since availableToSwitchIn needs to update before the other slot chooses
+        bool slot2IsLeastAdvantageous = true;
+        if (slot2AverageAdvantage > slot3AverageAdvantage || (slot2AverageAdvantage == slot3AverageAdvantage && Random.Range(0, 2) == 0))
+            slot2IsLeastAdvantageous = false;
+
+        if (slot2IsLeastAdvantageous)
         {
-            LeastVulnerableSlot2SwitchTarget = LeastVulnerableSwitchTarget(gameManager.pokemonSlots[2]);
-            LeastVulnerableSlot2SwitchTarget.data.availableToSwitchIn = false;
-            LeastVulnerableSlot3SwitchTarget = LeastVulnerableSwitchTarget(gameManager.pokemonSlots[3]);
+            AddSwitchSeedsToHat(true, slot2AverageAdvantage);
+            AddSwitchSeedsToHat(false, slot3AverageAdvantage);
         }
         else
         {
-            LeastVulnerableSlot3SwitchTarget = LeastVulnerableSwitchTarget(gameManager.pokemonSlots[3]);
-            LeastVulnerableSlot3SwitchTarget.data.availableToSwitchIn = false;
-            LeastVulnerableSlot2SwitchTarget = LeastVulnerableSwitchTarget(gameManager.pokemonSlots[2]);
+            AddSwitchSeedsToHat(false, slot3AverageAdvantage);
+            AddSwitchSeedsToHat(true, slot2AverageAdvantage);
         }
 
+
+
+        // Choose both choices from hat
         ChoiceInfo slot2Choice = slot2Hat[Random.Range(0, slot2Hat.Count)];
         ChoiceInfo slot3Choice = slot3Hat[Random.Range(0, slot3Hat.Count)];
         return new List<ChoiceInfo>() { slot2Choice, slot3Choice };
@@ -51,10 +70,17 @@ public class CPU : MonoBehaviour
         (MoveData, int) enemyMoveIntoAlly = GetMoveAdvantage(enemy, ally);
         allyMoveIntoEnemy.Item2 -= enemyMoveIntoAlly.Item2;
 
-        // Add/subtract effectiveness based on speed difference
+        // Add/subtract advantage based on speed difference
         allyMoveIntoEnemy.Item2 += GetSpeedAdvantage(ally, enemy);
 
-        // Add most effective moves into both enemies to hat
+        // Cache this for Switch code. Do it before rounding up
+        allyMoveAdvantages.Add(allyMoveIntoEnemy.Item2);
+
+        // Round up so that hat is never empty
+        if (allyMoveIntoEnemy.Item2 < 1)
+            allyMoveIntoEnemy.Item2 = 1;
+
+        // Add most effective moves into both enemies to hat, advantage = # of seeds
         ChoiceInfo info = new()
         {
             casterName = ally.data.pokemonName,
@@ -92,18 +118,16 @@ public class CPU : MonoBehaviour
         }
 
         int advantage;
-        if (greatestEffectiveness == 0)
-            advantage = 0;
-        else if (greatestEffectiveness == .25f)
+        if (greatestEffectiveness == 0 || greatestEffectiveness == .25f)
             advantage = 1;
         else if (greatestEffectiveness == .5f)
-            advantage = 2;
+            advantage = 3;
         else if (greatestEffectiveness == 1)
-            advantage = 4;
+            advantage = 5;
         else if (greatestEffectiveness == 2)
-            advantage = 6;
+            advantage = 7;
         else // greatestEffectiveness == 4
-            advantage = 8;
+            advantage = 9;
 
         return (cachedMove, advantage);
     }
@@ -128,6 +152,32 @@ public class CPU : MonoBehaviour
 
         // Speeds are equal
         return 0;
+    }
+
+    private void AddSwitchSeedsToHat(bool slot2, int allyAdvantage)
+    {
+        PokemonSlot ally = slot2 ? gameManager.pokemonSlots[2] : gameManager.pokemonSlots[3];
+
+        PokemonSlot switchTarget = LeastVulnerableSwitchTarget(ally);
+        switchTarget.data.availableToSwitchIn = false;
+
+        int seeds = allyAdvantage < 5 ? 6 : 1;
+
+        // Add most effective moves into both enemies to hat, advantage = # of seeds
+        ChoiceInfo info = new()
+        {
+            casterName = ally.data.pokemonName,
+            casterSlot = ally,
+            // No move assignment tells GameManager that it's switching
+            targetSlot = switchTarget
+        };
+        for (int i = 0; i < seeds; i++)
+        {
+            if (slot2)
+                slot2Hat.Add(info);
+            else
+                slot3Hat.Add(info);
+        }
     }
 
     private PokemonSlot LeastVulnerableSwitchTarget(PokemonSlot ally)
