@@ -1165,6 +1165,8 @@ public class GameManager : MonoBehaviour
 
         if (CheckForRepopulation())
             return;
+        else
+            cpu.CPURepopulate(); // Instantly repopulate CPU if player doesn't need to repopulate
 
         ResetForNewRound();
     }
@@ -1180,7 +1182,9 @@ public class GameManager : MonoBehaviour
         benchSlotsToRepopulate.Clear();
 
         RepopulateTargetButtons(new() { 0, 1, 4, 5 });
-        RepopulateTargetButtons(new() { 2, 3, 6, 7 });
+
+        if (!cpuMode) // CPU repopulates after player repopulates
+            RepopulateTargetButtons(new() { 2, 3, 6, 7 });
 
         foreach (Button targetButton in targetButtons)
             if (targetButton.gameObject.activeSelf)
@@ -1251,6 +1255,8 @@ public class GameManager : MonoBehaviour
         repopulating = false;
         resetChoicesButton.SetActive(false);
         submitChoicesButton.SetActive(false);
+
+        cpu.CPURepopulate(); // Repopulate CPU before switching enemy so that the CPU has no knowledge of player choices
 
         foreach (int benchSlot in benchSlotsToRepopulate)
         {

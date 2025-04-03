@@ -411,7 +411,32 @@ public class CPU : MonoBehaviour
             }
         }
 
-        Debug.Log(bestShoptOption);
         return bestShoptOption;
+    }
+
+
+    public void CPURepopulate()
+    {
+        if (gameManager.pokemonSlots[6].slotIsEmpty && gameManager.pokemonSlots[7].slotIsEmpty)
+            return;
+
+        if (!gameManager.pokemonSlots[2].slotIsEmpty && !gameManager.pokemonSlots[3].slotIsEmpty)
+            return;
+
+        for (int i = 2; i < 4; i++)
+        {
+            if (!gameManager.pokemonSlots[i].slotIsEmpty)
+                continue;
+
+            PokemonSlot bench;
+
+            if (gameManager.pokemonSlots[6].slotIsEmpty)
+                bench = gameManager.pokemonSlots[7];
+            else if (gameManager.pokemonSlots[7].slotIsEmpty)
+                bench = gameManager.pokemonSlots[6];
+            else bench = Random.Range(0, 2) == 0 ? gameManager.pokemonSlots[6] : gameManager.pokemonSlots[7];
+
+            gameManager.Switch(gameManager.pokemonSlots[i], bench);
+        }
     }
 }
