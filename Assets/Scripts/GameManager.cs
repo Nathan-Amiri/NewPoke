@@ -164,9 +164,16 @@ public class GameManager : MonoBehaviour
             PokemonData newData = pokemonIndex.LoadPokemonFromIndex(newPokemon);
             shopOptions.Add((newPokemon, newData));
 
-            optionSprites[i].sprite = newData.sprite;
+            if (!cpuMode || player1Drafting)
+                optionSprites[i].sprite = newData.sprite;
 
             pokemonList.RemoveAt(randomIndex); // Ensures no present duplicates
+        }
+
+        if (cpuMode && !player1Drafting)
+        {
+            SelectDraftOption(cpu.ChooseDraftOption(shopOptions));
+            SelectDraftChoose();
         }
     }
 
@@ -574,8 +581,9 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        foreach (ChoiceInfo cpuChoice in cpu.GetCPUChoices())
-            choices.Add(cpuChoice);
+        if (cpuMode)
+            foreach (ChoiceInfo cpuChoice in cpu.GetCPUChoices())
+                choices.Add(cpuChoice);
 
         infoScreen.SetActive(false);
         resetChoicesButton.SetActive(false);
@@ -924,7 +932,10 @@ public class GameManager : MonoBehaviour
 
         ResetTargetButtons();
 
-        replayRoundButton.SetActive(true);
+        messageButton.SetActive(false);
+
+        if (!cpuMode)
+            replayRoundButton.SetActive(true);
         endRoundButton.SetActive(true);
     }
 

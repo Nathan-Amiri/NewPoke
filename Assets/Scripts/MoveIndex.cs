@@ -85,8 +85,7 @@ public class MoveIndex : MonoBehaviour
             isTargeted = true,
             targetsBench = true,
 
-            advantageSeeds = 1,
-            disadvantageSeeds = 7
+            // Custom seed code in CPU
         };
     }
     private MoveData ThunderWave() // 3
@@ -625,8 +624,7 @@ public class MoveIndex : MonoBehaviour
             isTargeted = true,
             targetsBench = true,
 
-            advantageSeeds = 1,
-            disadvantageSeeds = 7
+            // Custom seed code in CPU
         };
     }
     private MoveData JetPunch() // 39
@@ -657,8 +655,7 @@ public class MoveIndex : MonoBehaviour
             isTargeted = true,
             targetsBench = true,
 
-            advantageSeeds = 1,
-            disadvantageSeeds = 7
+            // Custom seed code in CPU
         };
     }
     private MoveData WaveCrash() // 41

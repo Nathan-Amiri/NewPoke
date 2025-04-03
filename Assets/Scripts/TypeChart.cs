@@ -57,4 +57,18 @@ public class TypeChart : MonoBehaviour
 
         return multiplier;
     }
+
+    public float GetEffectivenessAdvantage(List<int> allyTypes, List<int> enemyTypes)
+    {
+        float effectiveness = 0;
+
+        foreach (int allyType in allyTypes)
+            foreach (int enemyType in enemyTypes)
+            {
+                effectiveness += typeChart[allyType][enemyType];
+                effectiveness -= typeChart[enemyType][allyType];
+            }
+
+        return effectiveness;
+    }
 }

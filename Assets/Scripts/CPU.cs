@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.U2D.Aseprite;
 using UnityEngine;
 
 public class CPU : MonoBehaviour
@@ -61,9 +60,9 @@ public class CPU : MonoBehaviour
         AddNonBasicMovesToHat(false);
 
 
-        // Add conditional moves to hat (moves that are not always available)
-        AddConditionalMovesToHat(true);
-        AddConditionalMovesToHat(false);
+        // Add custom seed moves to hat
+        AddCustomSeedMovesToHat(true);
+        AddCustomSeedMovesToHat(false);
 
 
         foreach (ChoiceInfo choice in slot2Hat)
@@ -211,6 +210,10 @@ public class CPU : MonoBehaviour
 
         int seeds = allyAdvantage < 5 ? 6 : 1;
 
+        // Add more seeds when stats are lowered
+        if (ally.data.currentAttack < ally.data.baseAttack || ally.data.currentSpeed < ally.data.baseSpeed)
+            seeds += 3;
+
         // Add most effective moves into both enemies to hat, advantage = # of seeds
         ChoiceInfo info = new()
         {
@@ -320,7 +323,7 @@ public class CPU : MonoBehaviour
         return averageAdvantage / advantages.Count;
     }
 
-    private void AddConditionalMovesToHat(bool slot2)
+    private void AddCustomSeedMovesToHat(bool slot2)
     {
         PokemonSlot ally = slot2 ? gameManager.pokemonSlots[2] : gameManager.pokemonSlots[3];
         if (ally.slotIsEmpty)
@@ -359,14 +362,56 @@ public class CPU : MonoBehaviour
 
                 seeds = 9;
             }
-
-            for (int i = 0; i < seeds; i++)
+            else if (move.targetsBench)
             {
-                if (slot2)
-                    slot2Hat.Add(choice);
+                if (gameManager.pokemonSlots[6].slotIsEmpty && gameManager.pokemonSlots[7].slotIsEmpty)
+                    continue;
+
+                choice.targetSlot = LeastVulnerableSwitchTarget(ally);
+
+                if (averageAdvantage >= 5)
+                    seeds = 1;
                 else
-                    slot3Hat.Add(choice);
+                    seeds = 7;
+            }
+
+                for (int i = 0; i < seeds; i++)
+                {
+                    if (slot2)
+                        slot2Hat.Add(choice);
+                    else
+                        slot3Hat.Add(choice);
+                }
+        }
+    }
+
+
+
+    public int ChooseDraftOption(List<(int, PokemonData)> shopOptions)
+    {
+        List<PokemonSlot> chosenEnemies = new();
+        if (!gameManager.pokemonSlots[0].slotIsEmpty) chosenEnemies.Add(gameManager.pokemonSlots[0]);
+        if (!gameManager.pokemonSlots[1].slotIsEmpty) chosenEnemies.Add(gameManager.pokemonSlots[1]);
+        if (!gameManager.pokemonSlots[4].slotIsEmpty) chosenEnemies.Add(gameManager.pokemonSlots[4]);
+        if (!gameManager.pokemonSlots[5].slotIsEmpty) chosenEnemies.Add(gameManager.pokemonSlots[5]);
+
+        int bestShoptOption = 0;
+        float bestEffectiveness = -1000;
+        for (int i = 0; i < 3; i++)
+        {
+            float effectiveness = 0;
+
+            foreach (PokemonSlot chosenEnemy in chosenEnemies)
+                effectiveness += typeChart.GetEffectivenessAdvantage(shopOptions[i].Item2.pokeTypes, chosenEnemy.data.pokeTypes);
+
+            if (effectiveness > bestEffectiveness)
+            {
+                bestShoptOption = i;
+                bestEffectiveness = effectiveness;
             }
         }
+
+        Debug.Log(bestShoptOption);
+        return bestShoptOption;
     }
 }
