@@ -37,6 +37,10 @@ public class CPU : MonoBehaviour
         averageSlot2Advantage = GetAverageAdvantage(true);
         averageSlot3Advantage = GetAverageAdvantage(false);
 
+        // Cache whether slots 6 and 7 are available to switch. They'll be set to false when adding Switch Seeds to hat
+        bool slot6AvailableToSwitch = gameManager.pokemonSlots[6].data.availableToSwitchIn;
+        bool slot7AvailableToSwitch = gameManager.pokemonSlots[7].data.availableToSwitchIn;
+
         // Let the least advantageous slot choose a switch target first, since availableToSwitchIn needs to update before the other slot chooses
         bool slot2IsLeastAdvantageous = true;
         if (averageSlot2Advantage > averageSlot3Advantage || (averageSlot2Advantage == averageSlot3Advantage && Random.Range(0, 2) == 0))
@@ -53,7 +57,9 @@ public class CPU : MonoBehaviour
             AddSwitchSeedsToHat(true, averageSlot2Advantage);
         }
 
-
+        // Reset availableToSwitch for moves that target bench
+        gameManager.pokemonSlots[6].data.availableToSwitchIn = slot6AvailableToSwitch;
+        gameManager.pokemonSlots[7].data.availableToSwitchIn = slot7AvailableToSwitch;
 
         // Add non-basic moves to hat based on their indexed seeds
         AddNonBasicMovesToHat(true);
@@ -375,13 +381,13 @@ public class CPU : MonoBehaviour
                     seeds = 7;
             }
 
-                for (int i = 0; i < seeds; i++)
-                {
-                    if (slot2)
-                        slot2Hat.Add(choice);
-                    else
-                        slot3Hat.Add(choice);
-                }
+            for (int i = 0; i < seeds; i++)
+            {
+                if (slot2)
+                    slot2Hat.Add(choice);
+                else
+                    slot3Hat.Add(choice);
+            }
         }
     }
 

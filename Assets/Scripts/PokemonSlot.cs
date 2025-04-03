@@ -95,7 +95,7 @@ public class PokemonSlot : MonoBehaviour
                 else
                     move.pokeType = 0;
             }
-            else if (move.moveName == "Grassy Surge")
+            else if (move.moveName == "Grassy Glide")
                 move.priority = gameManager.fieldEffects.ContainsKey("Grassy Terrain") ? 1 : 0;
 
             data.moves[i] = move;
