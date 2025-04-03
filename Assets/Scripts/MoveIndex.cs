@@ -578,8 +578,8 @@ public class MoveIndex : MonoBehaviour
             isTargeted = false,
             targetsBench = false,
 
-            advantageSeeds = 5,
-            disadvantageSeeds = 1
+            advantageSeeds = 3,
+            disadvantageSeeds = 0
         };
     }
     private MoveData GrassyGlide() // 36

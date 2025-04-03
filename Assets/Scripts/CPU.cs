@@ -11,14 +11,20 @@ public class CPU : MonoBehaviour
     private readonly List<ChoiceInfo> slot2Hat = new();
     private readonly List<ChoiceInfo> slot3Hat = new();
 
-    private readonly List<int> allyMoveAdvantages = new();
+    private readonly List<int> slot2Advantages = new();
+    private readonly List<int> slot3Advantages = new();
+    private int averageSlot2Advantage;
+    private int averageSlot3Advantage;
 
     public List<ChoiceInfo> GetCPUChoices()
     {
         //Reset all CPU variables
         slot2Hat.Clear();
         slot3Hat.Clear();
-        allyMoveAdvantages.Clear();
+        slot2Advantages.Clear();
+        slot3Advantages.Clear();
+        averageSlot2Advantage = 0;
+        averageSlot3Advantage = 0;
 
 
 
@@ -28,24 +34,24 @@ public class CPU : MonoBehaviour
         AddMostEffectiveMoveSeeds(gameManager.pokemonSlots[3], gameManager.pokemonSlots[0], false);
         AddMostEffectiveMoveSeeds(gameManager.pokemonSlots[3], gameManager.pokemonSlots[1], false);
 
-        // Get average advantages for switch code
-        int slot2AverageAdvantage = (allyMoveAdvantages[0] + allyMoveAdvantages[1]) / 2;
-        int slot3AverageAdvantage = (allyMoveAdvantages[0] + allyMoveAdvantages[1]) / 2;
+        // Get average advantages for switch code (no need to check for slotIsEmpty since AddSwitchSeedsToHat and AddNonBasicMovesToHat will catch it)
+        averageSlot2Advantage = GetAverageAdvantage(true);
+        averageSlot3Advantage = GetAverageAdvantage(false);
 
         // Let the least advantageous slot choose a switch target first, since availableToSwitchIn needs to update before the other slot chooses
         bool slot2IsLeastAdvantageous = true;
-        if (slot2AverageAdvantage > slot3AverageAdvantage || (slot2AverageAdvantage == slot3AverageAdvantage && Random.Range(0, 2) == 0))
+        if (averageSlot2Advantage > averageSlot3Advantage || (averageSlot2Advantage == averageSlot3Advantage && Random.Range(0, 2) == 0))
             slot2IsLeastAdvantageous = false;
 
         if (slot2IsLeastAdvantageous)
         {
-            AddSwitchSeedsToHat(true, slot2AverageAdvantage);
-            AddSwitchSeedsToHat(false, slot3AverageAdvantage);
+            AddSwitchSeedsToHat(true, averageSlot2Advantage);
+            AddSwitchSeedsToHat(false, averageSlot3Advantage);
         }
         else
         {
-            AddSwitchSeedsToHat(false, slot3AverageAdvantage);
-            AddSwitchSeedsToHat(true, slot2AverageAdvantage);
+            AddSwitchSeedsToHat(false, averageSlot3Advantage);
+            AddSwitchSeedsToHat(true, averageSlot2Advantage);
         }
 
 
@@ -106,8 +112,11 @@ public class CPU : MonoBehaviour
         // Add/subtract advantage based on speed difference
         allyMoveIntoEnemy.Item2 += GetSpeedAdvantage(ally, enemy);
 
-        // Cache this for Switch code. Do it before rounding up
-        allyMoveAdvantages.Add(allyMoveIntoEnemy.Item2);
+        // Cache this so that CPU can calculate average advantage later. Do it before rounding up
+        if (addToSlot2Hat)
+            slot2Advantages.Add(allyMoveIntoEnemy.Item2);
+        else
+            slot3Advantages.Add(allyMoveIntoEnemy.Item2);
 
         // Round up so that hat is never empty
         if (allyMoveIntoEnemy.Item2 < 1)
@@ -262,24 +271,18 @@ public class CPU : MonoBehaviour
             if (move.advantageSeeds == -1)
                 continue;
 
-            int allyAdvantage = slot2 ? allyMoveAdvantages[0] : allyMoveAdvantages[1];
+            int allyAdvantage = slot2 ? averageSlot2Advantage : averageSlot3Advantage;
             bool allyHasAdvantage = allyAdvantage >= 5;
             int seeds = allyHasAdvantage ? move.advantageSeeds : move.disadvantageSeeds;
 
-            PokemonSlot target;
-            if (gameManager.pokemonSlots[0].slotIsEmpty)
-                target = gameManager.pokemonSlots[1];
-            else if (gameManager.pokemonSlots[1].slotIsEmpty)
-                target = gameManager.pokemonSlots[0];
-            else
-                target = Random.Range(0, 2) == 0 ? gameManager.pokemonSlots[0] : gameManager.pokemonSlots[1];
+
 
             ChoiceInfo info = new()
             {
                 casterName = ally.data.pokemonName,
                 casterSlot = ally,
                 move = move,
-                targetSlot = target
+                targetSlot = ReturnRandomTarget()
             };
             for (int i = 0; i < seeds; i++)
             {
@@ -292,24 +295,77 @@ public class CPU : MonoBehaviour
     }
 
 
+    private PokemonSlot ReturnRandomTarget()
+    {
+        if (gameManager.pokemonSlots[0].slotIsEmpty)
+            return gameManager.pokemonSlots[1];
+        else if (gameManager.pokemonSlots[1].slotIsEmpty)
+            return gameManager.pokemonSlots[0];
+        else
+            return Random.Range(0, 2) == 0 ? gameManager.pokemonSlots[0] : gameManager.pokemonSlots[1];
+    }
+
+
+    private int GetAverageAdvantage(bool slot2)
+    {
+        int averageAdvantage = 0;
+
+        List<int> advantages = slot2 ? slot2Advantages : slot3Advantages;
+        if (advantages.Count == 0)
+            return 0;
+
+        foreach (int advantage in advantages)
+            averageAdvantage += advantage;
+
+        return averageAdvantage / advantages.Count;
+    }
+
     private void AddConditionalMovesToHat(bool slot2)
     {
         PokemonSlot ally = slot2 ? gameManager.pokemonSlots[2] : gameManager.pokemonSlots[3];
         if (ally.slotIsEmpty)
             return;
 
+        int averageAdvantage = slot2 ? averageSlot2Advantage : averageSlot3Advantage;
+
         foreach (MoveData move in ally.data.moves)
         {
+            int seeds = 0;
+            ChoiceInfo choice = new()
+            {
+                casterSlot = ally,
+                casterName = ally.data.pokemonName,
+                move = move,
+                targetSlot = move.isTargeted ? ReturnRandomTarget() : null
+            };
+
             if (move.moveName == "Protect" || move.moveName == "Detect")
             {
                 if (ally.data.protectedLastRound)
                     return;
 
+                if (ally.data.protectedLastRound)
+                    continue;
 
+                if (averageAdvantage >= 5)
+                    seeds = 1;
+                else
+                    seeds = 9;
             }
             else if (move.moveName == "Fake Out")
             {
+                if (!ally.data.fakeOutAvailable)
+                    continue;
 
+                seeds = 9;
+            }
+
+            for (int i = 0; i < seeds; i++)
+            {
+                if (slot2)
+                    slot2Hat.Add(choice);
+                else
+                    slot3Hat.Add(choice);
             }
         }
     }
