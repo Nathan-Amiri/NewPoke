@@ -8,10 +8,12 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     // STATIC:
-    public static bool cpuMode = true;
+    public static bool cpuMode;
 
     // SCENE REFERENCE:
     [SerializeField] private List<int> debugPokemon = new();
+
+    [SerializeField] private GameObject modeScreen;
 
     public List<PokemonSlot> pokemonSlots = new();
     [SerializeField] private PokemonIndex pokemonIndex;
@@ -120,8 +122,11 @@ public class GameManager : MonoBehaviour
     private PokemonData selectedData; // Used for effectivenessScreen instead of selectedSlot because drafting doesn't set selectedSlot
     private bool player1Drafting = true;
 
-    private void Start()
+    public void StartGame(bool selectedCPUMode)
     {
+        cpuMode = selectedCPUMode;
+        modeScreen.SetActive(false);
+
         // Debug mode
         if (debugPokemon.Count != 0)
         {
