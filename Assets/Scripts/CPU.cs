@@ -399,6 +399,9 @@ public class CPU : MonoBehaviour
             }
             else if (move.isDamaging && move.priority > 0 || move.moveName == "Grassy Glide")
             {
+                if (gameManager.fieldEffects.ContainsKey("Psychic Terrain"))
+                    continue;
+
                 // Grassy Glide doesn't work if Grassy Terrain isn't active
                 if (move.moveName == "Grassy Glide" && !gameManager.fieldEffects.ContainsKey("Grassy Terrain"))
                     continue;
