@@ -61,10 +61,6 @@ public class CPU : MonoBehaviour
         gameManager.pokemonSlots[6].data.availableToSwitchIn = slot6AvailableToSwitch;
         gameManager.pokemonSlots[7].data.availableToSwitchIn = slot7AvailableToSwitch;
 
-        // Add non-basic moves to hat based on their indexed seeds
-        AddNonBasicMovesToHat(true);
-        AddNonBasicMovesToHat(false);
-
 
         // Add custom seed moves to hat
         AddCustomSeedMovesToHat(true);
@@ -153,7 +149,7 @@ public class CPU : MonoBehaviour
         float greatestEffectiveness = 0;
         foreach (MoveData move in caster.data.moves)
         {
-            if (move.advantageSeeds != -1)
+            if (move.basic == false)
                 continue;
 
             float effectiveness = typeChart.GetEffectivenessMultiplier(move.pokeType, target.data.pokeTypes);
@@ -269,40 +265,6 @@ public class CPU : MonoBehaviour
             return Random.Range(0, 2) == 0 ? gameManager.pokemonSlots[6] : gameManager.pokemonSlots[7];
     }
 
-    private void AddNonBasicMovesToHat(bool slot2)
-    {
-        PokemonSlot ally = slot2 ? gameManager.pokemonSlots[2] : gameManager.pokemonSlots[3];
-        if (ally.slotIsEmpty)
-            return;
-
-        foreach (MoveData move in ally.data.moves)
-        {
-            if (move.advantageSeeds == -1)
-                continue;
-
-            int allyAdvantage = slot2 ? averageSlot2Advantage : averageSlot3Advantage;
-            bool allyHasAdvantage = allyAdvantage >= 5;
-            int seeds = allyHasAdvantage ? move.advantageSeeds : move.disadvantageSeeds;
-
-
-
-            ChoiceInfo info = new()
-            {
-                casterName = ally.data.pokemonName,
-                casterSlot = ally,
-                move = move,
-                targetSlot = ReturnRandomTarget()
-            };
-            for (int i = 0; i < seeds; i++)
-            {
-                if (slot2)
-                    slot2Hat.Add(info);
-                else
-                    slot3Hat.Add(info);
-            }
-        }
-    }
-
 
     private PokemonSlot ReturnRandomTarget()
     {
@@ -336,6 +298,7 @@ public class CPU : MonoBehaviour
             return;
 
         int averageAdvantage = slot2 ? averageSlot2Advantage : averageSlot3Advantage;
+        bool hasAdvantage = averageAdvantage >= 5;
 
         foreach (MoveData move in ally.data.moves)
         {
@@ -356,10 +319,7 @@ public class CPU : MonoBehaviour
                 if (ally.data.protectedLastRound)
                     continue;
 
-                if (averageAdvantage >= 5)
-                    seeds = 1;
-                else
-                    seeds = 9;
+                seeds = hasAdvantage ? 1 : 9;
             }
             else if (move.moveName == "Fake Out")
             {
@@ -375,11 +335,142 @@ public class CPU : MonoBehaviour
 
                 choice.targetSlot = LeastVulnerableSwitchTarget(ally);
 
-                if (averageAdvantage >= 5)
-                    seeds = 1;
-                else
-                    seeds = 7;
+                seeds = hasAdvantage ? 1 : 7;
             }
+            else if (move.moveName == "Thunder Wave")
+            {
+                // Doesn't work when enemy is slower than both me and my ally, or when enemy has status, or when trick room is active
+                if (choice.targetSlot.data.currentSpeed < ally.data.currentSpeed && choice.targetSlot.data.currentSpeed < ally.ally.data.currentSpeed)
+                    continue;
+
+                if (choice.targetSlot.data.status.statusName != null)
+                    continue;
+
+                if (gameManager.fieldEffects.ContainsKey("Trick Room"))
+                    continue;
+
+                seeds = hasAdvantage ? 1 : 5;
+            }
+            else if (move.moveName == "Tailwind")
+            {
+                // Doesn't work when Tailwind is active or when allies are faster than enemies
+                if (gameManager.fieldEffects.ContainsKey("Tailwind (Player 2)"))
+                    continue;
+
+                if (CPUTeamHasSpeedAdvantage())
+                    continue;
+                
+                seeds = hasAdvantage ? 3 : 1;
+            }
+            else if (move.moveName == "Rage Powder" || move.moveName == "Follow Me")
+            {
+                // Doesn't work when ally slot is empty
+                if (ally.ally.slotIsEmpty)
+                    continue;
+
+                seeds = hasAdvantage ? 1 : 7;
+            }
+            else if (move.moveName == "Life Dew")
+            {
+                // Doesn't work when ally near full hp or ally slot is empty
+                if (ally.ally.slotIsEmpty || ally.ally.data.currentHealth > ally.ally.data.baseHealth - 2)
+                    continue;
+
+                seeds = hasAdvantage ? 1 : 7;
+            }
+            else if (move.moveName == "Coil")
+            {
+                // Doesn't work unless current hp is over half
+                if (ally.data.currentHealth < ally.data.baseHealth / 2)
+                    continue;
+
+                seeds = 3;
+            }
+            else if (move.moveName == "Toxic")
+            {
+                // Doesn't work unless an enemy current hp is very high, doesn't work when enemy has status
+                if (choice.targetSlot.data.status.statusName != null)
+                    continue;
+
+                if (choice.targetSlot.data.currentHealth < 7)
+                    continue;
+
+                seeds = 7;
+            }
+            else if (move.isDamaging && move.priority > 0 || move.moveName == "Grassy Glide")
+            {
+                // Grassy Glide doesn't work if Grassy Terrain isn't active
+                if (move.moveName == "Grassy Glide" && !gameManager.fieldEffects.ContainsKey("Grassy Terrain"))
+                    continue;
+
+                // Doesn't work unless a faster enemy is either low or has advantage
+                if (choice.targetSlot.data.currentSpeed < ally.data.currentSpeed)
+                    continue;
+
+                if (choice.targetSlot.data.currentHealth < 3)
+                    seeds = 7;
+                else if (hasAdvantage)
+                    seeds = 5;
+            }
+            else if (move.moveName == "Will-o-Wisp")
+            {
+                // Doesn't work when enemy has status or has only 1 currentAttack
+                if (choice.targetSlot.data.status.statusName != null)
+                    continue;
+
+                if (choice.targetSlot.data.currentAttack == 1)
+                    continue;
+
+                seeds = hasAdvantage ? 1 : 5;
+            }
+            else if (move.moveName == "Aurora Veil")
+            {
+                // Doesn't work when Aurora Veil is active
+                if (gameManager.fieldEffects.ContainsKey("Aurora Veil (Player 2)"))
+                    continue;
+
+                seeds = 3;
+            }
+            else if (move.moveName == "Trick Room")
+            {
+                // Doesn't work if trick room is active or when total ally team speed is more than total enemy team speed
+                if (gameManager.fieldEffects.ContainsKey("Trick Room"))
+                    continue;
+
+                if (CPUTeamHasSpeedAdvantage())
+                    continue;
+
+                seeds = hasAdvantage ? 5 : 1;
+            }
+            else if (move.moveName == "Helping Hand")
+            {
+                // Doesn't work unless ally exists
+                if (ally.ally.slotIsEmpty)
+                    continue;
+
+                seeds = hasAdvantage ? 3 : 5;
+            }
+            else if (move.moveName == "Earthquake")
+            {
+                // Very unlikely unless ally doesn't exist or is immune or both enemies are low
+                if (ally.ally.slotIsEmpty || ally.ally.data.pokeTypes.Contains(9) || ally.ally.data.ability.abilityName == "Levitate")
+                    seeds = 9;
+                else if (!gameManager.pokemonSlots[0].slotIsEmpty && !gameManager.pokemonSlots[1].slotIsEmpty &&
+                    gameManager.pokemonSlots[0].data.currentHealth < 4 && gameManager.pokemonSlots[1].data.currentHealth < 4)
+                    seeds = 9;
+                else
+                    seeds = 1;
+            }
+            else if (move.moveName == "Swords Dance")
+            {
+                // Doesn't work if attack is already high
+                if (ally.data.currentAttack > 5)
+                    continue;
+
+                seeds = hasAdvantage ? 3 : 0;
+            }
+
+
 
             for (int i = 0; i < seeds; i++)
             {
@@ -389,6 +480,20 @@ public class CPU : MonoBehaviour
                     slot3Hat.Add(choice);
             }
         }
+    }
+    private bool CPUTeamHasSpeedAdvantage()
+    {
+        float speedAdvantage = 0;
+        if (!gameManager.pokemonSlots[0].slotIsEmpty) speedAdvantage -= gameManager.pokemonSlots[0].data.currentSpeed;
+        if (!gameManager.pokemonSlots[1].slotIsEmpty) speedAdvantage -= gameManager.pokemonSlots[1].data.currentSpeed;
+        if (!gameManager.pokemonSlots[2].slotIsEmpty) speedAdvantage += gameManager.pokemonSlots[2].data.currentSpeed;
+        if (!gameManager.pokemonSlots[3].slotIsEmpty) speedAdvantage += gameManager.pokemonSlots[3].data.currentSpeed;
+        if (!gameManager.pokemonSlots[4].slotIsEmpty) speedAdvantage -= gameManager.pokemonSlots[4].data.currentSpeed;
+        if (!gameManager.pokemonSlots[5].slotIsEmpty) speedAdvantage -= gameManager.pokemonSlots[5].data.currentSpeed;
+        if (!gameManager.pokemonSlots[6].slotIsEmpty) speedAdvantage += gameManager.pokemonSlots[6].data.currentSpeed;
+        if (!gameManager.pokemonSlots[7].slotIsEmpty) speedAdvantage += gameManager.pokemonSlots[7].data.currentSpeed;
+
+        return speedAdvantage > 0;
     }
 
 

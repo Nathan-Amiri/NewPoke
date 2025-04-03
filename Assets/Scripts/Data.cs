@@ -66,8 +66,7 @@ public struct MoveData
 
     public int indexNumber; // MoveEffect
 
-    public int advantageSeeds; // CPU, normal damaging moves = -1
-    public int disadvantageSeeds; //^
+    public bool basic; // CPU
 }
 public struct AbilityData
 {
