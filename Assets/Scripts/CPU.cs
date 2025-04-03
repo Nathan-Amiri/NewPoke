@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.U2D.Aseprite;
 using UnityEngine;
 
 public class CPU : MonoBehaviour
@@ -14,20 +15,18 @@ public class CPU : MonoBehaviour
 
     public List<ChoiceInfo> GetCPUChoices()
     {
-        // Reset all CPU variables
+        //Reset all CPU variables
         slot2Hat.Clear();
         slot3Hat.Clear();
         allyMoveAdvantages.Clear();
 
 
 
-        // Add basic damage moves to hat
+        // Add basic moves to hat (basic moves are ones that deal reliable damage)
         AddMostEffectiveMoveSeeds(gameManager.pokemonSlots[2], gameManager.pokemonSlots[0], true);
         AddMostEffectiveMoveSeeds(gameManager.pokemonSlots[2], gameManager.pokemonSlots[1], true);
         AddMostEffectiveMoveSeeds(gameManager.pokemonSlots[3], gameManager.pokemonSlots[0], false);
         AddMostEffectiveMoveSeeds(gameManager.pokemonSlots[3], gameManager.pokemonSlots[1], false);
-
-
 
         // Get average advantages for switch code
         int slot2AverageAdvantage = (allyMoveAdvantages[0] + allyMoveAdvantages[1]) / 2;
@@ -51,10 +50,33 @@ public class CPU : MonoBehaviour
 
 
 
+        // Add non-basic moves to hat based on their indexed seeds
+        AddNonBasicMovesToHat(true);
+        AddNonBasicMovesToHat(false);
+
+
+        // Add conditional moves to hat (moves that are not always available)
+        AddConditionalMovesToHat(true);
+        AddConditionalMovesToHat(false);
+
+
+        foreach (ChoiceInfo choice in slot2Hat)
+            if (choice.move.moveName == null)
+                Debug.Log(choice.casterName + " switch into " + choice.targetSlot.data.pokemonName);
+            else if (choice.move.isTargeted)
+                Debug.Log(choice.casterName + " cast " + choice.move.moveName + " into " + choice.targetSlot.data.pokemonName);
+            else
+                Debug.Log(choice.casterName + " cast " + choice.move.moveName);
+
         // Choose both choices from hat
-        ChoiceInfo slot2Choice = slot2Hat[Random.Range(0, slot2Hat.Count)];
-        ChoiceInfo slot3Choice = slot3Hat[Random.Range(0, slot3Hat.Count)];
-        return new List<ChoiceInfo>() { slot2Choice, slot3Choice };
+        List<ChoiceInfo> finalChoices = new();
+
+        if (!gameManager.pokemonSlots[2].slotIsEmpty)
+            finalChoices.Add(slot2Hat[Random.Range(0, slot2Hat.Count)]);
+        if (!gameManager.pokemonSlots[3].slotIsEmpty)
+            finalChoices.Add(slot3Hat[Random.Range(0, slot3Hat.Count)]);
+
+        return finalChoices;
     }
     private void AddMostEffectiveMoveSeeds(PokemonSlot ally, PokemonSlot enemy, bool addToSlot2Hat)
     {
@@ -63,12 +85,23 @@ public class CPU : MonoBehaviour
         if (enemy.slotIsEmpty)
             return;
 
-        // Cache the most effective move ally has into enemy, set advantage equal to effectiveness
+        // Find the most effective move ally has into enemy, set advantage equal to effectiveness
         (MoveData, int) allyMoveIntoEnemy = GetMoveAdvantage(ally, enemy);
 
-        // Cache the most effective move enemy has into ally, subtract advantage based on effectiveness
-        (MoveData, int) enemyMoveIntoAlly = GetMoveAdvantage(enemy, ally);
-        allyMoveIntoEnemy.Item2 -= enemyMoveIntoAlly.Item2;
+        if (ally.data.currentSpeed > enemy.data.currentSpeed && (allyMoveIntoEnemy.Item2 > 5 || enemy.data.currentHealth < 4))
+        {
+            // If ally is faster and either has a super effective move or the enemy is on low health, do nothing.
+            // Else, factor in enemy move effectiveness when calculating advantage
+        }
+        else
+        {
+            // Increase advantage by 5 before subtracting
+            allyMoveIntoEnemy.Item2 += 5;
+
+            // Find the most effective move enemy has into ally, subtract advantage based on effectiveness
+            (MoveData, int) enemyMoveIntoAlly = GetMoveAdvantage(enemy, ally);
+            allyMoveIntoEnemy.Item2 -= enemyMoveIntoAlly.Item2;
+        }
 
         // Add/subtract advantage based on speed difference
         allyMoveIntoEnemy.Item2 += GetSpeedAdvantage(ally, enemy);
@@ -79,6 +112,8 @@ public class CPU : MonoBehaviour
         // Round up so that hat is never empty
         if (allyMoveIntoEnemy.Item2 < 1)
             allyMoveIntoEnemy.Item2 = 1;
+
+
 
         // Add most effective moves into both enemies to hat, advantage = # of seeds
         ChoiceInfo info = new()
@@ -98,7 +133,7 @@ public class CPU : MonoBehaviour
     }
     private (MoveData, int) GetMoveAdvantage(PokemonSlot caster, PokemonSlot target)
     {
-        // Returns the most effective move into the target, and its advantage (Advantage = effectiveness(0 / 1 / 2 / 4 / 6 / 8))
+        // Returns the most effective move into the target, and its advantage (Advantage = effectiveness(1 / 3 / 5 / 7 / 9))
 
         MoveData cachedMove = default;
         float greatestEffectiveness = 0;
@@ -108,7 +143,6 @@ public class CPU : MonoBehaviour
                 continue;
 
             float effectiveness = typeChart.GetEffectivenessMultiplier(move.pokeType, target.data.pokeTypes);
-
             if (greatestEffectiveness == 0 || effectiveness > greatestEffectiveness || 
                 (effectiveness == greatestEffectiveness && Random.Range(0, 2) == 0))
             {
@@ -156,7 +190,12 @@ public class CPU : MonoBehaviour
 
     private void AddSwitchSeedsToHat(bool slot2, int allyAdvantage)
     {
+        if (!gameManager.pokemonSlots[6].data.availableToSwitchIn && !gameManager.pokemonSlots[7].data.availableToSwitchIn)
+            return;
+
         PokemonSlot ally = slot2 ? gameManager.pokemonSlots[2] : gameManager.pokemonSlots[3];
+        if (ally.slotIsEmpty)
+            return;
 
         PokemonSlot switchTarget = LeastVulnerableSwitchTarget(ally);
         switchTarget.data.availableToSwitchIn = false;
@@ -185,8 +224,6 @@ public class CPU : MonoBehaviour
         // Returns the bench cpuSlot that's likely going to take the least damage from the enemy attack
 
         // If only one or neither slot is available to switch, return early
-        if (ally.slotIsEmpty)
-            return null;
         if (!gameManager.pokemonSlots[6].data.availableToSwitchIn && !gameManager.pokemonSlots[7].data.availableToSwitchIn)
             return null;
         if (!gameManager.pokemonSlots[6].data.availableToSwitchIn)
@@ -212,5 +249,68 @@ public class CPU : MonoBehaviour
             return gameManager.pokemonSlots[7];
         else // Equal
             return Random.Range(0, 2) == 0 ? gameManager.pokemonSlots[6] : gameManager.pokemonSlots[7];
+    }
+
+    private void AddNonBasicMovesToHat(bool slot2)
+    {
+        PokemonSlot ally = slot2 ? gameManager.pokemonSlots[2] : gameManager.pokemonSlots[3];
+        if (ally.slotIsEmpty)
+            return;
+
+        foreach (MoveData move in ally.data.moves)
+        {
+            if (move.advantageSeeds == -1)
+                continue;
+
+            int allyAdvantage = slot2 ? allyMoveAdvantages[0] : allyMoveAdvantages[1];
+            bool allyHasAdvantage = allyAdvantage >= 5;
+            int seeds = allyHasAdvantage ? move.advantageSeeds : move.disadvantageSeeds;
+
+            PokemonSlot target;
+            if (gameManager.pokemonSlots[0].slotIsEmpty)
+                target = gameManager.pokemonSlots[1];
+            else if (gameManager.pokemonSlots[1].slotIsEmpty)
+                target = gameManager.pokemonSlots[0];
+            else
+                target = Random.Range(0, 2) == 0 ? gameManager.pokemonSlots[0] : gameManager.pokemonSlots[1];
+
+            ChoiceInfo info = new()
+            {
+                casterName = ally.data.pokemonName,
+                casterSlot = ally,
+                move = move,
+                targetSlot = target
+            };
+            for (int i = 0; i < seeds; i++)
+            {
+                if (slot2)
+                    slot2Hat.Add(info);
+                else
+                    slot3Hat.Add(info);
+            }
+        }
+    }
+
+
+    private void AddConditionalMovesToHat(bool slot2)
+    {
+        PokemonSlot ally = slot2 ? gameManager.pokemonSlots[2] : gameManager.pokemonSlots[3];
+        if (ally.slotIsEmpty)
+            return;
+
+        foreach (MoveData move in ally.data.moves)
+        {
+            if (move.moveName == "Protect" || move.moveName == "Detect")
+            {
+                if (ally.data.protectedLastRound)
+                    return;
+
+
+            }
+            else if (move.moveName == "Fake Out")
+            {
+
+            }
+        }
     }
 }

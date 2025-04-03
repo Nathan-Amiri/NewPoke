@@ -1023,7 +1023,7 @@ public class GameManager : MonoBehaviour
             if (player1Loss && player2Loss)
                 message.text = "All Pokemon have fainted. The game ends in a tie!";
             else if (player1Loss)
-                message.text = "All of your Pokemon have fainted. You lose";
+                message.text = "All of your Pokemon have fainted. You lose.";
             else if (player2Loss)
                 message.text = "All of the enemy's Pokemon have fainted. You win!";
             else
@@ -1057,15 +1057,6 @@ public class GameManager : MonoBehaviour
         messageButton.SetActive(false);
 
         replayRoundButton.SetActive(false);
-
-        foreach (PokemonSlot slot in pokemonSlots)
-        {
-            slot.data.fakedOut = false;
-            slot.data.fakeOutAvailable = slot.data.fakeOutAvailableNextRound;
-            slot.data.fakeOutAvailableNextRound = false;
-            slot.data.helpingHandReady = false;
-            slot.data.helpingHandBoosted = false;
-        }
 
         // Find each Pokemon for delayedeffects (Pokemon might have moved)
         List<(ChoiceInfo, int)> newDelayedEffects = new();
@@ -1273,16 +1264,22 @@ public class GameManager : MonoBehaviour
 
     private void ResetForNewRound()
     {
-        foreach (PokemonSlot pokemonSlot in pokemonSlots)
+        foreach (PokemonSlot slot in pokemonSlots)
         {
-            pokemonSlot.button.interactable = !pokemonSlot.slotIsEmpty;
-            pokemonSlot.pokemonImage.color = Color.white;
+            slot.data.fakedOut = false;
+            slot.data.fakeOutAvailable = slot.data.fakeOutAvailableNextRound;
+            slot.data.fakeOutAvailableNextRound = false;
+            slot.data.helpingHandReady = false;
+            slot.data.helpingHandBoosted = false;
 
-            pokemonSlot.data.hasChosen = false;
+            slot.button.interactable = !slot.slotIsEmpty;
+            slot.pokemonImage.color = Color.white;
+
+            slot.data.hasChosen = false;
 
             // This check is necessary so that PokemonSlot's ChoiceInteractable can use availableToSwitchIn to ensure that slot isn't empty AND pokemon is available to switch
-            if (!pokemonSlot.slotIsEmpty)
-                pokemonSlot.data.availableToSwitchIn = true;
+            if (!slot.slotIsEmpty)
+                slot.data.availableToSwitchIn = true;
         }
 
         PrepareForNextChoice();
