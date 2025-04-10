@@ -149,12 +149,14 @@ public class CPU : MonoBehaviour
         float greatestEffectiveness = 0;
         foreach (MoveData move in caster.data.moves)
         {
-            if (move.basic == false)
+            if (move.basicPower == 0)
                 continue;
 
             float effectiveness = typeChart.GetEffectivenessMultiplier(move.pokeType, target.data.pokeTypes);
-            if (greatestEffectiveness == 0 || effectiveness > greatestEffectiveness || 
-                (effectiveness == greatestEffectiveness && Random.Range(0, 2) == 0))
+            if (greatestEffectiveness == 0 || 
+                effectiveness > greatestEffectiveness || 
+                (effectiveness == greatestEffectiveness && move.basicPower > cachedMove.basicPower) ||
+                (effectiveness == greatestEffectiveness && move.basicPower == cachedMove.basicPower && Random.Range(0, 2) == 0))
             {
                 cachedMove = move;
                 greatestEffectiveness = effectiveness;
@@ -210,7 +212,7 @@ public class CPU : MonoBehaviour
         PokemonSlot switchTarget = LeastVulnerableSwitchTarget(ally);
         switchTarget.data.availableToSwitchIn = false;
 
-        int seeds = allyAdvantage < 5 ? 6 : 1;
+        int seeds = allyAdvantage < 5 ? 4 : 1;
 
         // Add more seeds when stats are lowered
         if (ally.data.currentAttack < ally.data.baseAttack || ally.data.currentSpeed < ally.data.baseSpeed)
@@ -351,6 +353,15 @@ public class CPU : MonoBehaviour
 
                 seeds = hasAdvantage ? 1 : 5;
             }
+            else if (move.moveName == "Icy Wind")
+            {
+                // Doesn't work in trick room
+
+                if (gameManager.fieldEffects.ContainsKey("Trick Room"))
+                    continue;
+
+                seeds = hasAdvantage ? 0 : 5;
+            }
             else if (move.moveName == "Tailwind")
             {
                 // Doesn't work when Tailwind is active or when allies are faster than enemies
@@ -378,6 +389,14 @@ public class CPU : MonoBehaviour
 
                 seeds = hasAdvantage ? 1 : 7;
             }
+            else if (move.moveName == "Roost")
+            {
+                // Doesn't work when near full hp
+                if (ally.data.currentHealth > ally.data.baseHealth - 2)
+                    continue;
+
+                seeds = hasAdvantage ? 3 : 3;
+            }
             else if (move.moveName == "Coil")
             {
                 // Doesn't work unless current hp is over half
@@ -385,6 +404,14 @@ public class CPU : MonoBehaviour
                     continue;
 
                 seeds = 3;
+            }
+            else if (move.moveName == "Curse")
+            {
+                // Doesn't work unless current hp is over half
+                if (ally.data.currentHealth < ally.data.baseHealth / 2)
+                    continue;
+
+                seeds = hasAdvantage ? 7 : 3;
             }
             else if (move.moveName == "Toxic")
             {
@@ -463,6 +490,21 @@ public class CPU : MonoBehaviour
                     seeds = 9;
                 else
                     seeds = 1;
+            }
+            else if (move.moveName == "Self-Destruct")
+            {
+                // Very unlikely unless ally doesn't exist or is immune or both enemies are low or I'm low, never happens if there's an enemy ghost type
+                if (gameManager.pokemonSlots[0].data.pokeTypes.Contains(13) || gameManager.pokemonSlots[0].data.pokeTypes.Contains(13))
+                    seeds = 0;
+                else if (ally.ally.slotIsEmpty || ally.ally.data.pokeTypes.Contains(13))
+                    seeds = 9;
+                else if (!gameManager.pokemonSlots[0].slotIsEmpty && !gameManager.pokemonSlots[1].slotIsEmpty &&
+                    gameManager.pokemonSlots[0].data.currentHealth < 4 && gameManager.pokemonSlots[1].data.currentHealth < 4)
+                    seeds = 9;
+                else if (ally.data.currentHealth < 4)
+                    seeds = 5;
+                else
+                    seeds = 0;
             }
             else if (move.moveName == "Swords Dance")
             {

@@ -174,9 +174,16 @@ public class PokemonSlot : MonoBehaviour
                 return;
             }
 
+            if (data.ability.abilityName == "Thick Fat")
+                if (moveType == 1 || moveType == 5)
+                    amount = Mathf.CeilToInt(amount / 2);
+
             float effectivenessMultiplier = typeChart.GetEffectivenessMultiplier(moveType, data.pokeTypes);
             amount = Mathf.CeilToInt(amount * effectivenessMultiplier);
             gameManager.AddEffectivenessMessage(effectivenessMultiplier, data.pokemonName);
+
+            if (data.ability.abilityName == "Multiscale" && data.currentHealth == data.baseHealth && amount > 1)
+                amount -= 1;
         }
 
         if (amount > 0 && caster != null && caster.data.ability.abilityName == "Intimidate" && !caster.data.hasIntimidated)
@@ -358,7 +365,7 @@ public class PokemonSlot : MonoBehaviour
         ReloadPokemon();
     }
 
-    private void Faint()
+    public void Faint()
     {
         slotIsEmpty = true;
 
@@ -369,6 +376,14 @@ public class PokemonSlot : MonoBehaviour
             statusActive.SetActive(false);
         }
         data = default;
+
+        ReloadPokemon();
+    }
+
+    public void ChangeType(int newType)
+    {
+        data.pokeTypes.Clear();
+        data.pokeTypes.Add(newType);
 
         ReloadPokemon();
     }

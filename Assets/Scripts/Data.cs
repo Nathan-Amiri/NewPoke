@@ -66,7 +66,7 @@ public struct MoveData
 
     public int indexNumber; // MoveEffect
 
-    public bool basic; // CPU
+    public int basicPower; // CPU, 3 = more, 2 = normal, 1 = less
 }
 public struct AbilityData
 {

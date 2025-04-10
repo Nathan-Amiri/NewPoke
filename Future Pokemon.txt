@@ -8,9 +8,13 @@ Arbok (Intimidate, Toxic)
 Rotom-Heat (Levitate, Will-o-Wisp)
 Regigigas (Slow Start)
 Ninetales (Alola) (Hail, Aurora Veil)
-
-Substitute
-Icy Wind/Electroweb/Rest
+Blaziken (Speed Boost)
+Palafin (Zero to Hero)
+Rillaboom (Grassy Surge)
+Dragonite
+Greninja (Protean)
+Gengar
+Snorlax (self-destruct)
 
 Need enough of:
 Sun/Rain/Hail/Sandstorm
@@ -19,17 +23,14 @@ Paralyzed/Asleep/Burned/Poisoned
 Type variety
 
 Basculegion (Swift Swim, Last Respects)
-Blaziken (Speed Boost)
 Chien-Pao (Sword of Ruin)
 Clefable (Heal Pulse, Unaware)
 Corviknight 
 Ditto (Transform)
-Dragonite 
 Gardevoir (Trace, Taunt)
 Gastrodon (Storm Drain, Recover, Helping Hand)
 Gholdengo (Good as Gold, Make it Rain, Nasty Plot)
 Glimmora (Toxic Debris?, Meteor Beam)
-Greninja (Protean)
 Gyarados (Moxie, Dragon Dance)
 Heatran (Flash Fire, Magma Storm, Overheat)
 Hydreigon (coverage)
@@ -44,11 +45,9 @@ Mimikyu (Disguise)
 Ogerpon (Wellspring) (Spiky Shield)
 Oranguru (Instruct)
 Orthworm (Shed Tail)
-Palafin (Zero to Hero)
 Porygon2 (Trick Room, Analytic)
 Primarina (Haze)
 Raging Bolt
-Rillaboom (Grassy Surge)
 Skeledirge (Torch Song)
 Scrafty
 Serperior (Contrary)

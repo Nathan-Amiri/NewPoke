@@ -130,6 +130,30 @@ public class AbilityIndex : MonoBehaviour
             description = "The first time I switch out, I permanently gain 3 attack"
         };
     }
+    private AbilityData ThickFat() // 13
+    {
+        return new AbilityData
+        {
+            abilityName = "Thick Fat",
+            description = "Fire and Ice moves deal half damage to me, rounding up"
+        };
+    }
+    private AbilityData Protean() // 14
+    {
+        return new AbilityData
+        {
+            abilityName = "Protean",
+            description = "When I use a move, I transform into that move's type"
+        };
+    }
+    private AbilityData Multiscale() // 15
+    {
+        return new AbilityData
+        {
+            abilityName = "Multiscale",
+            description = "If I'm damaged while at full health, I take -1 damage, but not less than 1"
+        };
+    }
 
     private void PopulateIndex()
     {
@@ -146,5 +170,8 @@ public class AbilityIndex : MonoBehaviour
         indexMethods.Add(SpeedBoost);
         indexMethods.Add(GrassySurge);
         indexMethods.Add(ZeroToHero);
+        indexMethods.Add(ThickFat);
+        indexMethods.Add(Protean);
+        indexMethods.Add(Multiscale);
     }
 }

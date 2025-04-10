@@ -14341,6 +14341,8 @@ MonoBehaviour:
   confirmUI: {fileID: 799419470}
   chooseButton: {fileID: 2077987254}
   shopText: {fileID: 1765402423}
+  player1Text: {fileID: 2022579408}
+  player2Text: {fileID: 1820274828}
   pokemonDim: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
   palafinHeroSprite: {fileID: 21300000, guid: f3cd3bec891f4c44caa7fa034711715a, type: 3}
 --- !u!114 &1092461926
@@ -14394,6 +14396,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 49de8accd98714b4dbc0e395d440c8b3, type: 3}
   - {fileID: 21300000, guid: 8289c1119e2202b4d81247d84e47715c, type: 3}
   - {fileID: 21300000, guid: f11c95a8eaf513f49ae5cc5acda435f9, type: 3}
+  - {fileID: 21300000, guid: bfa6200b6c57d28489c197a627c29a65, type: 3}
+  - {fileID: 21300000, guid: 9657469024fc3b744bd547222d798230, type: 3}
+  - {fileID: 21300000, guid: 19902858163763d46a6309b8dcfd1b94, type: 3}
+  - {fileID: 21300000, guid: 76180c571b0c1454f8ee3b79bcbcb86b, type: 3}
   abilityIndex: {fileID: 1092461929}
   moveIndex: {fileID: 1092461927}
 --- !u!114 &1092461929

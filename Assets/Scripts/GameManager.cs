@@ -81,6 +81,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Button chooseButton;
     [SerializeField] private TMP_Text shopText;
 
+    [SerializeField] private TMP_Text player1Text;
+    [SerializeField] private TMP_Text player2Text;
+
     [SerializeField] private Color pokemonDim;
 
     //[SerializeField] private GameObject quitScreen;
@@ -126,6 +129,9 @@ public class GameManager : MonoBehaviour
     {
         cpuMode = selectedCPUMode;
         modeScreen.SetActive(false);
+
+        player1Text.text = cpuMode ? "Player" : "Player 1";
+        player2Text.text = cpuMode ? "CPU" : "Player 2";
 
         // Debug mode
         if (debugPokemon.Count != 0)
@@ -687,25 +693,25 @@ public class GameManager : MonoBehaviour
         // Redirection:
         if (nextChoice.targetSlot != null)
         {
+            PokemonSlot rod = null;
+
             if (nextChoice.move.pokeType == 4) // Lightning Rod
             {
-                PokemonSlot rod = null;
-
                 if (nextChoice.casterSlot.ally.data.ability.abilityName == "Lightning Rod")
                     rod = nextChoice.casterSlot.ally;
                 else if (nextChoice.casterSlot.enemySlots[0].data.ability.abilityName == "Lightning Rod")
                     rod = nextChoice.casterSlot.enemySlots[0];
                 else if (nextChoice.casterSlot.enemySlots[1].data.ability.abilityName == "Lightning Rod")
                     rod = nextChoice.casterSlot.enemySlots[1];
+            }
 
-                if (rod != null)
-                {
-                    ChoiceInfo temp = nextChoice;
-                    temp.targetSlot = rod;
-                    nextChoice = temp;
+            if (rod != null)
+            {
+                ChoiceInfo temp = nextChoice;
+                temp.targetSlot = rod;
+                nextChoice = temp;
 
-                    nextChoice.targetSlot.AttackChange(1);
-                }
+                nextChoice.targetSlot.AttackChange(1);
             }
             else if (nextChoice.targetSlot.slotIsEmpty && nextChoice.casterSlot != nextChoice.targetSlot.ally && !nextChoice.targetSlot.ally.slotIsEmpty)
             {

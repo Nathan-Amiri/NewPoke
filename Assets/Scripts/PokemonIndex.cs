@@ -168,9 +168,9 @@ public class PokemonIndex : MonoBehaviour
             baseSpeed = 4.7f,
             ability = abilityIndex.LoadAbilityFromIndex(6),
             moves = new List<MoveData>() {
-                moveIndex.LoadMoveFromIndex(0),
                 moveIndex.LoadMoveFromIndex(21),
                 moveIndex.LoadMoveFromIndex(2),
+                moveIndex.LoadMoveFromIndex(3),
                 moveIndex.LoadMoveFromIndex(22)
                 }
         };
@@ -289,6 +289,82 @@ public class PokemonIndex : MonoBehaviour
                 }
         };
     }
+    private PokemonData Snorlax() // 13
+    {
+        return new PokemonData
+        {
+            pokemonName = "Snorlax",
+            sprite = pokemonSprites[13],
+            pokeTypes = new() { 0 },
+            baseHealth = 11,
+            baseAttack = 2,
+            baseSpeed = 1.3f,
+            ability = abilityIndex.LoadAbilityFromIndex(13),
+            moves = new List<MoveData>() {
+                moveIndex.LoadMoveFromIndex(43),
+                moveIndex.LoadMoveFromIndex(13),
+                moveIndex.LoadMoveFromIndex(44),
+                moveIndex.LoadMoveFromIndex(45)
+                }
+        };
+    }
+    private PokemonData Greninja() // 14
+    {
+        return new PokemonData
+        {
+            pokemonName = "Greninja",
+            sprite = pokemonSprites[14],
+            pokeTypes = new() { 2, 15 },
+            baseHealth = 7,
+            baseAttack = 4,
+            baseSpeed = 7.9f,
+            ability = abilityIndex.LoadAbilityFromIndex(14),
+            moves = new List<MoveData>() {
+                moveIndex.LoadMoveFromIndex(46),
+                moveIndex.LoadMoveFromIndex(47),
+                moveIndex.LoadMoveFromIndex(48),
+                moveIndex.LoadMoveFromIndex(49)
+                }
+        };
+    }
+    private PokemonData Dragonite() // 15
+    {
+        return new PokemonData
+        {
+            pokemonName = "Dragonite",
+            sprite = pokemonSprites[15],
+            pokeTypes = new() { 14, 9 },
+            baseHealth = 7,
+            baseAttack = 3,
+            baseSpeed = 4.4f,
+            ability = abilityIndex.LoadAbilityFromIndex(15),
+            moves = new List<MoveData>() {
+                moveIndex.LoadMoveFromIndex(50),
+                moveIndex.LoadMoveFromIndex(51),
+                moveIndex.LoadMoveFromIndex(52),
+                moveIndex.LoadMoveFromIndex(53)
+                }
+        };
+    }
+    private PokemonData Gengar() // 16
+    {
+        return new PokemonData
+        {
+            pokemonName = "Gengar",
+            sprite = pokemonSprites[16],
+            pokeTypes = new() { 13, 7 },
+            baseHealth = 5,
+            baseAttack = 4,
+            baseSpeed = 6.5f,
+            ability = abilityIndex.LoadAbilityFromIndex(6),
+            moves = new List<MoveData>() {
+                moveIndex.LoadMoveFromIndex(0),
+                moveIndex.LoadMoveFromIndex(54),
+                moveIndex.LoadMoveFromIndex(55),
+                moveIndex.LoadMoveFromIndex(56)
+                }
+        };
+    }
 
     private void PopulateIndex()
     {
@@ -305,5 +381,9 @@ public class PokemonIndex : MonoBehaviour
         indexMethods.Add(Blaziken);
         indexMethods.Add(Rillaboom);
         indexMethods.Add(Palafin);
+        indexMethods.Add(Snorlax);
+        indexMethods.Add(Greninja);
+        indexMethods.Add(Dragonite);
+        indexMethods.Add(Gengar);
     }
 }

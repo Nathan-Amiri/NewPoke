@@ -70,7 +70,7 @@ public class MoveIndex : MonoBehaviour
             isTargeted = true,
             targetsBench = false,
 
-            basic = true
+            basicPower = 2
         };
     }
     private MoveData VoltSwitch() // 3
@@ -113,7 +113,7 @@ public class MoveIndex : MonoBehaviour
             isTargeted = true,
             targetsBench = false,
 
-            basic = true
+            basicPower = 2
         };
     }
     private MoveData Hurricane() // 6
@@ -128,7 +128,7 @@ public class MoveIndex : MonoBehaviour
             isTargeted = true,
             targetsBench = false,
 
-            basic = true
+            basicPower = 2
         };
     }
     private MoveData Tailwind() // 7
@@ -156,7 +156,7 @@ public class MoveIndex : MonoBehaviour
             isTargeted = false,
             targetsBench = false,
 
-            basic = true
+            basicPower = 3
         };
     }
     private MoveData Hex() // 9
@@ -171,7 +171,7 @@ public class MoveIndex : MonoBehaviour
             isTargeted = true,
             targetsBench = false,
 
-            basic = true
+            basicPower = 2
         };
     }
     private MoveData RagePowder() // 10
@@ -212,7 +212,7 @@ public class MoveIndex : MonoBehaviour
             isTargeted = true,
             targetsBench = false,
 
-            basic = true
+            basicPower = 3
         };
     }
     private MoveData FirePunch() // 13
@@ -227,7 +227,7 @@ public class MoveIndex : MonoBehaviour
             isTargeted = true,
             targetsBench = false,
 
-            basic = true
+            basicPower = 1
         };
     }
     private MoveData DrainPunch() // 14
@@ -242,7 +242,7 @@ public class MoveIndex : MonoBehaviour
             isTargeted = true,
             targetsBench = false,
 
-            basic = true
+            basicPower = 2
         };
     }
     private MoveData Coil() // 15
@@ -270,7 +270,7 @@ public class MoveIndex : MonoBehaviour
             isTargeted = true,
             targetsBench = false,
 
-            basic = true
+            basicPower = 2
         };
     }
     private MoveData Toxic() // 17
@@ -311,7 +311,7 @@ public class MoveIndex : MonoBehaviour
             isTargeted = true,
             targetsBench = false,
 
-            basic = true
+            basicPower = 3
         };
     }
     private MoveData ThunderPunch() // 20
@@ -326,7 +326,7 @@ public class MoveIndex : MonoBehaviour
             isTargeted = true,
             targetsBench = false,
 
-            basic = true
+            basicPower = 1
         };
     }
     private MoveData Overheat() // 21
@@ -341,7 +341,7 @@ public class MoveIndex : MonoBehaviour
             isTargeted = true,
             targetsBench = false,
 
-            basic = true
+            basicPower = 2
         };
     }
     private MoveData WilloWisp() // 22
@@ -382,7 +382,7 @@ public class MoveIndex : MonoBehaviour
             isTargeted = false,
             targetsBench = false,
 
-            basic = true
+            basicPower = 2
         };
     }
     private MoveData Moonblast() // 25
@@ -397,7 +397,7 @@ public class MoveIndex : MonoBehaviour
             isTargeted = true,
             targetsBench = false,
 
-            basic = true
+            basicPower = 2
         };
     }
     private MoveData Psychic() // 26
@@ -412,7 +412,7 @@ public class MoveIndex : MonoBehaviour
             isTargeted = true,
             targetsBench = false,
 
-            basic = true
+            basicPower = 2
         };
     }
     private MoveData TrickRoom() // 27
@@ -466,7 +466,7 @@ public class MoveIndex : MonoBehaviour
             isTargeted = false,
             targetsBench = false,
 
-            basic = true
+            basicPower = 2
         };
     }
     private MoveData KnockOff() // 31
@@ -481,7 +481,7 @@ public class MoveIndex : MonoBehaviour
             isTargeted = true,
             targetsBench = false,
 
-            basic = true
+            basicPower = 2
         };
     }
     private MoveData Earthquake() // 32
@@ -524,7 +524,7 @@ public class MoveIndex : MonoBehaviour
             isTargeted = true,
             targetsBench = false,
 
-            basic = true
+            basicPower = 2
         };
     }
     private MoveData SwordsDance() // 35
@@ -565,7 +565,7 @@ public class MoveIndex : MonoBehaviour
             isTargeted = true,
             targetsBench = false,
 
-            basic = true
+            basicPower = 3
         };
     }
     private MoveData UTurn() // 38
@@ -623,7 +623,7 @@ public class MoveIndex : MonoBehaviour
             isTargeted = true,
             targetsBench = false,
 
-            basic = true
+            basicPower = 3
         };
     }
     private MoveData IcePunch() // 42
@@ -638,7 +638,207 @@ public class MoveIndex : MonoBehaviour
             isTargeted = true,
             targetsBench = false,
 
-            basic = true
+            basicPower = 1
+        };
+    }
+    private MoveData BodySlam() // 43
+    {
+        return new MoveData
+        {
+            pokeType = 0,
+            moveName = "BodySlam",
+            description = "I deal damage to a target equal to my Attack",
+            priority = 0,
+            isDamaging = true,
+            isTargeted = true,
+            targetsBench = false,
+
+            basicPower = 2
+        };
+    }
+    private MoveData Curse() // 44
+    {
+        return new MoveData
+        {
+            pokeType = 13,
+            moveName = "Curse",
+            description = "I lose 1 Speed, gain 1 Attack and gain 1 base Health. Then, I gain 1 Health",
+            priority = 0,
+            isDamaging = false,
+            isTargeted = false,
+            targetsBench = false,
+        };
+    }
+    private MoveData SelfDestruct() // 45
+    {
+        return new MoveData
+        {
+            pokeType = 0,
+            moveName = "Self-Destruct",
+            description = "I deal 3 damage to my ally and both enemies. I faint",
+            priority = 0,
+            isDamaging = true,
+            isTargeted = false,
+            targetsBench = false,
+        };
+    }
+    private MoveData WaterShuriken() // 46
+    {
+        return new MoveData
+        {
+            pokeType = 2,
+            moveName = "Water Shuriken",
+            description = "I deal damage to a target equal to my Attack",
+            priority = 0,
+            isDamaging = true,
+            isTargeted = true,
+            targetsBench = false,
+
+            basicPower = 2
+        };
+    }
+    private MoveData DarkPulse() // 47
+    {
+        return new MoveData
+        {
+            pokeType = 15,
+            moveName = "Dark Pulse",
+            description = "I deal damage to a target equal to my Attack",
+            priority = 0,
+            isDamaging = true,
+            isTargeted = true,
+            targetsBench = false,
+
+            basicPower = 2
+        };
+    }
+    private MoveData IceBeam() // 48
+    {
+        return new MoveData
+        {
+            pokeType = 5,
+            moveName = "Ice Beam",
+            description = "I deal damage to a target equal to my Attack",
+            priority = 0,
+            isDamaging = true,
+            isTargeted = true,
+            targetsBench = false,
+
+            basicPower = 2
+        };
+    }
+    private MoveData GunkShot() // 49
+    {
+        return new MoveData
+        {
+            pokeType = 7,
+            moveName = "Gunk Shot",
+            description = "I deal damage to a target equal to my Attack",
+            priority = 0,
+            isDamaging = true,
+            isTargeted = true,
+            targetsBench = false,
+
+            basicPower = 2
+        };
+    }
+    private MoveData ExtremeSpeed() // 50
+    {
+        return new MoveData
+        {
+            pokeType = 0,
+            moveName = "Extreme Speed",
+            description = "I deal damage to a target equal to my Attack - 1, but not below 1",
+            priority = 2,
+            isDamaging = true,
+            isTargeted = true,
+            targetsBench = false,
+        };
+    }
+    private MoveData DragonClaw() // 51
+    {
+        return new MoveData
+        {
+            pokeType = 14,
+            moveName = "Dragon Claw",
+            description = "I deal damage to a target equal to my Attack",
+            priority = 0,
+            isDamaging = true,
+            isTargeted = true,
+            targetsBench = false,
+
+            basicPower = 2
+        };
+    }
+    private MoveData IronHead() // 52
+    {
+        return new MoveData
+        {
+            pokeType = 14,
+            moveName = "Iron Head",
+            description = "I deal damage to a target equal to my Attack - 1, but not below 1",
+            priority = 0,
+            isDamaging = true,
+            isTargeted = true,
+            targetsBench = false,
+
+            basicPower = 1
+        };
+    }
+    private MoveData Roost() // 53
+    {
+        return new MoveData
+        {
+            pokeType = 9,
+            moveName = "Roost",
+            description = "I heal 2",
+            priority = 0,
+            isDamaging = false,
+            isTargeted = false,
+            targetsBench = false,
+        };
+    }
+    private MoveData ShadowBall() // 54
+    {
+        return new MoveData
+        {
+            pokeType = 13,
+            moveName = "Shadow Ball",
+            description = "I deal damage to a target equal to my Attack",
+            priority = 0,
+            isDamaging = true,
+            isTargeted = true,
+            targetsBench = false,
+
+            basicPower = 2
+        };
+    }
+    private MoveData SludgeBomb() // 55
+    {
+        return new MoveData
+        {
+            pokeType = 7,
+            moveName = "Sludge Bomb",
+            description = "I deal damage to a target equal to my Attack",
+            priority = 0,
+            isDamaging = true,
+            isTargeted = true,
+            targetsBench = false,
+
+            basicPower = 2
+        };
+    }
+    private MoveData IcyWind() // 56
+    {
+        return new MoveData
+        {
+            pokeType = 5,
+            moveName = "Icy Wind",
+            description = "I deal damage to both enemies equal to my Attack - 2, but not below 1. Both enemies lose 2 Speed",
+            priority = 0,
+            isDamaging = true,
+            isTargeted = false,
+            targetsBench = false,
         };
     }
 
@@ -687,5 +887,19 @@ public class MoveIndex : MonoBehaviour
         indexMethods.Add(FlipTurn);
         indexMethods.Add(WaveCrash);
         indexMethods.Add(IcePunch);
+        indexMethods.Add(BodySlam);
+        indexMethods.Add(Curse);
+        indexMethods.Add(SelfDestruct);
+        indexMethods.Add(WaterShuriken);
+        indexMethods.Add(DarkPulse);
+        indexMethods.Add(IceBeam);
+        indexMethods.Add(GunkShot);
+        indexMethods.Add(ExtremeSpeed);
+        indexMethods.Add(DragonClaw);
+        indexMethods.Add(IronHead);
+        indexMethods.Add(Roost);
+        indexMethods.Add(ShadowBall);
+        indexMethods.Add(SludgeBomb);
+        indexMethods.Add(IcyWind);
     }
 }

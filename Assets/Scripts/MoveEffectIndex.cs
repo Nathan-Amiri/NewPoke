@@ -354,6 +354,90 @@ public class MoveEffectIndex : MonoBehaviour
             amount = 1;
         choiceInfo.targetSlot.DealDamage(amount, 5, choiceInfo.casterSlot);
     }
+    private void BodySlam(ChoiceInfo choiceInfo, int occurance) // 43
+    {
+        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack, 0, choiceInfo.casterSlot);
+    }
+    private void Curse(ChoiceInfo choiceInfo, int occurance) // 44
+    {
+        choiceInfo.casterSlot.AttackChange(1);
+        choiceInfo.casterSlot.BaseHealthChange(1);
+        choiceInfo.casterSlot.GainHealth(1);
+        choiceInfo.casterSlot.SpeedChange(-1);
+    }
+    private void SelfDestruct(ChoiceInfo choiceInfo, int occurance) // 45
+    {
+        choiceInfo.casterSlot.ally.DealDamage(3, 0, choiceInfo.casterSlot);
+        choiceInfo.casterSlot.enemySlots[0].DealDamage(3, 0, choiceInfo.casterSlot);
+        choiceInfo.casterSlot.enemySlots[1].DealDamage(3, 0, choiceInfo.casterSlot);
+        choiceInfo.casterSlot.Faint();
+    }
+    private void WaterShuriken(ChoiceInfo choiceInfo, int occurance) // 46
+    {
+        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack, 2, choiceInfo.casterSlot);
+
+        if (choiceInfo.casterSlot.data.ability.abilityName == "Protean")
+            choiceInfo.casterSlot.ChangeType(2);
+    }
+    private void DarkPulse(ChoiceInfo choiceInfo, int occurance) // 47
+    {
+        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack, 15, choiceInfo.casterSlot);
+
+        if (choiceInfo.casterSlot.data.ability.abilityName == "Protean")
+            choiceInfo.casterSlot.ChangeType(15);
+    }
+    private void IceBeam(ChoiceInfo choiceInfo, int occurance) // 48
+    {
+        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack, 5, choiceInfo.casterSlot);
+
+        if (choiceInfo.casterSlot.data.ability.abilityName == "Protean")
+            choiceInfo.casterSlot.ChangeType(5);
+    }
+    private void GunkShot(ChoiceInfo choiceInfo, int occurance) // 49
+    {
+        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack, 7, choiceInfo.casterSlot);
+
+        if (choiceInfo.casterSlot.data.ability.abilityName == "Protean")
+            choiceInfo.casterSlot.ChangeType(7);
+    }
+    private void ExtremeSpeed(ChoiceInfo choiceInfo, int occurance) // 50
+    {
+        int amount = choiceInfo.casterSlot.data.currentAttack - 1;
+        if (amount < 1)
+            amount = 1;
+        choiceInfo.targetSlot.DealDamage(amount, 0, choiceInfo.casterSlot);
+    }
+    private void DragonClaw(ChoiceInfo choiceInfo, int occurance) // 51
+    {
+        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack, 14, choiceInfo.casterSlot);
+    }
+    private void IronHead(ChoiceInfo choiceInfo, int occurance) // 52
+    {
+        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack, 16, choiceInfo.casterSlot);
+    }
+    private void Roost(ChoiceInfo choiceInfo, int occurance) // 53
+    {
+        choiceInfo.casterSlot.GainHealth(2);
+    }
+    private void ShadowBall(ChoiceInfo choiceInfo, int occurance) // 54
+    {
+        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack, 13, choiceInfo.casterSlot);
+    }
+    private void SludgeBomb(ChoiceInfo choiceInfo, int occurance) // 55
+    {
+        choiceInfo.targetSlot.DealDamage(choiceInfo.casterSlot.data.currentAttack, 7, choiceInfo.casterSlot);
+    }
+    private void IcyWind(ChoiceInfo choiceInfo, int occurance) // 56
+    {
+        int amount = choiceInfo.casterSlot.data.currentAttack - 2;
+        if (amount < 1)
+            amount = 1;
+        choiceInfo.casterSlot.enemySlots[0].DealDamage(amount, 5, choiceInfo.casterSlot);
+        choiceInfo.casterSlot.enemySlots[1].DealDamage(amount, 5, choiceInfo.casterSlot);
+
+        choiceInfo.casterSlot.enemySlots[0].SpeedChange(-2);
+        choiceInfo.casterSlot.enemySlots[1].SpeedChange(-2);
+    }
 
     private void PopulateIndex()
     {
@@ -400,5 +484,19 @@ public class MoveEffectIndex : MonoBehaviour
         indexMethods.Add(FlipTurn);
         indexMethods.Add(WaveCrash);
         indexMethods.Add(IcePunch);
+        indexMethods.Add(BodySlam);
+        indexMethods.Add(Curse);
+        indexMethods.Add(SelfDestruct);
+        indexMethods.Add(WaterShuriken);
+        indexMethods.Add(DarkPulse);
+        indexMethods.Add(IceBeam);
+        indexMethods.Add(GunkShot);
+        indexMethods.Add(ExtremeSpeed);
+        indexMethods.Add(DragonClaw);
+        indexMethods.Add(IronHead);
+        indexMethods.Add(Roost);
+        indexMethods.Add(ShadowBall);
+        indexMethods.Add(SludgeBomb);
+        indexMethods.Add(IcyWind);
     }
 }
